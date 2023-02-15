@@ -1,5 +1,7 @@
 # Folders
 **/__pycache__/
+**/MISC/
+**/.idea/
 
 # Files
 **/run.sh

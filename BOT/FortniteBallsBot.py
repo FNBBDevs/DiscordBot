@@ -13,6 +13,7 @@ import Config
 import re
 import discord
 import COMMANDS
+import FUNCTIONS
 import random
 
 # ------------------------- VARIABLE INSTANTIATION ----------------------------
@@ -46,11 +47,8 @@ class FortniteBot(discord.Client):
         if message.author == bot.user:
             return
 
-        # --- Ethan's Method for getting fortnite balls ---
-        # if "fortniteballs" in process.sub('', str(message.content)).lower():
-        #     await message.channel.send(
-        #         "Fortnite balls\nhttps://www.youtube.com/watch?v=Kodx9em0mXE&ab_channel=Sergeantstinky-Topic")
 
+        # MOVE THIS TO FUNCTIONS.py thnx - etchris
         # --- My Method for getting fortnite balls ---
         if ("fortnite" in processed and "balls" in processed) or ("fortniteballs" in processed):
             await message.channel.send(

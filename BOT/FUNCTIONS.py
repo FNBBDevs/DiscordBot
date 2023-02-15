@@ -1,4 +1,5 @@
 # -------------------------- ESSENTIAL FUNCITONS -------------------------------
+
 def _check(word):
     checks = {0: 'fort',1: 'nite',2: 'balls'}
     res = [False, False, False]

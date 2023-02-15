@@ -69,7 +69,7 @@ class FortniteBot(discord.Client):
 
         # Lastly, for fun, let's assume that the user pings the bot (bad idea)
         if str(message.content).__contains__("<@1075154837609656350>"):
-            await message.channel.send(f"Hey, <@{message.author.id}>, don't ping me, jackass!")
+            await message.channel.send(f"Hey, <@{message.author.id}>, don't ping me, bud!")
 
 
 # -------------------- CREATE THE BOT OBJECT AND BOOT UP ------------------------

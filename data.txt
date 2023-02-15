@@ -1,2 +1,0 @@
-token = MTA3NTE1NDgzNzYwOTY1NjM1MA.GfjEmz.CwUghrb_WnemtZauPYRCgw1rTNhDS4sCxYhCN4
-password (MongoDB Cluster) = KvCNM6VuHNlKTg5H

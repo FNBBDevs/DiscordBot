@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f696411b-c719-4a11-9851-c4f2937dd0a4" name="Changes" comment="Reformated to be in a class.">
-      <change afterPath="$PROJECT_DIR$/COMMANDS.py" afterDir="false" />
+    <list default="true" id="f696411b-c719-4a11-9851-c4f2937dd0a4" name="Changes" comment="Added comments for readability.">
       <change beforePath="$PROJECT_DIR$/Config.py" beforeDir="false" afterPath="$PROJECT_DIR$/Config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FortniteBallsBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/FortniteBallsBot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,7 +113,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1676426864035</updated>
-      <workItem from="1676426866643" duration="14401000" />
+      <workItem from="1676426866643" duration="14699000" />
     </task>
     <task id="LOCAL-00001" summary="Change">
       <created>1676434031783</created>
@@ -132,7 +129,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676439963839</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added comments for readability.">
+      <created>1676442285200</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1676442285200</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,7 +156,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Change" />
     <MESSAGE value="Reformated to be in a class." />
-    <option name="LAST_COMMIT_MESSAGE" value="Reformated to be in a class." />
+    <MESSAGE value="Added comments for readability." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added comments for readability." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/DiscordBot$FortniteBallsBot__1_.coverage" NAME="FortniteBallsBot (1) Coverage Results" MODIFIED="1676442102205" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

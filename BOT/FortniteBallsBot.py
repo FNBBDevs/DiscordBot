@@ -57,6 +57,9 @@ class FortniteBot(discord.Client):
         if "bruhshell" in process.sub('', str(message.content)).lower():
             await message.channel.send("! ! ! BRUH SHELL IS A CRYPTO-MINING SPYWARE ! ! !")
 
+        if "lol" in message.content.strip().lower():
+            await message.reply("https://i.imgflip.com/7b8363.gif")
+
         # Let's assume we want to parse bot commands - we could simply do something like what I illustrate below.
         if message.content[0] == COMMAND_PREFIX:
             # Here we could go ahead and search through a command base - I will just code one in as an example.

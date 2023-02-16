@@ -1,3 +1,3 @@
 # DiscordBot
 
-Sussy fortnite bot
+Sussy balls fortnite bot

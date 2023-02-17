@@ -1,7 +1,9 @@
 # -------------------------- ESSENTIAL FUNCITONS -------------------------------
+
 def _check(word):
     checks = {0: 'fort',1: 'nite',2: 'balls'}
-    res = [False, False, False]
+    res  = [False, False, False]
+    locs = [-1, -1, -1]
     word = str(word).lower()
     for check, val in checks.items():
         cp = 0
@@ -12,6 +14,7 @@ def _check(word):
                 cw += c
                 cp += 1
             if cw == val:
+                locs[check] = i
                 break
             if cp >= len(val):
                 res[check] = False
@@ -21,9 +24,10 @@ def _check(word):
             res[check] = False
         else:
             res[check] = True
-    return res
+    return res, locs
 
 def erm__________is_this_fortnite_balls(word):
-    tmp1 = _check(word)
-    tmp2 = _check(word[::-1])
+    tmp1, tmp1_loc = _check(word)
+    tmp2, tmp2_loc = _check(word[::-1])
+    print(tmp1, tmp2, tmp1_loc, tmp2_loc)
     return all([(tmp1[0] or tmp2[0]),(tmp1[1] or tmp2[1]),(tmp1[2] or tmp2[2])])

@@ -9,6 +9,7 @@
 
 # --------------------------- IMPORT STATEMENTS -------------------------------
 
+import asyncio
 import Config
 import re
 import discord
@@ -29,10 +30,20 @@ commands = COMMANDS.COMMANDS
 
 class FortniteBot(discord.Client):
 
+    async def ping_joe(self : discord.Client):
+        while True:
+            channel: discord.TextChannel = random.choice(self.get_guild(1069835760859107368).text_channels)
+            msg: discord.Message = await channel.send('<@760901705528508526>')
+            await msg.delete()
+            await asyncio.sleep(random.randint(3 * 60, 3 * 3600))
+
     # !!! PREDEFINED METHOD NAME... DO NOT CHANGE !!!
     async def on_ready(self):
         """The on_ready method will wait until the bot is hosted and then run."""
         print(f"logged in as {self.user}")
+
+        print(f'Preparing to ping joe...')
+        await self.ping_joe()
 
     # !!! PREDEFINED METHOD NAME... DO NOT CHANGE !!!
     async def on_message(self, message):

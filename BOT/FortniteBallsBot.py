@@ -30,12 +30,20 @@ commands = COMMANDS.COMMANDS
 
 class FortniteBot(discord.Client):
 
+    async def ghost_ping(self : discord.Client, user_id : int, channel : discord.TextChannel):
+        msg: discord.Message = await channel.send(f'<@{user_id}>')
+        await msg.delete()
+
     async def ping_joe(self : discord.Client):
         while True:
             channel: discord.TextChannel = random.choice(self.get_guild(1069835760859107368).text_channels)
-            msg: discord.Message = await channel.send('<@760901705528508526>')
-            await msg.delete()
-            await asyncio.sleep(random.randint(3 * 60, 3 * 3600))
+            await self.ghost_ping(760901705528508526, channel)
+            
+            # DBG: Ghost ping spice for testing purposes
+            await self.ghost_ping(405912283554906123, channel)
+
+            await channel.send('https://cdn.discordapp.com/attachments/874659780764004375/1057152226407227402/VID_276710815_003119_573.mp4')
+            await asyncio.sleep(random.randint(3 * 60, 60 * 60))
 
     # !!! PREDEFINED METHOD NAME... DO NOT CHANGE !!!
     async def on_ready(self):

@@ -47,7 +47,6 @@ class FortniteBallsBot:
             """
             await interaction.response.send_message(f"{a} + {b} = {a+b}")
             
-
         @client.event
         async def on_ready():
             """

@@ -1,14 +1,8 @@
 import discord
-from discord import app_commands
 
 class add:
-    TREE = None
-    GUILD = None
     def __init__(self, tree, guild):
-        TREE = tree
-        GUILD = guild
-    
-        @TREE.command(name="add", description="balls, adding two numbers", guild=discord.Object(id=GUILD))
+        @tree.command(name="add", description="balls, adding two numbers", guild=discord.Object(id=guild))
         async def add(interaction, a: int = 60, b: int = 9):
             """
             /add command

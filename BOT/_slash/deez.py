@@ -1,14 +1,8 @@
 import discord
-from discord import app_commands
 
 class deez:
-    TREE = None
-    GUILD = None
     def __init__(self, tree, guild):
-        TREE = tree
-        GUILD = guild
-
-        @TREE.command(name="deez", description="bud is asking for a brusing!!!!! on god!!!!", guild=discord.Object(id=GUILD))
+        @tree.command(name="deez", description="bud is asking for a brusing!!!!! on god!!!!", guild=discord.Object(id=guild))
         async def deez(interaction):
             """
             /deez command

@@ -31,7 +31,7 @@ class FortniteBallsBot:
         This command starts the bot and defines the slash (/) commands
         """
         @tree.command(name="deez", description="go ahead, give it a try buddy", guild=discord.Object(id=GUILD))
-        async def first_command(interaction):
+        async def deez(interaction):
             await interaction.response.send_message("nutz [tips hat]")
 
         @client.event

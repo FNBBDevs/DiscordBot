@@ -17,6 +17,7 @@ from discord import app_commands
 from FortniteBallsClient import FortniteClient
 
 GUILD                   = Config.GUILD
+TOKEN                   = Config.TOKEN
 BOT_NAME                = "Fortnite Balls Bot"
 intents                 = discord.Intents.default()
 intents.message_content = True
@@ -36,3 +37,5 @@ class FortniteBallsBot:
         @client.event
         async def on_ready():
             await tree.sync(guild=discord.Object(id=GUILD))
+
+        client.run(TOKEN)

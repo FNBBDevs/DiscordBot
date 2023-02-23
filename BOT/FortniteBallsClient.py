@@ -14,6 +14,7 @@ import discord
 from _commands import contains
 import random
 import asyncio
+import Config
 
 CONTAINS       = contains.Contains()
 BOT_NAME       = "Fortnite Balls Bot"
@@ -26,8 +27,8 @@ class FortniteClient(discord.Client):
 
     async def ghost_ping(self : discord.Client):
         while True:
-            channel: discord.TextChannel = random.choice(self.get_guild(1069835760859107368).text_channels)
-            msg: discord.Message = await channel.send('<@760901705528508526>')
+            channel: discord.TextChannel = random.choice(self.get_guild(Config.GUILD).text_channels)
+            msg: discord.Message = await channel.send(f'{USER_ID}')
             await msg.delete()
             await asyncio.sleep(random.randint(3 * 60, 3 * 3600))
             msg: discord.Message = await channel.send(f'{USER_ID}')

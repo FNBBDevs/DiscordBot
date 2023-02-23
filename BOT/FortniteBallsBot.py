@@ -40,6 +40,11 @@ class FortniteBallsBot:
 
         @tree.command(name="add", description="let me help you add two numbers", guild=discord.Object(id=GUILD))
         async def add(interaction, a: int = 60, b: int = 9):
+            """
+            /add command
+            :param a: number 1
+            :param b: number 2
+            """
             await interaction.response.send_message(f"{a} + {b} = {a+b}")
             
 

@@ -1,17 +1,28 @@
+
+"""
+DISCORD BOT
+
+Authors: Nolan Gregory, Ethan Christensen, Klim F.
+Version: 0.69
+Intent: This multifaceted bot is to promote user activity within
+        servers that it is hosted in.
+"""
+
+
+
+#import COMMANDS
 import Config
 import discord
 from discord import app_commands
-import COMMANDS
-from _commands import contains
 from FortniteBallsClient import FortniteClient
 
 GUILD                   = Config.GUILD
-COMMAND_PREFIX          = '!'
 BOT_NAME                = "Fortnite Balls Bot"
 intents                 = discord.Intents.default()
 intents.message_content = True
 client                  = FortniteClient(intents=intents)
 tree                    = app_commands.CommandTree(client)
+# COMMAND_PREFIX          = '!' <- deprecated?
 
 class FortniteBallsBot:
     def run(self):
@@ -25,5 +36,3 @@ class FortniteBallsBot:
         @client.event
         async def on_ready():
             await tree.sync(guild=discord.Object(id=GUILD))
-
-        client.run(Config.TOKEN)

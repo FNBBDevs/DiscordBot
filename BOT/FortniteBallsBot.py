@@ -1,4 +1,3 @@
-
 """
 DISCORD BOT
 
@@ -29,13 +28,22 @@ class FortniteBallsBot:
     def run(self):
         """
         This command starts the bot and defines the slash (/) commands
+        - can only have one @client.event
+        - can have many @tree.command (this is the /<commands>)
         """
         @tree.command(name="deez", description="go ahead, give it a try buddy", guild=discord.Object(id=GUILD))
         async def deez(interaction):
+            """
+            /deez command
+            """
             await interaction.response.send_message("nutz [tips hat]")
+
 
         @client.event
         async def on_ready():
+            """
+            Can only have one event, this captures syncs and caputres the /-commands
+            """
             await tree.sync(guild=discord.Object(id=GUILD))
 
         client.run(TOKEN)

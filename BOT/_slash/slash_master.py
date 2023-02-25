@@ -3,7 +3,8 @@ When a new slash command file is made, add it here
 Also add it in self._slash_commands list
 """
 
-from _slash.SLASH_COMMANDS import SLASH_COMMANDS as SC
+import os
+from Config import SLASH_PATH
 from importlib import import_module
 
 class SlashMaster:
@@ -13,7 +14,7 @@ class SlashMaster:
     def __init__(self, tree, guild):
         self._tree = tree
         self._guild = guild
-        self._slash_commands = SC
+        self._slash_commands = self.get_commands()
     
     def load_commands(self):
         """
@@ -29,5 +30,9 @@ class SlashMaster:
     def import_from(self, module, name):
         module = __import__(module, fromlist=[name])
         return getattr(module, name)
-
+    
+    def get_commands(self):
+        valid_files = [val[:-3] for val in os.listdir(SLASH_PATH) if '__' not in val and val != 'slash_master.py']
+        return valid_files
+        
 

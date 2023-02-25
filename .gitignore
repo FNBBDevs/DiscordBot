@@ -1,9 +1,11 @@
 # Folders
 **/.idea/
+**/.vscode/
 
 # Files
 **/run.sh
 **/run.bat
+**/error.fnbbef
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

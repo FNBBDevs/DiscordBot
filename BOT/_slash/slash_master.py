@@ -37,8 +37,7 @@ class SlashMaster:
         return getattr(module, name)
     
     def get_commands(self):
-        valid_files = [val[:-3] for val in os.listdir(SLASH_PATH) if '__' not in val]
-        # and val != 'slash_master.py'
+        valid_files = [val[:-3] for val in os.listdir(SLASH_PATH) if '__' not in val and val != 'slash_master.py' and "error" not in val]
         return valid_files
         
 

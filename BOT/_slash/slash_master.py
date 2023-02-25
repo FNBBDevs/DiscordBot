@@ -4,6 +4,7 @@ Also add it in self._slash_commands list
 """
 
 import os
+from datetime import datetime
 from Config import SLASH_PATH
 from importlib import import_module
 
@@ -22,9 +23,13 @@ class SlashMaster:
         """
         commands = []
         for command in self._slash_commands:
-            pre_loaded_command = self.import_from(f'_slash.{command}', command)
-            pre_loaded_command = pre_loaded_command(self._tree, self._guild)
-            commands.append(pre_loaded_command)
+            try:
+                pre_loaded_command = self.import_from(f'_slash.{command}', command)
+                pre_loaded_command = pre_loaded_command(self._tree, self._guild)
+                commands.append(pre_loaded_command)
+            except:
+                with open(f'{SLASH_PATH}/error.fnbbef', 'a+') as error_file:
+                    error_file.write(f'{datetime.now().strftime("%d/%m/%Y %H:%M:%S")} - erm... I couldn\'t load that command...  erm... the one called \'{command}\', maybe try again . . .\n')
         return commands
     
     def import_from(self, module, name):
@@ -32,7 +37,8 @@ class SlashMaster:
         return getattr(module, name)
     
     def get_commands(self):
-        valid_files = [val[:-3] for val in os.listdir(SLASH_PATH) if '__' not in val and val != 'slash_master.py']
+        valid_files = [val[:-3] for val in os.listdir(SLASH_PATH) if '__' not in val]
+        # and val != 'slash_master.py'
         return valid_files
         
 

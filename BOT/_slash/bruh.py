@@ -32,7 +32,7 @@ class bruh:
             final_response = ''
             if response:
                 for finsished_job in response:
-                    final_response += f"{finsished_job}\n"
+                    final_response += f"```{finsished_job}```\n"
                 await interaction.response.send_message(final_response)
             else:
                 await interaction.response.send_message("hmm, no completed jobs were returned . . .")
@@ -81,11 +81,12 @@ class bruh:
             if arg == None:
                 return "**ERROR**: Usage 'weather <city>' | Usage 'weather -f <city>"
             elif arg == "-f":
+                print(cmd, arg, argvs)
                 if not argvs: 
                     cmd_string = cmd + ' ' + arg + ' ' + (' '.join(argvs) if argvs else '')
                     return f"**ERROR**: no city provided in '{cmd_string}'"
                 city = ' '.join(argvs)
-                response = await get_weather(city)
+                response = await get_weather(city, arg)
                 return response
             else:
                 city = arg
@@ -103,7 +104,9 @@ class bruh:
                 if not flag: return f"Current Temperature in {city} is **{response.current.temperature}°F** {response.current.type!r}"
                 if flag == "-f":
                     forecast_response = ''
-                    for forecast in response.forecasts:
+                    for i, forecast in enumerate(response.forecasts):
+                        if i == 1:
+                            break
                         date = f"Date: {forecast.date}"
                         sunrise = f"Sunrise: {forecast.astronomy.sun_rise}"
                         sunset = f"Sunset: {forecast.astronomy.sun_set}"

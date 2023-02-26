@@ -3,7 +3,6 @@ When a new slash command file is made, add it here
 Also add it in self._slash_commands list
 """
 
-from genericpath import isdir
 import os
 from datetime import datetime
 

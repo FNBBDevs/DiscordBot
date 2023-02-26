@@ -11,8 +11,8 @@ class Contains:
             'lol':"https://i.imgflip.com/7b8363.gif",
             'bruhshell':"! ! ! BRUH SHELL IS A CRYPTO-MINING SPYWARE ! ! !",
             'etchris': "https://soundcloud.com/etchris?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
-            'c++': "C++ Dev be like:\nhttps://tenor.com/view/legs-anothersh0tatlife-gif-18722244",
-            'python': "Python Dev be like :P\nhttps://tenor.com/view/gigachad-chad-gif-20773266",
+            'c++': "C++ Dev be like:\nhttps://tenor.com/view/giga-moai-gif-26488016",
+            'python': "Python Dev be like :P\nPwease use python i can't understand anything besides python\nhttps://tenor.com/view/gun-tears-cat-point-gun-crying-cat-gif-17741904",
             #'give me some dat cardi':"https://media.discordapp.net/attachments/1069835760859107371/1076370583807328256/image0.png"
 
         }

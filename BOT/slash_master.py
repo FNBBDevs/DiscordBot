@@ -11,7 +11,7 @@ class SlashMaster:
     responsible for loading in each command
     """
     def __init__(self, tree, guild, path, debug):
-        self._PATH = f'{os.getcwd()}/{path}'
+        self._PATH = f'{os.path.dirname(__file__)}/{path}'
         self._DEBUG = debug
         self._tree = tree
         self._guild = guild

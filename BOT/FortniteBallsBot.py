@@ -39,3 +39,4 @@ class FortniteBallsBot:
             print('[FNBB]: slash commands loaded')
         
         client.run(TOKEN)
+

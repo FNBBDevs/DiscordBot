@@ -1,7 +1,7 @@
 import os
 import sys
 import discord
-from Config import SLASH_PATH
+
 try:
     import python_weather
 except ModuleNotFoundError:

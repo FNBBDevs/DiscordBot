@@ -2,13 +2,6 @@ import os
 import sys
 import discord
 
-try:
-    import python_weather
-except ModuleNotFoundError:
-    print("installing python_weather w/o your permission :P")
-    if sys.platform == 'win32': os.system("pip install python_weather")
-    else: os.system("pip3 install python_weather")
-
 class bruh:
     def __init__(self, tree, guild):
 

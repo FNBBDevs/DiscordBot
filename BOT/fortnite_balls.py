@@ -18,7 +18,7 @@ class FortniteBallsBot(discord.Client):
 
         # Guild ID the bot will only work in
         self._GUILD = guild
-        self._DEBUG = True if debug else False # debug might not have been assigned!
+        self._DEBUG = bool(int(debug))
         self._CMDS_PATH = cmds_path
         self._contains = Contains()
 

@@ -9,9 +9,9 @@ Intent: This multifaceted bot is to promote user activity within
 
 import Config
 import discord
+from _slash.slash_master import SlashMaster
 from discord import app_commands
 from FortniteBallsClient import FortniteClient
-from command_delegation import CommandDelegation
 
 GUILD                   = Config.GUILD
 TOKEN                   = Config.TOKEN
@@ -20,7 +20,6 @@ intents                 = discord.Intents.default()
 intents.message_content = True
 client                  = FortniteClient(intents=intents)
 tree                    = app_commands.CommandTree(client)
-delegator               = CommandDelegation(tree, GUILD)
 
 class FortniteBallsBot:
     def run(self):
@@ -33,9 +32,10 @@ class FortniteBallsBot:
             """
 
             # ping the delegator to tell slash master to load commands
-            delegator.load_commands()      
+            SlashMaster(tree, GUILD).load_commands()   
           
             # sync the commands with our guild (server)
             await tree.sync(guild=discord.Object(id=GUILD))
+            print('[FNBB]: slash commands loaded')
         
         client.run(TOKEN)

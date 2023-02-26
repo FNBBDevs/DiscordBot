@@ -29,10 +29,11 @@ class bruh:
             command for all things bruh shell!
             """
             response = await base_process(input_str)
-            final_response = ''
+            final_response = f'```>> {input_str}\n'
             if response:
                 for finsished_job in response:
-                    final_response += f"```{finsished_job}```\n"
+                    final_response += f"{finsished_job}\n"
+                final_response += "```"
                 await interaction.response.send_message(final_response)
             else:
                 await interaction.response.send_message("hmm, no completed jobs were returned . . .")
@@ -60,12 +61,10 @@ class bruh:
                 return tokens[0], tokens[1], tokens[2:]
         
         async def process_command(cmd, arg, argvs):
-            print(argvs)
             if not cmd in self.valid_commands + ['']:
                return  f"{cmd} is not a valid command bro"
             elif cmd == 'help':
-                response  = f'>> {cmd}\n'
-                response += f'┏{"━"*33}┓\n'
+                response  = f'┏{"━"*33}┓\n'
                 response += f'┃{"VALID COMMANDS":^33s}┃\n'
                 response += f'┣{"━"*16}┳{"━"*16}┫\n'
                 for i in range(0, len(self.valid_commands), 2):
@@ -81,7 +80,6 @@ class bruh:
             if arg == None:
                 return "**ERROR**: Usage 'weather <city>' | Usage 'weather -f <city>"
             elif arg == "-f":
-                print(cmd, arg, argvs)
                 if not argvs: 
                     cmd_string = cmd + ' ' + arg + ' ' + (' '.join(argvs) if argvs else '')
                     return f"**ERROR**: no city provided in '{cmd_string}'"
@@ -101,7 +99,7 @@ class bruh:
             async with python_weather.Client(format="F") as client:
                 response = await client.get(city)
 
-                if not flag: return f"Current Temperature in {city} is **{response.current.temperature}°F** {response.current.type!r}"
+                if not flag: return f"The current temperature in {city} is {response.current.temperature}°F {response.current.type!r}"
                 if flag == "-f":
                     forecast_response = ''
                     for i, forecast in enumerate(response.forecasts):
@@ -110,16 +108,12 @@ class bruh:
                         date = f"Date: {forecast.date}"
                         sunrise = f"Sunrise: {forecast.astronomy.sun_rise}"
                         sunset = f"Sunset: {forecast.astronomy.sun_set}"
-                        forecast_response += f"={date:^25s}{sunrise:^25s}{sunset:^24s}=\n"
-                        t = "    Time           TEMP"
-                        forecast_response += f"={(t + ' '*46):74s}=\n"
+                        forecast_response += f"{date:<25s}\n{sunrise:<25s}{sunset:<24s}\n"
                         for hourly in forecast.hourly:
-                            time_span = f" {str(hourly.time.hour).rjust(2, '0')}:{str(hourly.time.minute).ljust(2, '0')}   -->    {str(hourly.temperature).rjust(3, ' ')}"
-                            info = f"{str(hourly.description).ljust(13, ' ')}  -->  {hourly.type!r} "
+                            time_span = f"{str(hourly.time.hour).rjust(2, '0')}:{str(hourly.time.minute).ljust(2, '0')}    {str(hourly.temperature).rjust(3, ' ')}°F"
+                            info = f"{str(hourly.description).ljust(13, ' ')}{hourly.type!r} "
                             if hourly.description in ["Mist", "Partly cloudy"]:
-                                forecast_response += f"=   {time_span:42s}{info:<28s}=\n"
+                                forecast_response += f"{time_span:25s}{info:<28s}\n"
                             else:
-                                forecast_response += f"=   {time_span:42s}{info:<29s}=\n"
-                            forecast_response += f"={' '*74}=\n"
-                        forecast_response += "="*76 + "\n"
+                                forecast_response += f"{time_span:25s}{info:<29s}\n"
                     return forecast_response

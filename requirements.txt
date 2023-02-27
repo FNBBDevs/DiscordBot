@@ -3,3 +3,4 @@
 discord.py==2.1.1
 python-dotenv==1.0.0
 python-weather==0.4.3
+matplotlib

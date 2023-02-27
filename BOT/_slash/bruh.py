@@ -1,6 +1,7 @@
 import discord
 import python_weather
 from _utils.bruhpy import BruhPy
+from _utils.lifegen import gen_life_gif
 
 class bruh:
     def __init__(self, tree, guild):
@@ -25,13 +26,22 @@ class bruh:
 
         @tree.command(name="bruh", description="hello world, from BRUHSHELL 2.0", guild=discord.Object(id=guild))
         async def bruh(interaction, input_str: str = "help"):
+            await interaction.response.defer()
             """
             command for all things bruh shell!
             """
             final_response = f'```>> {input_str}\n```'
+            opt_file = None
             async for finished_job in base_process(input_str):
-                final_response += f"{finished_job}\n"           
-            await interaction.response.send_message(final_response)
+                response_type = finished_job[0]
+                response_contents = finished_job[1]
+
+                if response_type == 'file': 
+                    opt_file = response_contents
+                else:
+                    final_response += f"{response_contents}\n"
+            if opt_file: await interaction.followup.send(final_response, file=opt_file)
+            else: await interaction.followup.send(final_response)
 
         async def base_process(command):
             command_line_in = command
@@ -50,6 +60,7 @@ class bruh:
         
         async def process_command(cmd, arg, argvs):
             try:
+                print(cmd, arg, argvs)
                 if not cmd in self.valid_commands + ['']:return  f"{cmd} is not a valid command bro"
                 elif cmd == 'help':
                     return await help()
@@ -57,16 +68,18 @@ class bruh:
                     return await process_weather(cmd, arg, argvs)
                 elif cmd == 'bruhpy':
                     return await bruhpy_execute(arg, argvs)
+                elif cmd == 'life':
+                    return await process_life(arg, argvs)
                 else:
-                    return f"that is not implemented yet . . ."
+                    return ("str", f"that is not implemented yet . . .")
             except Exception as exception:
-                return  f"ERROR: {exception}"
+                return  ("str", f"ERROR: {exception}")
         
         async def help():
             response = f'┏{"━"*33}┓\n┃{"VALID COMMANDS":^33s}┃\n┣{"━"*16}┳{"━"*16}┫\n'\
             +''.join([f"┃ {self.valid_commands[i]:<15s}┃ {self.valid_commands[i+1]:<14s} ┃\n" for i in range(0, len(self.valid_commands), 2)])\
             +f'┗{"━"*16}┻{"━"*16}┛\n'
-            return response
+            return ("str", f"```\n{response}\n```")
 
         async def process_weather(cmd, arg, argvs):
             if arg == None:
@@ -106,11 +119,24 @@ class bruh:
                                 forecast_response += f"{time_span:25s}{info:<28s}\n"
                             else:
                                 forecast_response += f"{time_span:25s}{info:<29s}\n"
-                    return f"```\n{forecast_response}\n```"
+                    return ("str", f"```\n{forecast_response}\n```")
 
         async def bruhpy_execute(arg, argvs):
             response = ''
             master = BruhPy()
             for res in master.run(arg, argvs):
                 response += f"```{self._tags[res[0]]}\n{res[1]}\n```\n"
-            return response
+            return ("str", response)
+
+        async def process_life(arg, argvs):
+            argvs = [arg] + [val for val in argvs if val != '']
+            if argvs[0] == '-s' and argvs[2] == '-r' and argvs[4] == '-cm' and argvs[6] == '-i':
+                try:
+                    gen_life_gif(int(argvs[1]), int(argvs[3]), argvs[5], argvs[7])
+                    with open('./BOT/_utils/_gif/tmp.gif', 'rb') as life_gif:
+                        gif = discord.File(life_gif)
+                        return ("file", gif)
+                except Exception as exception:
+                    return ("str", f"```diff\n-[ERROR]: {str(exception)}\n```")
+            else:
+                return ("str", f"```diff\n-[ERROR]: invalid / missing arguments\n```\n```\n[USAGE]: life -s # -r # -cm <colormap> -i <interpolation>\n```")

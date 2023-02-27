@@ -18,7 +18,7 @@ def execute_processed_command(program, results, debug):
     with stdoutIO() as s:
         try:
             exec(f"""\n{program}\n""")
-            if s.value() != '': results['POST'] = ('NORMAL', s.getvalue())
+            if s.getvalue() != '': results['POST'] = ('NORMAL', '[OUTPUT]\n'+s.getvalue())
             else:results['POST'] =  ('INFO', '[INFO]: no output produced')
         except Exception as exception:
             results['POST'] = ('ERROR', "-[ERROR]: " + str(exception))

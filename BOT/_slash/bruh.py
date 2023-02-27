@@ -60,7 +60,6 @@ class bruh:
         
         async def process_command(cmd, arg, argvs):
             try:
-                print(cmd, arg, argvs)
                 if not cmd in self.valid_commands + ['']:return  f"{cmd} is not a valid command bro"
                 elif cmd == 'help':
                     return await help()

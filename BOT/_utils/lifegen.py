@@ -222,24 +222,21 @@ def update(frameNum, img, current, N,):
 
 
 def gen_life_gif(size, update_time, color_map, interp):
-    print('in gen life gif')
     N = size if size < 501 else 500
     updateInterval = update_time
     cm = color_map if color_map in color_maps else "tab20b"
     it = interp if interp in interps else "none"
     grid = np.array([])
     grid = randomGrid(N)
-    plt.tight_layout()
     fig, ax = plt.subplots()
+    fig.tight_layout()
+    fig.set_tight_layout(True)
     ax.set_axis_off()
     img1 = ax.imshow(grid, interpolation=it)
     img1.set_cmap(cm)
     writer = animation.PillowWriter(fps=20)
-    print('running animation')
     ani1 = animation.FuncAnimation(fig, update, fargs=(img1, grid, N, ),
                                 frames = 120,
                                 interval=updateInterval,
                                 save_count=50)
-    print('saving animation')
     ani1.save("./BOT/_utils/_gif/tmp.gif", writer=writer)
-    print('done saving animation')

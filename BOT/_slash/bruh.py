@@ -1,11 +1,5 @@
-import os
-import sys
-import time
 import discord
-import contextlib
 import python_weather
-import multiprocessing
-from io import StringIO
 from _utils.bruhpy import BruhPy
 
 class bruh:

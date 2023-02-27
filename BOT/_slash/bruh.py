@@ -20,6 +20,13 @@ class bruh:
             'weather': {"args": [""], "argconfigs": [0], "argc": 1, "help-info": [""]},
         }
 
+        self._tags = {
+            'ERROR':  'diff',
+            'NORMAL': '',
+            'PY':     'py',
+            'INFO':   'fix', 
+        }
+
         self.valid_commands = list(self.commands.keys())
 
         @tree.command(name="bruh", description="hello world, from BRUHSHELL 2.0", guild=discord.Object(id=guild))
@@ -108,5 +115,8 @@ class bruh:
                     return forecast_response
 
         async def bruhpy_execute(arg, argvs):
+            response = ''
             master = BruhPy()
-            return f"```\n{master.run(arg, argvs)}\n```"
+            for res in master.run(arg, argvs):
+                response += f"```{self._tags[res[0]]}\n{res[1]}\n```\n"
+            return response

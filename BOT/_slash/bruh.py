@@ -29,6 +29,13 @@ class bruh:
             await interaction.response.defer()
             """
             command for all things bruh shell!
+            
+            - take the inputted string and parse it out into seperate jobs.
+            - each job is ran and a response is returned.
+            - responses have the form (<type>, <contents>)
+            - and one may look like ("str", "hello world").
+            - all str responses are merged into a larger response.
+            - optionally, a single file can be sent denoted by "file"
             """
             final_response = f'```>> {input_str}\n```'
             opt_file = None

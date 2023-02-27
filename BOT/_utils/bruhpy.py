@@ -1,3 +1,4 @@
+import re
 import sys
 import time
 import contextlib
@@ -33,7 +34,22 @@ def execute_processed_command(program, results, debug):
             if s.getvalue() != '': results['POST'] = ('NORMAL', '[OUTPUT]\n'+s.getvalue())
             else:results['POST'] =  ('INFO', '[INFO]: no output produced')
         except Exception as exception:
-            results['POST'] = ('ERROR', "-[ERROR]: " + str(exception))
+            error_response = ''
+            line_num = None
+            exception = str(exception)
+            try:
+                line_num = int(re.search('line (\d)', exception).groups()[0])
+            except Exception as e:
+                pass
+            error_response += f"-[ERROR]: {exception}\n"
+            if "bruhpy" in program:
+                error_response += "it looks like 'bruhpy' was found in the program, did you type it twice?\n"
+            if line_num:
+                for i, line in enumerate(program.split("\n")):
+                    if i == line_num - 2:
+                        error_response += f"line {line_num}: '{line}'"
+            
+            results['POST'] = ('ERROR', error_response)
 
 class BruhPy:
     """

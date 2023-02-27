@@ -6,6 +6,7 @@
 **/run.sh
 **/run.bat
 **/error.fnbbef
+**/tmp.gif
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

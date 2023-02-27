@@ -1,6 +1,7 @@
 import sys
 import time
 import contextlib
+import python_weather
 import multiprocessing
 from io import StringIO
 

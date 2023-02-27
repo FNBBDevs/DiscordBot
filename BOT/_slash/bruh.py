@@ -89,7 +89,7 @@ class bruh:
             async with python_weather.Client(format="F") as client:
                 response = await client.get(city)
 
-                if not flag: return f"The current temperature in {city} is {response.current.temperature}°F {response.current.type!r}"
+                if not flag: return f"```\nThe current temperature in {city} is {response.current.temperature}°F {response.current.type!r}\n```"
                 if flag == "-f":
                     forecast_response = ''
                     for i, forecast in enumerate(response.forecasts):
@@ -106,7 +106,7 @@ class bruh:
                                 forecast_response += f"{time_span:25s}{info:<28s}\n"
                             else:
                                 forecast_response += f"{time_span:25s}{info:<29s}\n"
-                    return forecast_response
+                    return f"```\n{forecast_response}\n```"
 
         async def bruhpy_execute(arg, argvs):
             response = ''

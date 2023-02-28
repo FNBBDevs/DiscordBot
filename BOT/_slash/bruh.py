@@ -135,6 +135,7 @@ class bruh:
             return ("str", response)
 
         async def process_life(arg, argvs):
+            print(arg, argvs)
             if arg == '-h':
                 if argvs[0] == 'color':
                     cm_reponse = ''
@@ -150,10 +151,11 @@ class bruh:
                         if i + 4 < len(CMAPS) - 1:
                             cm_reponse += f"{CMAPS[i+4]:20s}"
                         cm_reponse += "\n"
+                    return ("str", f"```\n{cm_reponse[:1500]}\n```")
                 elif argvs[0] == 'interpolations':
                     pass
                 else:
-                    pass
+                   pass
             argvs = [arg] + [val for val in argvs if val != '']
             if argvs[0] == '-s' and argvs[2] == '-r' and argvs[4] == '-cm' and argvs[6] == '-i':
                 try:

@@ -33,7 +33,7 @@ class SlashMaster:
                 pre_loaded_command = pre_loaded_command(self._tree, self._guild)
                 print(f" ┗ {Alert('SUCCESS', 'loaded successfully!')}")
             except Exception as e:
-                print("freaking error!")
+                print(f" ┗ {Alert('ERROR', 'error encountered')}: {str(e)}")
                 with open(f'./error.fnbbef', 'a+') as error_file:
                     error_file.write(f'{datetime.now().strftime("%d/%m/%Y %H:%M:%S")} - erm... I couldn\'t load that command...  erm... the one called \'{file}\', {e}\n')
     

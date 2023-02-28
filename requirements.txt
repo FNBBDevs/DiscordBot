@@ -4,4 +4,4 @@ discord.py==2.1.1
 python-dotenv==1.0.0
 python-weather==0.4.3
 bruhcolor==0.0.56
-matplotlib
+matplotlib==3.6.3

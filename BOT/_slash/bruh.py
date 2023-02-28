@@ -47,6 +47,7 @@ class bruh:
                     opt_file = response_contents
                 else:
                     final_response += f"{response_contents}\n"
+            if len(final_response)>2000: final_response = f"{final_response[:1997]}```"
             if opt_file: await interaction.followup.send(final_response, file=opt_file)
             else: await interaction.followup.send(final_response)
 
@@ -89,11 +90,11 @@ class bruh:
 
         async def process_weather(cmd, arg, argvs):
             if arg == None:
-                return "```diff\nERROR: Usage 'weather <city>' | Usage 'weather -f <city>'```"
+                return ("str", "```diff\nERROR: Usage 'weather <city>' | Usage 'weather -f <city>'```")
             elif arg == "-f":
                 if not argvs: 
                     cmd_string = cmd + ' ' + arg + ' ' + (' '.join(argvs) if argvs else '')
-                    return f"```diff\nERROR: no city provided in '{cmd_string}'```"
+                    return ("str", f"```diff\nERROR: no city provided in '{cmd_string}'```")
                 city = ' '.join(argvs)
                 return await get_weather(city, arg)
             else:
@@ -107,8 +108,7 @@ class bruh:
         async def get_weather(city, flag=None):
             async with python_weather.Client(format="F") as client:
                 response = await client.get(city)
-
-                if not flag: return f"```\nThe current temperature in {city} is {response.current.temperature}°F {response.current.type!r}\n```"
+                if not flag: return ("str", f"```\nThe current temperature in {city} is {response.current.temperature}°F {response.current.type!r}\n```")
                 if flag == "-f":
                     forecast_response = ''
                     for i, forecast in enumerate(response.forecasts):
@@ -135,7 +135,6 @@ class bruh:
             return ("str", response)
 
         async def process_life(arg, argvs):
-            print(arg, argvs)
             if arg == '-h':
                 if argvs[0] == 'color':
                     cm_reponse = ''
@@ -151,7 +150,7 @@ class bruh:
                         if i + 4 < len(CMAPS) - 1:
                             cm_reponse += f"{CMAPS[i+4]:20s}"
                         cm_reponse += "\n"
-                    return ("str", f"```\n{cm_reponse[:1500]}\n```")
+                    return ("str", f"```\n{cm_reponse}\n```")
                 elif argvs[0] == 'interpolations':
                     pass
                 else:

@@ -14,14 +14,14 @@ class bruh:
             'bruhpy': {"args": ["", "-n"], "argconfigs": [0, 1], "argc": 2, "help-info": [""]},
             'weather': {"args": [""], "argconfigs": [0], "argc": 1, "help-info": [""]},
         }
-
         self._tags = {
             'ERROR':  'diff',
             'NORMAL': '',
             'PY':     'py',
             'INFO':   'fix', 
         }
-
+        self._tag = "\n . . . (truncated) . . .\n```"
+        self._tag_length = len(self._tag)+1
         self.valid_commands = list(self.commands.keys())
 
         @tree.command(name="bruh", description="hello world, from BRUHSHELL 2.0", guild=discord.Object(id=guild))
@@ -47,9 +47,14 @@ class bruh:
                     opt_file = response_contents
                 else:
                     final_response += f"{response_contents}\n"
-            if len(final_response)>2000: final_response = f"{final_response[:1997]}```"
-            if opt_file: await interaction.followup.send(final_response, file=opt_file)
-            else: await interaction.followup.send(final_response)
+            if len(final_response)>2000:
+                final_response = final_response[:2000-self._tag_length] + self._tag
+            if opt_file:
+                try:await interaction.followup.send(final_response, file=opt_file)
+                except Exception as exception:await interaction.followup.send(f"```diff\n-{str(exception)}\n```")
+            else:
+                try:await interaction.followup.send(final_response)
+                except Exception as exception:await interaction.followup.send(f"```diff\n-{str(exception)}\n```")
 
         async def base_process(command):
             command_line_in = command
@@ -120,7 +125,7 @@ class bruh:
                         forecast_response += f"{date:<25s}\n{sunrise:<25s}{sunset:<24s}\n"
                         for hourly in forecast.hourly:
                             time_span = f"{str(hourly.time.hour).rjust(2, '0')}:{str(hourly.time.minute).ljust(2, '0')}    {str(hourly.temperature).rjust(3, ' ')}°F"
-                            info = f"{str(hourly.description).ljust(13, ' ')}{hourly.type!r} "
+                            info = f"{str(hourly.description).ljust(14, ' ')}{hourly.type!r} "
                             if hourly.description in ["Mist", "Partly cloudy"]:
                                 forecast_response += f"{time_span:25s}{info:<28s}\n"
                             else:

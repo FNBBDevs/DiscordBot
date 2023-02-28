@@ -13,9 +13,6 @@ class Contains:
             'etchris': "https://soundcloud.com/etchris?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
             'c++': "C++ Dev be like:\nhttps://tenor.com/view/giga-moai-gif-26488016",
             'python': "Python Dev be like :P\nPwease use python i can't understand anything besides python\nhttps://tenor.com/view/gun-tears-cat-point-gun-crying-cat-gif-17741904",
-            'cringeconsoleisbetterthanbruhshell': "https://cdn.discordapp.com/attachments/1079227343433912431/1079963568541290496/nulzo.jpg"
-            #'give me some dat cardi':"https://media.discordapp.net/attachments/1069835760859107371/1076370583807328256/image0.png"
-
         }
     
     def execute(self, message_in, debug):

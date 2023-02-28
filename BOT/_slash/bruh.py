@@ -1,7 +1,7 @@
 import discord
 import python_weather
 from _utils.bruhpy import BruhPy
-from _utils.lifegen import gen_life_gif
+from _utils.lifegen import gen_life_gif, color_maps as CMAPS, interps as INTERPS
 
 class bruh:
     def __init__(self, tree, guild):
@@ -135,6 +135,27 @@ class bruh:
             return ("str", response)
 
         async def process_life(arg, argvs):
+            print(arg, argvs)
+            if arg == '-h':
+                if argvs[0] == 'color':
+                    cm_reponse = ''
+                    for i in range(0, len(CMAPS), 5):
+                        if i < len(CMAPS) - 1:
+                            cm_reponse += f"{CMAPS[i]:20s}"
+                        if i + 1 < len(CMAPS) - 1:
+                            cm_reponse += f"{CMAPS[i+1]:20s}"
+                        if i + 2 < len(CMAPS) - 1:
+                            cm_reponse += f"{CMAPS[i+2]:20s}"
+                        if i + 3 < len(CMAPS) - 1:
+                            cm_reponse += f"{CMAPS[i+3]:20s}"
+                        if i + 4 < len(CMAPS) - 1:
+                            cm_reponse += f"{CMAPS[i+4]:20s}"
+                        cm_reponse += "\n"
+                    return ("str", f"```\n{cm_reponse[:1500]}\n```")
+                elif argvs[0] == 'interpolations':
+                    pass
+                else:
+                   pass
             argvs = [arg] + [val for val in argvs if val != '']
             if argvs[0] == '-s' and argvs[2] == '-r' and argvs[4] == '-cm' and argvs[6] == '-i':
                 try:

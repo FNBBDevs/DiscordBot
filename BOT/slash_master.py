@@ -4,7 +4,9 @@ Also add it in self._slash_commands list
 """
 
 import os
+import bruhcolor
 from datetime import datetime
+from _utils.alerts import Alert
 
 class SlashMaster:
     """
@@ -21,18 +23,17 @@ class SlashMaster:
         initialize each command with the current tree and guild
         """
         if self._DEBUG:
-            print(f'Searching for slash commands in: {self._PATH}...')        
+            print(f"{Alert('INFO', 'Searching for slash commands in:')} {self._PATH}...")        
 
         for file in self.get_next_command():
             if self._DEBUG:
                 print(f'Attempting to load \'{file}\'...')
-
             try:
                 pre_loaded_command = self.import_from(f'_slash.{file}', file)
                 pre_loaded_command = pre_loaded_command(self._tree, self._guild)
-
+                print(f" ┗ {Alert('SUCCESS', 'loaded successfully!')}")
             except Exception as e:
-                # TODO: You can use an actual logging library for this! >:(
+                print(f" ┗ {Alert('ERROR', 'error encountered')}: {str(e)}")
                 with open(f'./error.fnbbef', 'a+') as error_file:
                     error_file.write(f'{datetime.now().strftime("%d/%m/%Y %H:%M:%S")} - erm... I couldn\'t load that command...  erm... the one called \'{file}\', {e}\n')
     

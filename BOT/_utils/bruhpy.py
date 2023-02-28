@@ -39,9 +39,10 @@ def execute_processed_command(program, results, debug):
             line_num = None
             exception = str(exception)
             try:
-                line_num = int(re.search('line (\d*)', exception).groups()[0])
+                line_num = int(re.search('line (\d+)\)', exception).groups()[0])
             except Exception as e:
                 pass
+
             error_response += f"-[ERROR]: {exception}\n"
             if "bruhpy" in program:
                 error_response += "it looks like 'bruhpy' was found in the program, did you type it twice?\n"
@@ -73,9 +74,6 @@ class BruhPy:
             pre_process = f"{' '.join(argvs) if argvs else ''}".replace('#', '\n').replace('\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
             self._responses.append(('PY', pre_process))
         else: pre_process = f"{arg + ' ' + (' '.join(argvs) if argvs else '')}".replace('#', '\n').replace('\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
-
-        with open('err.txt', 'w') as f:
-            f.write(pre_process)
 
         code_check = self._check(pre_process)
 

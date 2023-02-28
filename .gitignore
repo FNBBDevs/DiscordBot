@@ -7,7 +7,7 @@
 **/run.bat
 **/error.fnbbef
 **/tmp.gif
-
+**/git_log_fmt.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

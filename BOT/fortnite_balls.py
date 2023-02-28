@@ -41,7 +41,7 @@ class FortniteBallsBot(discord.Client):
         if the message contains certain flags ;)
         :param message: message from the client
         """
-        if message.author == self.user:
+        if message.author == self.user or str(message.channel) in ['testing', 'git-log']:
             return
 
         if self._DEBUG: 

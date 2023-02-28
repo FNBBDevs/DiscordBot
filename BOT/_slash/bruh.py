@@ -14,14 +14,14 @@ class bruh:
             'bruhpy': {"args": ["", "-n"], "argconfigs": [0, 1], "argc": 2, "help-info": [""]},
             'weather': {"args": [""], "argconfigs": [0], "argc": 1, "help-info": [""]},
         }
-
         self._tags = {
             'ERROR':  'diff',
             'NORMAL': '',
             'PY':     'py',
             'INFO':   'fix', 
         }
-
+        self._tag = "\n . . . (truncated) . . .\n```"
+        self._tag_length = len(self._tag)+1
         self.valid_commands = list(self.commands.keys())
 
         @tree.command(name="bruh", description="hello world, from BRUHSHELL 2.0", guild=discord.Object(id=guild))
@@ -47,8 +47,14 @@ class bruh:
                     opt_file = response_contents
                 else:
                     final_response += f"{response_contents}\n"
-            if opt_file: await interaction.followup.send(final_response, file=opt_file)
-            else: await interaction.followup.send(final_response)
+            if len(final_response)>2000:
+                final_response = final_response[:2000-self._tag_length] + self._tag
+            if opt_file:
+                try:await interaction.followup.send(final_response, file=opt_file)
+                except Exception as exception:await interaction.followup.send(f"```diff\n-{str(exception)}\n```")
+            else:
+                try:await interaction.followup.send(final_response)
+                except Exception as exception:await interaction.followup.send(f"```diff\n-{str(exception)}\n```")
 
         async def base_process(command):
             command_line_in = command
@@ -67,7 +73,7 @@ class bruh:
         
         async def process_command(cmd, arg, argvs):
             try:
-                if not cmd in self.valid_commands + ['']:return  f"{cmd} is not a valid command bro"
+                if not cmd in self.valid_commands + ['']:return  ("str", f"{cmd} is not a valid command bro")
                 elif cmd == 'help':
                     return await help()
                 elif cmd == 'weather':
@@ -89,11 +95,11 @@ class bruh:
 
         async def process_weather(cmd, arg, argvs):
             if arg == None:
-                return "```diff\nERROR: Usage 'weather <city>' | Usage 'weather -f <city>'```"
+                return ("str", "```diff\nERROR: Usage 'weather <city>' | Usage 'weather -f <city>'```")
             elif arg == "-f":
                 if not argvs: 
                     cmd_string = cmd + ' ' + arg + ' ' + (' '.join(argvs) if argvs else '')
-                    return f"```diff\nERROR: no city provided in '{cmd_string}'```"
+                    return ("str", f"```diff\nERROR: no city provided in '{cmd_string}'```")
                 city = ' '.join(argvs)
                 return await get_weather(city, arg)
             else:
@@ -107,8 +113,7 @@ class bruh:
         async def get_weather(city, flag=None):
             async with python_weather.Client(format="F") as client:
                 response = await client.get(city)
-
-                if not flag: return f"```\nThe current temperature in {city} is {response.current.temperature}°F {response.current.type!r}\n```"
+                if not flag: return ("str", f"```\nThe current temperature in {city} is {response.current.temperature}°F {response.current.type!r}\n```")
                 if flag == "-f":
                     forecast_response = ''
                     for i, forecast in enumerate(response.forecasts):
@@ -120,7 +125,7 @@ class bruh:
                         forecast_response += f"{date:<25s}\n{sunrise:<25s}{sunset:<24s}\n"
                         for hourly in forecast.hourly:
                             time_span = f"{str(hourly.time.hour).rjust(2, '0')}:{str(hourly.time.minute).ljust(2, '0')}    {str(hourly.temperature).rjust(3, ' ')}°F"
-                            info = f"{str(hourly.description).ljust(13, ' ')}{hourly.type!r} "
+                            info = f"{str(hourly.description).ljust(14, ' ')}{hourly.type!r} "
                             if hourly.description in ["Mist", "Partly cloudy"]:
                                 forecast_response += f"{time_span:25s}{info:<28s}\n"
                             else:
@@ -129,13 +134,12 @@ class bruh:
 
         async def bruhpy_execute(arg, argvs):
             response = ''
-            master = BruhPy()
+            master = BruhPy(debug=True)
             for res in master.run(arg, argvs):
                 response += f"```{self._tags[res[0]]}\n{res[1]}\n```\n"
             return ("str", response)
 
         async def process_life(arg, argvs):
-            print(arg, argvs)
             if arg == '-h':
                 if argvs[0] == 'color':
                     cm_reponse = ''
@@ -151,7 +155,7 @@ class bruh:
                         if i + 4 < len(CMAPS) - 1:
                             cm_reponse += f"{CMAPS[i+4]:20s}"
                         cm_reponse += "\n"
-                    return ("str", f"```\n{cm_reponse[:1500]}\n```")
+                    return ("str", f"```\n{cm_reponse}\n```")
                 elif argvs[0] == 'interpolations':
                     pass
                 else:

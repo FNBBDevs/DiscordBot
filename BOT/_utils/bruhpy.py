@@ -128,18 +128,16 @@ class BruhPy:
             r""".*(open[(].*[)]).*""",
             r""".*(while True:).*""",
         ]
-
         anti_checks = [
             r"""(.*(".*eval.*[(].*[)].*").*)|(.*('.*eval.*[(].*[)].*').*)""",
             r"""(.*(".*exec.*[(].*[)].*").*)|(.*('.*exec.*[(].*[)].*').*)""",
-            r"""(.*(".*import .*").*)|"(.*('.*import .*').*)""",
+            r"""(.*(".*import .*").*)|(.*('.*import .*').*)""",
             r"""(.*(".*__import__[(].*[)].*").*)|(.*('__import__[(].*[)].*').*)""",
             r"""(.*(".*globals[(][)].*").*)|(.*('.*globals[(][)].*').*)""",
             r"""(.*(".*getattr[(].*[)].*").*)|(.*('.*getattr[(].*[)].*').*)""",
             r"""(.*(".*open[(].*[)].*").*)|(.*('.*open[(].*[)].*').*)""",
             r"""(.*(".*while True:.*").*)|(.*('.*while True:.*').*)""",
         ]
-
         no_antis = [
             r"""(.*(f".*{.*eval.*[(].*[)].*}.*").*)|(.*(f'.*{.*eval.*[(].*[)].*}.*').*)""",
             r"""(.*(f".*{.*exec.*[(].*[)].*}.*").*)|(.*(f'.*{.*exec.*[(].*[)].*}.*').*)""",
@@ -150,7 +148,6 @@ class BruhPy:
             r"""(.*(f".*{.*open[(].*[)].*}.*").*)|(.*(f'.*{.*open[(].*[)].*}.*').*)""",
             r"""(.*(f".*{.*while True:.*}.*").*)|(.*(f'.*{.*while True:.*}.*').*)""",
         ]
-
         no_antis_antis = [
             r"""(.*(f".*{.*'.*eval.*[(].*[)].*'.*}.*").*)|(.*(f'.*{.*".*eval.*[(].*[)].*".*}.*').*)""",
             r"""(.*(f".*{.*'.*exec.*[(].*[)].*'.*}.*").*)|(.*(f'.*{.*".*exec.*[(].*[)].*".*}.*').*)""",
@@ -179,11 +176,18 @@ class BruhPy:
                 for restriction in self._restictions:
                     check_1 = r"""(.*=.*"""+restriction+r""".*)"""
                     check_2 = r"""(.*[(]"""+restriction+r"""[)].*)"""
+                    anti_check_1 = r"""(.*=.*\""""+restriction+r""".*")"""
+                    anti_check_1_2 = r"""(.*=.*'"""+restriction+r""".*')"""
+                    anti_check_2 = r"""(.*[(]\""""+restriction+r"""[)].*")"""
+                    anti_check_2_2 = r"""(.*[(]'"""+restriction+r"""[)].*')"""
                     if re.search(check_1, hidden_line) or re.search(check_2, hidden_line):
-                        hits.append(check_1)
-                        hits.append(check_2)
-                        flag = True
-                        break
+                        if not (re.search(anti_check_1, hidden_line) or re.search(anti_check_1_2, hidden_line) or re.search(anti_check_2, hidden_line) or re.search(anti_check_2_2, hidden_line)):
+                            break
+                        else:
+                            hits.append(check_1)
+                            hits.append(check_2)
+                            flag = True
+                            break
                 for check, anti_check in list(zip(no_antis, no_antis_antis)):
                     if re.search(check, hidden_line) and not re.search(anti_check, hidden_line):
                         hits.append(check)
@@ -191,5 +195,5 @@ class BruhPy:
                         flag = True
                         break
         print(hits)
-        return not flag
+        #return not flag
         return True if input("allow?: ").strip().lower() == "y" else False

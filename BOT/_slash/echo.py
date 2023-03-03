@@ -5,8 +5,6 @@ class echo:
         @tree.command(name="echo", description="let me talk to you ;)", guild=discord.Object(id=guild))
         async def echo(interaction, message: str = "are you serious right now"):
             """
-            /add command
-            :param a: number 1
-            :param b: number 2
+            Echo command
             """
             await interaction.response.send_message(message)

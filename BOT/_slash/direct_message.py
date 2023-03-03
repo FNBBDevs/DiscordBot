@@ -17,7 +17,6 @@ class direct_message(Group):
 
         @self.command(description='Send a direct message to everyone in the discord server')
         async def all(interaction: discord.Interaction, message: str):
-            # Create DMs if they don't already exist
 
             await interaction.response.defer(ephemeral=True, thinking=True)
 
@@ -26,6 +25,7 @@ class direct_message(Group):
                     continue
                 
                 try:
+                    # Create DMs if they don't already exist
                     dms: discord.DMChannel = await member.create_dm()
                     await dms.send(message)
 

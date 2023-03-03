@@ -51,11 +51,21 @@ class Marcus:
             r"""(.*(f".*{.*'.*while True:.*'.*}.*").*)|(.*(f'.*{.*".*while True:.*".*}.*').*)""",
             r"""(.*(f".*{.*'.*__builtins__.*'.*}.*").*)|(.*(f'.*{.*".*__builtins__.*".*}.*').*)""",
         ]
+        self.for_real_no_antis = [
+            r"""(.*(f".*{.*f'.*{.*(__builtins__).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(__builtins__).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(__import__[(].*[)].*).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(__import__[(].*[)].*).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(import).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(import).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(while True:).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(while True:).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(exec[(].*[)].*).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(exec[(].*[)].*).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(eval[(].*[)].*).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(eval[(].*[)].*).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(getattr[(].*[)].*).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(getattr[(].*[)].*).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(open[(].*[)].*).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(open[(].*[)].*).*}.*".*}.*').*)""",
+        ]
         self._restrictions = BRUHPY_RESTRICTIONS
         self._hook = os.environ['MARCUS']
         self._marcus_says = Discord(url=self._hook)
 
-    def erm__hey_marcus__can_you_check_this_code_out(self, program):                
+    def erm__hey_marcus__can_you_check_this_code_out(self, program):             
             hits = []
             flag = False
             lines = program.split("\n")
@@ -91,7 +101,12 @@ class Marcus:
                             hits.append((hidden_line, anti_check))
                             flag = True
                             break
-            hits = [hit for hit in hits if hit]
+                    for check in self.for_real_no_antis:
+                        if check_res := re.search(check, hidden_line):
+                            hits.append((hidden_line, check_res))
+                            flag = True
+                            break
+            hits = [hit for hit in hits if hit[1]]
             if hits: 
                 print(f"erm... Marcus here, you might want to look at this!\n{hits}")
                 if random.random() < 0.5:

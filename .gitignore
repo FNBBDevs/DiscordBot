@@ -8,6 +8,7 @@
 **/error.fnbbef
 **/tmp.gif
 **/git_log_fmt.txt
+**/.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

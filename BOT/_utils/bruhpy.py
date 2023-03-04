@@ -85,6 +85,7 @@ class BruhPy:
         if arg == '-s':
             pre_process = f"{' '.join(argvs) if argvs else ''}".replace('#', '\n').replace(
                 '\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
+            self._responses.append(('PY', pre_process))
         else:
             pre_process = f"{arg + ' ' + (' '.join(argvs) if argvs else '')}".replace(
                 '#', '\n').replace('\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")

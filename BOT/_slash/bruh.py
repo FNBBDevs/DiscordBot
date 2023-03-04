@@ -134,7 +134,7 @@ class bruh:
 
         async def bruhpy_execute(arg, argvs):
             response = ''
-            master = BruhPy(debug=True)
+            master = BruhPy(debug=False)
             for res in master.run(arg, argvs):
                 response += f"```{self._tags[res[0]]}\n{res[1]}\n```\n"
             return ("str", response)

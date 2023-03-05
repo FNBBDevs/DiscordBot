@@ -1,6 +1,6 @@
 import bruhcolor
 
-VALID_TYPES = {'ERROR': 196, 'INFO': 220, 'SUCCESS': 76}
+VALID_TYPES = {'ERROR': 196, 'INFO': 220, 'SUCCESS': 76, 'GENERAL': 105}
 
 class Alert:
     def __init__(self, alert_type, text):
@@ -12,3 +12,19 @@ class Alert:
     
     def __str__(self):
         return self.text
+
+class ErrorAlert(Alert):
+    def __init__(self, text):
+        super(ErrorAlert, self).__init__('ERROR', text)
+
+class InfoAlert(Alert):
+    def __init__(self, text):
+        super(InfoAlert, self).__init__('INFO', text)
+
+class SuccessAlert(Alert):
+    def __init__(self, text):
+        super(SuccessAlert, self).__init__('SUCCESS', text)
+
+class GeneralAlert(Alert):
+    def __init__(self, text):
+        super(GeneralAlert, self).__init__('GENERAL', text)

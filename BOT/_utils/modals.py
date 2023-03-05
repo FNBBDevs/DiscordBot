@@ -24,8 +24,10 @@ class WeatherModal(Modal):
         self._typE = typE
 
     async def on_submit(self, interaction: discord.Interaction):
+        await interaction.response.defer()
+        orignal_response = await interaction.original_response()
         weather = await Weather(self.children[0].value, self._typE)
-        await interaction.response.edit_message(content=weather, view=None)
+        await orignal_response.edit(content=weather, view=None)
 
 class BruhPyModal(Modal):
     def __init__(self, show_code, prompt, *args, **kwargs):
@@ -42,8 +44,8 @@ class BruhPyModal(Modal):
     async def on_submit(self, interaction: discord.Interaction):
         await interaction.response.defer()
         orignal_response = await interaction.original_response()
-        response = ''
+        output = ''
         program = self.children[0].value.split(' ')
         for res in BruhPy(debug=False).run("-s" if self._show_code else program[0], program if self._show_code else program[1:]):
-            response += f"```{self._tags[res[0]]}\n{res[1]}\n```\n"
-        await orignal_response.edit(content=response, view=None)
+            output += f"```{self._tags[res[0]]}\n{res[1]}\n```\n"
+        await orignal_response.edit(content=output, view=None)

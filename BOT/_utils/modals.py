@@ -30,7 +30,7 @@ class WeatherModal(Modal):
 
 
 class BruhPyModal(Modal):
-    def __init__(self, show_code, prompt, *args, **kwargs):
+    def __init__(self, show_code, prompt, view, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.add_item(UI.TextInput(label=prompt, style=discord.TextStyle.long))
         self._tags = {
@@ -39,11 +39,13 @@ class BruhPyModal(Modal):
             'PY':     'py',
             'INFO':   'fix', 
         }
+        self._view = view
         self._show_code = show_code
 
     async def on_submit(self, interaction: discord.Interaction):
         await interaction.response.defer()
         orignal_response = await interaction.original_response()
+        await orignal_response.edit(view=self._view)
         output = ''
         program = self.children[0].value.split(' ')
         for res in BruhPy(debug=False).run("-s" if self._show_code else program[0], program if self._show_code else program[1:]):

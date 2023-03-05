@@ -119,10 +119,13 @@ class bruh:
     def get_bruhpy_options(self):
 
         async def callback(interaction):
+            bruhpy_select.disabled = True
+            bruhpy_select.placeholder = "thinking . . ."
             show_code = bruhpy_select.values[0] == "show code"
             modal = BruhPyModal(
                 show_code=show_code,
                 prompt="Enter your python code below",
+                view=bruhpy_view,
                 title="Enter your Code!"
             )
             await interaction.response.send_modal(modal)

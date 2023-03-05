@@ -6,21 +6,21 @@ from _utils.bruhpy import BruhPy
 class bruh:
     def __init__(self, tree, guild):
 
-        self._weather_options = [('current', '🌡️'), ('forecast', '⌚')]
+        self._weather_options = [('current', '🌡️'), ('forecast', '⌚'), ('both', '☁️')]
         self._bruhpy_options  = [('show code', '✅'), ('don\'t show code', '❌')]
+        self._life_options    = [('show config', '✅'), ('don\'t show config', '❌')]
         self._valid_commands  = {
             'help': 'The **help** command provides information about each command, the arguments they take in, and the expected response. You provide a `command`, and the bot responds with information about that command.',
             'weather': 'The **weather** command allows you get the current temperature or forecast for a given city. You provide whether you want the `current` temperature or `forecast`, and then provvide a `city`. The bot reponds with the corresponding information about that city.',
-            'bruhpy': 'The **bruhpy** command allows you get execute python code with the bot. You provide code the bot, and if it passes inspection, the code is executed and the bot displays the execution ouput.\nYour python code must follow a certain format where newlines in the program are replaced with `#` and tabs are still `\\t` If you want to use a newline within a string, use the standard `\\n`. An example program might look like this:\n```for i in range(10):#\\tprint("Hello, \\n world!")```'
+            'bruhpy': 'The **bruhpy** command allows you get execute python code with the bot. You provide code the bot, and if it passes inspection, the code is executed and the bot displays the execution ouput.\nYour python code must follow a certain format where newlines in the program are replaced with `#` and tabs are still `\\t` If you want to use a newline within a string, use the standard `\\n`. An example program might look like this:\n```for i in range(10):#\\tprint("Hello, \\n world!")```',
+            'life': 'The **life** command allows you to input various attributes to generate a Conway\'s Game of Life GIF. These attributes are `size`, `refresh rate`, `color map`, and `interpolation`.'
         }
-
         self._command_information = {
             'help': ("Learn about what the commands do!","❔"),
             'weather': ("Get the weather or forecast for a City!", "🌤️"),
-            'bruhpy': ("Execute Python Code!", "🐍")
+            'bruhpy': ("Execute Python Code!", "🐍"),
+            'life': ("Generate a GOL GIF!", "🧬")
         }
-
-
 
         @tree.command(name="bruh", description="bruh testing command", guild=discord.Object(id=guild))
         async def bruhv2(interaction: discord.Interaction):
@@ -37,6 +37,8 @@ class bruh:
                     view = self.get_weather_options()
                 elif selection == "b":
                     view = self.get_bruhpy_options()
+                elif selection == 'l':
+                    view = self.get_life_options()
                 else:
                     view = None
 
@@ -139,4 +141,27 @@ class bruh:
         bruhpy_view.add_item(bruhpy_select)
 
         return bruhpy_view
-                
+
+    def get_life_options(self):
+        async def callback(interaction):
+            show_config = life_select.values[0] == "show config"
+            modal = GameOfLifeModal(
+                show_config=show_config,
+                title="Set Game of Life Options"
+            )
+            await interaction.response.send_modal(modal)
+        
+        options = []
+        for option in self._life_options:
+            options.append(
+                discord.SelectOption(label=option[0].capitalize(), emoji=option[1], value=option[0])
+            )
+        life_select = Select(
+            placeholder="Do you want to display the config?",
+            options=options
+        )
+        life_select.callback = callback
+        life_view = View()
+        life_view.add_item(life_select)
+
+        return life_view

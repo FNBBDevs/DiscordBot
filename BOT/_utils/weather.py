@@ -6,8 +6,9 @@ async def get_weather(city, typE="current"):
         response = await client.get(city)
         if typE == "current":
             return f"```\nThe current temperature in {city} is {response.current.temperature}°F {response.current.type!r}\n```"
-        elif typE == "forecast":
+        elif typE == "forecast" or typE == "both":
             forecast_response = ''
+            if typE == "both": forecast_response += f"The current temperature in {city} is {response.current.temperature}°F {response.current.type!r}\n\n"
             for i, forecast in enumerate(response.forecasts):
                 if i == 1:
                     break
@@ -22,7 +23,7 @@ async def get_weather(city, typE="current"):
                         forecast_response += f"{time_span:25s}{info:<28s}\n"
                     else:
                         forecast_response += f"{time_span:25s}{info:<29s}\n"
-            return f"```\n{forecast_response}\n```"
+            return f"```\n{forecast_response}\n```"            
         else:
             return "**No Response**"
 

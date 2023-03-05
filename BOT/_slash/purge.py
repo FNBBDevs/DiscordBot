@@ -12,10 +12,11 @@ class purge:
             msg : discord.WebhookMessage = await interaction.followup.send(f'Deleted {count} messages from the chat...', ephemeral=True)
             await msg.delete(delay=3)
 
-        @tree.command(name='purge-channel', description="clear specified number of messages from the chat", guild=discord.Object(id=guild))
+        @tree.command(name='purge-channel', description="delete all messages from the channel", guild=discord.Object(id=guild))
         async def purge_channel(interaction : discord.Interaction):
-
+            webhooks = await interaction.channel.webhooks()
             await interaction.response.send_message(content='This channel will be deleted...', ephemeral=True)
-            
-            await interaction.channel.clone(reason='Has been nuked')
+            new_channel = await interaction.channel.clone(reason='Has been nuked')
+            for webhook in webhooks:
+                await webhook.edit(channel=new_channel)
             await interaction.channel.delete()

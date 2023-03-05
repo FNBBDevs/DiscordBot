@@ -52,24 +52,28 @@ class BruhPyModal(Modal):
 
 
 class GameOfLifeModal(Modal):
-    def __init__(self, show_config, *args, **kwargs):
+    def __init__(self, show_config, view, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+        self._view = view
+        self._show_config = show_config
         self.add_item(UI.TextInput(label="Enter a Grid Size:", style=discord.TextStyle.short))
-        self.add_item(UI.TextInput(label="Enter a Refresh Speed:", style=discord.TextStyle.short))
+        self.add_item(UI.TextInput(label="Enter a Refresh Speed(ms):", style=discord.TextStyle.short))
         self.add_item(UI.TextInput(label="Enter a Color Map:", style=discord.TextStyle.short))
         self.add_item(UI.TextInput(label="Enter an Interpolation:", style=discord.TextStyle.short))
 
     async def on_submit(self, interaction: discord.Interaction):
         await interaction.response.defer()
         original_response = await interaction.original_response()
+        await original_response.edit(view=self._view)
         values = [child.value for child in self.children]
         try:
-            GenLifeGif(int(self.children[0].value), int(self.children[1].value), self.children[2].value, self.children[3].value)
+            GenLifeGif(int(values[0]), int(values[1]), values[2], values[3])
             with open('./BOT/_utils/_gif/tmp.gif', 'rb') as life_gif:
                 gif = discord.File(life_gif)
                 await original_response.add_files(gif)
-                await original_response.edit(view=None)
-
+                if self._show_config:
+                    await original_response.edit(content=f"""```\nSize         : {values[0]}\nSpeed        : {values[1]}\nColormap     : {values[2]}\nInterpolation: {values[3]}\n```""",view=None)
+                else:
+                    await original_response.edit(view=None)
         except Exception as e:
-            print(str(e))
+            await original_response.delete()

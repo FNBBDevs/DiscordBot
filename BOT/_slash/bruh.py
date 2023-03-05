@@ -144,9 +144,12 @@ class bruh:
 
     def get_life_options(self):
         async def callback(interaction):
+            life_select.disabled = True
+            life_select.placeholder = "thinking . . ."
             show_config = life_select.values[0] == "show config"
             modal = GameOfLifeModal(
                 show_config=show_config,
+                view=life_view,
                 title="Set Game of Life Options"
             )
             await interaction.response.send_modal(modal)

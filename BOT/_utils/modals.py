@@ -1,6 +1,4 @@
 """DEFINE YOUR MODALS HERE"""
-
-
 import discord
 from discord import ui as UI
 from discord.ui import Modal
@@ -28,6 +26,7 @@ class WeatherModal(Modal):
         orignal_response = await interaction.original_response()
         weather = await Weather(self.children[0].value, self._typE)
         await orignal_response.edit(content=weather, view=None)
+
 
 class BruhPyModal(Modal):
     def __init__(self, show_code, prompt, *args, **kwargs):

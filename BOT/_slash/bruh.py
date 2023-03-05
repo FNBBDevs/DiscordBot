@@ -3,7 +3,7 @@ from discord.ui import Select, View
 from _utils.modals import *
 from _utils.bruhpy import BruhPy
 
-class bruhv2:
+class bruh:
     def __init__(self, tree, guild):
 
         self._weather_options = ['current', 'forecast']
@@ -16,7 +16,7 @@ class bruhv2:
 
 
 
-        @tree.command(name="bruhv2", description="bruh testing command", guild=discord.Object(id=guild))
+        @tree.command(name="bruh", description="bruh testing command", guild=discord.Object(id=guild))
         async def bruhv2(interaction: discord.Interaction):
 
             async def callback(interaction):

@@ -64,6 +64,29 @@ class bruh:
 
             await interaction.followup.send(view=view)
 
+    def get_help_options(self):
+
+        async def callback(interaction):
+
+            help_info = self._valid_commands[help_select.values[0]]
+            await interaction.response.edit_message(content=help_info, view=None)
+
+        options = []
+        for option in self._valid_commands:
+            options.append(
+                discord.SelectOption(label=option.capitalize(), emoji="❔", value=option)
+            )
+        
+        help_select = Select(
+            placeholder="What command?",
+            options=options
+        )
+
+        help_select.callback = callback
+        help_view = View()
+        help_view.add_item(help_select)
+        return help_view
+
     def get_weather_options(self):
 
         async def callback(interaction):
@@ -78,7 +101,7 @@ class bruh:
         options = []
         for option in self._weather_options:
             options.append(
-                discord.SelectOption(label=option.capitalize(), value=option)
+                discord.SelectOption(label=option.capitalize(), emoji="🌤️", value=option)
             )
         weather_select = Select(
             placeholder="Do you want the current Temperature or a Forecast?",
@@ -90,31 +113,6 @@ class bruh:
         
         return weather_view
     
-
-    def get_help_options(self):
-
-        async def callback(interaction):
-
-            help_info = self._valid_commands[help_select.values[0]]
-            await interaction.response.edit_message(content=help_info, view=None)
-
-        options = []
-        for option in self._valid_commands:
-            options.append(
-                discord.SelectOption(label=option.capitalize(), value=option)
-            )
-        
-        help_select = Select(
-            placeholder="What command?",
-            options=options
-        )
-
-        help_select.callback = callback
-        help_view = View()
-        help_view.add_item(help_select)
-        return help_view
-
-
     def get_bruhpy_options(self):
 
         async def callback(interaction):
@@ -129,7 +127,7 @@ class bruh:
         options = []
         for option in self._bruhpy_options:
             options.append(
-                discord.SelectOption(label=option.capitalize(), value=option)
+                discord.SelectOption(label=option.capitalize(), emoji="🐍", value=option)
             )
         bruhpy_select = Select(
             placeholder="Do you want to display the code?",

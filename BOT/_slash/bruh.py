@@ -71,7 +71,6 @@ class bruh:
             modal = WeatherModal(
                 typE=typE,
                 prompt="City: ",
-                short_or_long="short",
                 title="Enter a City"
             )
             await interaction.response.send_modal(modal)

@@ -1,173 +1,144 @@
 import discord
-import python_weather
+from discord.ui import Select, View
+from _utils.modals import *
 from _utils.bruhpy import BruhPy
-from _utils.lifegen import gen_life_gif, color_maps as CMAPS, interps as INTERPS
 
-class bruh:
+class bruhv2:
     def __init__(self, tree, guild):
 
-        self.commands = {
-            'help': {'args': [""], "argconfigs": [0], "argc": 1},
-            'view.users': {"args": [""], "argconfigs": [0], "argc": 1, "help-info": [""]},
-            'life': {"args": [""], "argconfigs": [0], "argc": 1, "help-info": [""]},
-            'wordle': {"args": [""], "argconfigs": [0], "argc": 1, "help-info": [""]},
-            'bruhpy': {"args": ["", "-n"], "argconfigs": [0, 1], "argc": 2, "help-info": [""]},
-            'weather': {"args": [""], "argconfigs": [0], "argc": 1, "help-info": [""]},
+        self._weather_options = ['current', 'forecast']
+        self._bruhpy_options  = ['show code', 'don\'t show code']
+        self._valid_commands  = {
+            'help': 'The **help** command provides information about each command, the arguments they take in, and the expected response. You provide a `command`, and the bot responds with information about that command.',
+            'weather': 'The **weather** command allows you get the current temperature or forecast for a given city. You provide whether you want the `current` temperature or `forecast`, and then provvide a `city`. The bot reponds with the corresponding information about that city.',
+            'bruhpy': 'The **bruhpy** command allows you get execute python code with the bot. You provide code the bot, and if it passes inspection, the code is executed and the bot displays the execution ouput.\nYour python code must follow a certain format where newlines in the program are replaced with `#` and tabs are still `\\t` If you want to use a newline within a string, use the standard `\\n`. An example program might look like this:\n```for i in range(10):#\\tprint("Hello, \\n world!")```'
         }
-        self._tags = {
-            'ERROR':  'diff',
-            'NORMAL': '',
-            'PY':     'py',
-            'INFO':   'fix', 
-        }
-        self._tag = "\n . . . (truncated) . . .\n```"
-        self._tag_length = len(self._tag)+1
-        self.valid_commands = list(self.commands.keys())
 
-        @tree.command(name="bruh", description="hello world, from BRUHSHELL 2.0", guild=discord.Object(id=guild))
-        async def bruh(interaction, input_str: str = "help"):
+
+
+        @tree.command(name="bruhv2", description="bruh testing command", guild=discord.Object(id=guild))
+        async def bruhv2(interaction: discord.Interaction):
+
+            async def callback(interaction):
+
+                await interaction.response.defer()
+
+                selection = initial_select.values[0]
+        
+                if selection == "h":
+                    view = self.get_help_options()
+                elif selection == "w":
+                    view = self.get_weather_options()
+                elif selection == "b":
+                    view = self.get_bruhpy_options()
+                else:
+                    view = None
+
+                if view:
+                    await interaction.edit_original_response(view=view)
+
             await interaction.response.defer()
-            """
-            command for all things bruh shell!
-            
-            - take the inputted string and parse it out into seperate jobs.
-            - each job is ran and a response is returned.
-            - responses have the form (<type>, <contents>)
-            - and one may look like ("str", "hello world").
-            - all str responses are merged into a larger response.
-            - optionally, a single file can be sent denoted by "file"
-            """
-            final_response = f'```>> {input_str}\n```'
-            opt_file = None
-            async for finished_job in base_process(input_str):
-                response_type = finished_job[0]
-                response_contents = finished_job[1]
 
-                if response_type == 'file': 
-                    opt_file = response_contents
-                else:
-                    final_response += f"{response_contents}\n"
-            if len(final_response)>2000:
-                final_response = final_response[:2000-self._tag_length] + self._tag
-            if opt_file:
-                try:await interaction.followup.send(final_response, file=opt_file)
-                except Exception as exception:await interaction.followup.send(f"```diff\n-{str(exception)}\n```")
-            else:
-                try:await interaction.followup.send(final_response)
-                except Exception as exception:await interaction.followup.send(f"```diff\n-{str(exception)}\n```")
+            initial_select = Select(
+                placeholder="What command would you like to execute?",
+                options=[
+                discord.SelectOption(
+                    label="Help",
+                    emoji="❔",
+                    description="Learn about what the commands do!",
+                    value="h"),
+                discord.SelectOption(
+                    label="Weather",
+                    emoji="🌤️",
+                    description="Get the weather or forecast for a City!",
+                    value="w"),
+                discord.SelectOption(
+                    label="BruhPy",
+                    emoji="🐍",
+                    description="Execute Python Code!",
+                    value="b"),
+            ])
+            initial_select.callback = callback
+            view = View()
+            view.add_item(initial_select)
 
-        async def base_process(command):
-            command_line_in = command
-            jobs = [job.strip() for job in command_line_in.split("&")]
-            for job in jobs:
-                command, arguement, arguement_values = tokenize_command(job)
-                yield await process_command(command, arguement, arguement_values)
+            await interaction.followup.send(view=view)
 
-        def tokenize_command(command):
-            tokens = [cmd.strip() for cmd in command.split(" ")]
-            if len(tokens) == 0:return "skip", None, []
-            elif len(tokens) == 1:return tokens[0], None, []
-            elif len(tokens) == 2:return tokens[0], tokens[1], []
-            elif len(tokens) == 3:return tokens[0], tokens[1], [tokens[2]]
-            else:return tokens[0], tokens[1], tokens[2:]
+    def get_weather_options(self):
+
+        async def callback(interaction):
+            typE = weather_select.values[0]
+            modal = WeatherModal(
+                typE=typE,
+                prompt="City: ",
+                short_or_long="short",
+                title="Enter a City"
+            )
+            await interaction.response.send_modal(modal)
+
+        options = []
+        for option in self._weather_options:
+            options.append(
+                discord.SelectOption(label=option.capitalize(), value=option)
+            )
+        weather_select = Select(
+            placeholder="Do you want the current Temperature or a Forecast?",
+            options=options,
+        )
+        weather_select.callback = callback
+        weather_view = View()
+        weather_view.add_item(weather_select)
         
-        async def process_command(cmd, arg, argvs):
-            try:
-                if not cmd in self.valid_commands + ['']:return  ("str", f"{cmd} is not a valid command bro")
-                elif cmd == 'help':
-                    return await help()
-                elif cmd == 'weather':
-                    return await process_weather(cmd, arg, argvs)
-                elif cmd == 'bruhpy':
-                    return await bruhpy_execute(arg, argvs)
-                elif cmd == 'life':
-                    return await process_life(arg, argvs)
-                else:
-                    return ("str", f"that is not implemented yet . . .")
-            except Exception as exception:
-                return  ("str", f"ERROR: {exception}")
+        return weather_view
+    
+
+    def get_help_options(self):
+
+        async def callback(interaction):
+
+            help_info = self._valid_commands[help_select.values[0]]
+            await interaction.response.edit_message(content=help_info, view=None)
+
+        options = []
+        for option in self._valid_commands:
+            options.append(
+                discord.SelectOption(label=option.capitalize(), value=option)
+            )
         
-        async def help():
-            response = f'┏{"━"*33}┓\n┃{"VALID COMMANDS":^33s}┃\n┣{"━"*16}┳{"━"*16}┫\n'\
-            +''.join([f"┃ {self.valid_commands[i]:<15s}┃ {self.valid_commands[i+1]:<14s} ┃\n" for i in range(0, len(self.valid_commands), 2)])\
-            +f'┗{"━"*16}┻{"━"*16}┛\n'
-            return ("str", f"```\n{response}\n```")
+        help_select = Select(
+            placeholder="What command?",
+            options=options
+        )
 
-        async def process_weather(cmd, arg, argvs):
-            if arg == None:
-                return ("str", "```diff\nERROR: Usage 'weather <city>' | Usage 'weather -f <city>'```")
-            elif arg == "-f":
-                if not argvs: 
-                    cmd_string = cmd + ' ' + arg + ' ' + (' '.join(argvs) if argvs else '')
-                    return ("str", f"```diff\nERROR: no city provided in '{cmd_string}'```")
-                city = ' '.join(argvs)
-                return await get_weather(city, arg)
-            else:
-                city = arg
-                if argvs:
-                    for word in argvs:
-                        if word != None:
-                            city += ' ' + word
-                return await get_weather(city)
+        help_select.callback = callback
+        help_view = View()
+        help_view.add_item(help_select)
+        return help_view
 
-        async def get_weather(city, flag=None):
-            async with python_weather.Client(format="F") as client:
-                response = await client.get(city)
-                if not flag: return ("str", f"```\nThe current temperature in {city} is {response.current.temperature}°F {response.current.type!r}\n```")
-                if flag == "-f":
-                    forecast_response = ''
-                    for i, forecast in enumerate(response.forecasts):
-                        if i == 1:
-                            break
-                        date = f"Date: {forecast.date}"
-                        sunrise = f"Sunrise: {forecast.astronomy.sun_rise}"
-                        sunset = f"Sunset: {forecast.astronomy.sun_set}"
-                        forecast_response += f"{date:<25s}\n{sunrise:<25s}{sunset:<24s}\n"
-                        for hourly in forecast.hourly:
-                            time_span = f"{str(hourly.time.hour).rjust(2, '0')}:{str(hourly.time.minute).ljust(2, '0')}    {str(hourly.temperature).rjust(3, ' ')}°F"
-                            info = f"{str(hourly.description).ljust(14, ' ')}{hourly.type!r} "
-                            if hourly.description in ["Mist", "Partly cloudy"]:
-                                forecast_response += f"{time_span:25s}{info:<28s}\n"
-                            else:
-                                forecast_response += f"{time_span:25s}{info:<29s}\n"
-                    return ("str", f"```\n{forecast_response}\n```")
 
-        async def bruhpy_execute(arg, argvs):
-            response = ''
-            master = BruhPy(debug=False)
-            for res in master.run(arg, argvs):
-                response += f"```{self._tags[res[0]]}\n{res[1]}\n```\n"
-            return ("str", response)
+    def get_bruhpy_options(self):
 
-        async def process_life(arg, argvs):
-            if arg == '-h':
-                if argvs[0] == 'color':
-                    cm_reponse = ''
-                    for i in range(0, len(CMAPS), 5):
-                        if i < len(CMAPS) - 1:
-                            cm_reponse += f"{CMAPS[i]:20s}"
-                        if i + 1 < len(CMAPS) - 1:
-                            cm_reponse += f"{CMAPS[i+1]:20s}"
-                        if i + 2 < len(CMAPS) - 1:
-                            cm_reponse += f"{CMAPS[i+2]:20s}"
-                        if i + 3 < len(CMAPS) - 1:
-                            cm_reponse += f"{CMAPS[i+3]:20s}"
-                        if i + 4 < len(CMAPS) - 1:
-                            cm_reponse += f"{CMAPS[i+4]:20s}"
-                        cm_reponse += "\n"
-                    return ("str", f"```\n{cm_reponse}\n```")
-                elif argvs[0] == 'interpolations':
-                    pass
-                else:
-                   pass
-            argvs = [arg] + [val for val in argvs if val != '']
-            if argvs[0] == '-s' and argvs[2] == '-r' and argvs[4] == '-cm' and argvs[6] == '-i':
-                try:
-                    gen_life_gif(int(argvs[1]), int(argvs[3]), argvs[5], argvs[7])
-                    with open('./BOT/_utils/_gif/tmp.gif', 'rb') as life_gif:
-                        gif = discord.File(life_gif)
-                        return ("file", gif)
-                except Exception as exception:
-                    return ("str", f"```diff\n-[ERROR]: {str(exception)}\n```")
-            else:
-                return ("str", f"```diff\n-[ERROR]: invalid / missing arguments\n```\n```\n[USAGE]: life -s # -r # -cm <colormap> -i <interpolation>\n```")
+        async def callback(interaction):
+            show_code = bruhpy_select.values[0] == "show code"
+            modal = BruhPyModal(
+                show_code=show_code,
+                prompt="Enter your python code below",
+                title="Enter your Code!"
+            )
+            await interaction.response.send_modal(modal)
+        
+        options = []
+        for option in self._bruhpy_options:
+            options.append(
+                discord.SelectOption(label=option.capitalize(), value=option)
+            )
+        bruhpy_select = Select(
+            placeholder="Do you want to display the code?",
+            options=options
+        )
+        bruhpy_select.callback = callback
+        bruhpy_view = View()
+        bruhpy_view.add_item(bruhpy_select)
+
+        return bruhpy_view
+                

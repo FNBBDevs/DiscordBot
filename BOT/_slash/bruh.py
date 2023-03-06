@@ -119,10 +119,13 @@ class bruh:
     def get_bruhpy_options(self):
 
         async def callback(interaction):
+            bruhpy_select.disabled = True
+            bruhpy_select.placeholder = "thinking . . ."
             show_code = bruhpy_select.values[0] == "show code"
             modal = BruhPyModal(
                 show_code=show_code,
                 prompt="Enter your python code below",
+                view=bruhpy_view,
                 title="Enter your Code!"
             )
             await interaction.response.send_modal(modal)
@@ -144,9 +147,12 @@ class bruh:
 
     def get_life_options(self):
         async def callback(interaction):
+            life_select.disabled = True
+            life_select.placeholder = "thinking . . ."
             show_config = life_select.values[0] == "show config"
             modal = GameOfLifeModal(
                 show_config=show_config,
+                view=life_view,
                 title="Set Game of Life Options"
             )
             await interaction.response.send_modal(modal)

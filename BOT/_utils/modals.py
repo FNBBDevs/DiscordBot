@@ -76,16 +76,12 @@ class GameOfLifeModal(Modal):
             print("waiting for gif . . .")
             GenLifeGif(int(values[0]), int(values[1]), values[2], values[3])
             async with open('./BOT/_utils/_gif/tmp.gif', 'rb') as life_gif:
-                print("creating discord file . . .")
                 gif = await discord.File(life_gif)
-                print("adding file to original response . . .")
                 await original_response.add_files(gif)
-                print("adding config (if enabled) to original message . . .")
                 if self._show_config:
                     await original_response.edit(content=f"""```\nSize          : {values[0]}\nSpeed         : {values[1]}\nColormap      : {values[2]}\nInterpolation : {values[3]}\n```""",view=None)
                 else:
                     await original_response.edit(view=None)
-                print("done sending gif, no errors . . .")
         except Exception as e:
             await original_response.edit(content="erm . . . what you requested is to large for a wee little boy like me [shaking, looks at ground nervously]. .  . uwu!", view=None)
             self.marcus_says.post(content="bro is not packing! 😭 🤣 🤣")

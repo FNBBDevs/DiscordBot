@@ -52,3 +52,8 @@ class FortniteBallsBot(discord.Client):
 
         if "<@1075154837609656350>" in str(message.content):
             await message.channel.send(f"Erm... <@{message.author.id}> ... [looks away nervously] ... pwease don't ping me :(")
+
+    async def on_message_delete(self, message):
+        msg = str(message.author)+ 'deleted message in '+str(message.channel)+': '+str(message.content)
+        with open("./error.fnbbef", "a+") as f: f.write(msg+"\n")
+

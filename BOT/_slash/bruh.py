@@ -66,7 +66,7 @@ class bruh:
             view = View()
             view.add_item(initial_select)
 
-            await interaction.followup.send(view=view)
+            await interaction.followup.send(view=view, ephemeral=True)
 
     def get_help_options(self):
 

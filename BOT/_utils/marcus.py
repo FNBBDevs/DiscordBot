@@ -74,6 +74,7 @@ class Marcus:
                 line = line.split(";")
                 for hidden_line in line:
                     hidden_line = hidden_line.replace('"""', '"')
+                    hidden_line = re.sub(" +", " ", hidden_line)
                     for check, anti_check in list(zip(self.checks, self.anti_checks)):
                         if (s1 := re.search(check, hidden_line)) and not (s2 := re.search(anti_check, hidden_line)):
                             hits.append((hidden_line, s1))
@@ -83,8 +84,8 @@ class Marcus:
                     for restriction in self._restrictions:
                         check_1 = r"""(.*=.*"""+restriction+r""".*)"""
                         check_2 = r"""(.*[(]"""+restriction+r"""[)].*)"""
-                        anti_check_1 = r"""(.*=.*"""+"\""+restriction+r""".*")"""
-                        anti_check_1_2 = r"""(.*=.*'"""+restriction+r""".*')"""
+                        anti_check_1 = r"""(.*=\s*"""+"\""+restriction+r""".*")"""
+                        anti_check_1_2 = r"""(.*=\s*'"""+restriction+r""".*')"""
                         anti_check_2 = r"""(.*[(]"""+"\""+restriction+r"""[)].*")"""
                         anti_check_2_2 = r"""(.*[(]'"""+restriction+r"""[)].*')"""
                         if re.search(check_1, hidden_line) or re.search(check_2, hidden_line):

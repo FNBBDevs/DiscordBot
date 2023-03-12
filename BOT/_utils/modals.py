@@ -1,5 +1,6 @@
 """DEFINE YOUR MODALS HERE"""
 import os
+import time
 import discord
 from discordwebhook import Discord
 from discord import ui as UI
@@ -46,13 +47,13 @@ class BruhPyModal(Modal):
 
     async def on_submit(self, interaction: discord.Interaction):
         await interaction.response.defer()
-        orignal_response = await interaction.original_response()
-        await orignal_response.edit(view=self._view)
+        original_response = await interaction.original_response()
+        await original_response.edit(view=self._view)
         output = ''
         program = self.children[0].value.split(' ')
         for res in BruhPy(debug=False).run("-s" if self._show_code else program[0], program if self._show_code else program[1:]):
             output += f"```{self._tags[res[0]]}\n{res[1]}\n```\n"
-        await orignal_response.edit(content=output, view=None)
+        await original_response.edit(content=output, view=None)
 
 
 class GameOfLifeModal(Modal):
@@ -73,15 +74,15 @@ class GameOfLifeModal(Modal):
         await original_response.edit(view=self._view)
         values = [child.value for child in self.children]
         try:
-            print("waiting for gif . . .")
             GenLifeGif(int(values[0]), int(values[1]), values[2], values[3])
-            async with open('./BOT/_utils/_gif/tmp.gif', 'rb') as life_gif:
-                gif = await discord.File(life_gif)
+            with open('./BOT/_utils/_gif/tmp.gif', 'rb') as life_gif:
+                gif = discord.File(life_gif)
                 await original_response.add_files(gif)
                 if self._show_config:
                     await original_response.edit(content=f"""```\nSize          : {values[0]}\nSpeed         : {values[1]}\nColormap      : {values[2]}\nInterpolation : {values[3]}\n```""",view=None)
                 else:
                     await original_response.edit(view=None)
         except Exception as e:
-            await original_response.edit(content="erm . . . what you requested is to large for a wee little boy like me [shaking, looks at ground nervously]. .  . uwu!", view=None)
+            with open("./error.fnbbef", "a+") as f: f.write(f"{time.time()} -> {str(e)}\n")
+            await original_response.edit(content="erm . . . what you requested is too large for a wee little boy like me [shaking, looks at ground nervously]. .  . uwu!", view=None)
             self.marcus_says.post(content="bro is not packing! 😭 🤣 🤣")

@@ -56,7 +56,7 @@ def reference_cmap(color_map):
 
 
 def gen_life_gif(size, update_time, color_map, interp):
-    N = size if size < 501 else 500
+    N = size if size < 151 else 150
     updateInterval = update_time
     cm = reference_cmap(color_map)
     it = interp if interp in interps else "none"

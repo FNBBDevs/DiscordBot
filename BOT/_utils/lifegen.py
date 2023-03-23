@@ -4,6 +4,8 @@ import matplotlib.animation as animation
 
 
 color_maps = plt.colormaps()
+color_maps_lower = {cmap.lower():i for i, cmap in enumerate(color_maps)}
+color_maps_upper =  {cmap.upper():i for i, cmap in enumerate(color_maps)}
 interps = ['antialiased', 'none', 'nearest', 'bilinear', 'bicubic', 'spline16', 'spline36', 'hanning', 'hamming', 'hermite', 'kaiser', 'quadric', 'catrom', 'gaussian', 'bessel', 'mitchell', 'sinc', 'lanczos', 'blackman']
 directions = [[1, 0],[0, 1],[-1, 0],[0, -1],[1, 1],[1, -1],[-1, 1],[-1, -1]]
 phases = {200:190, 190:180, 180:170, 170:160, 160:150, 150:140, 140:130, 130:120, 120:110, 110:90, 90:80, 80:70, 70:60, 60:50, 50:40, 40:30, 30:20, 20:10, 10:0, 0:0}
@@ -39,10 +41,24 @@ def update(frameNum, img, current, N,):
     return img,
 
 
+def reference_cmap(color_map):
+    if color_map in color_maps:
+        return color_map
+    # maybe lowercase on accident
+    if color_map in color_maps_lower:
+        return color_maps[color_maps_lower[color_map]]
+    # maybe uppercase on accident
+    if color_map in color_maps_upper:
+        return color_maps[color_maps_upper[color_map]]
+    # they messed up big time!
+    return "twilight_shifted_r"
+
+
+
 def gen_life_gif(size, update_time, color_map, interp):
     N = size if size < 501 else 500
     updateInterval = update_time
-    cm = color_map if color_map in color_maps else "tab20b"
+    cm = reference_cmap(color_map)
     it = interp if interp in interps else "none"
     grid = np.array([])
     grid = randomGrid(N)

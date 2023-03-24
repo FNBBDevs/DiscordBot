@@ -7,7 +7,7 @@ from discord import ui as UI
 from discord.ui import Modal, Select, View
 from _utils.weather import get_weather as Weather
 from _utils.bruhpy import BruhPy
-from _utils.lifegen import gen_life_gif as GenLifeGif
+from _utils.lifegen import LifeGen
 
 class UserInputModal(Modal):
     def __init__(self, prompt, short_or_long, *args, **kwargs):
@@ -67,6 +67,7 @@ class GameOfLifeModal(Modal):
         self.add_item(UI.TextInput(label="Enter a Refresh Speed(ms):", style=discord.TextStyle.short))
         self.add_item(UI.TextInput(label="Enter a Color Map:", style=discord.TextStyle.short))
         self.add_item(UI.TextInput(label="Enter an Interpolation:", style=discord.TextStyle.short))
+        self.add_item(UI.TextInput(label="Render decay (0-no, 1-yes): ", style=discord.TextStyle.short))
 
     async def on_submit(self, interaction: discord.Interaction):
         await interaction.response.defer()
@@ -74,7 +75,8 @@ class GameOfLifeModal(Modal):
         await original_response.edit(view=self._view)
         values = [child.value for child in self.children]
         try:
-            GenLifeGif(int(values[0]), int(values[1]), values[2], values[3])
+            life = LifeGen(values[4]=="1")
+            life.gen_life_gif(int(values[0]), int(values[1]), values[2], values[3])
             with open('./BOT/_utils/_gif/tmp.gif', 'rb') as life_gif:
                 gif = discord.File(life_gif)
                 await original_response.add_files(gif)

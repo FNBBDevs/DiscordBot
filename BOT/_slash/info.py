@@ -24,7 +24,7 @@ class info(Group):
 
             await interaction.response.send_message(embed=embed)
 
-        @self.command(description='Send a direct message to everyone in the discord server')
+        @self.command(description='Display information about a specific user')
         async def user(interaction: discord.Interaction, user: discord.User = None, show_display_info: bool = False):
             
             if not user:

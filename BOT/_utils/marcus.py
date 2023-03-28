@@ -74,6 +74,7 @@ class Marcus:
                 line = line.split(";")
                 for hidden_line in line:
                     hidden_line = hidden_line.replace('"""', '"')
+                    hidden_line = re.sub(" +", " ", hidden_line)
                     for check, anti_check in list(zip(self.checks, self.anti_checks)):
                         if (s1 := re.search(check, hidden_line)) and not (s2 := re.search(anti_check, hidden_line)):
                             hits.append((hidden_line, s1))
@@ -83,14 +84,12 @@ class Marcus:
                     for restriction in self._restrictions:
                         check_1 = r"""(.*=.*"""+restriction+r""".*)"""
                         check_2 = r"""(.*[(]"""+restriction+r"""[)].*)"""
-                        anti_check_1 = r"""(.*=.*\""""+restriction+r""".*")"""
-                        anti_check_1_2 = r"""(.*=.*'"""+restriction+r""".*')"""
-                        anti_check_2 = r"""(.*[(]\""""+restriction+r"""[)].*")"""
+                        anti_check_1 = r"""(.*=\s*"""+"\""+restriction+r""".*")"""
+                        anti_check_1_2 = r"""(.*=\s*'"""+restriction+r""".*')"""
+                        anti_check_2 = r"""(.*[(]"""+"\""+restriction+r"""[)].*")"""
                         anti_check_2_2 = r"""(.*[(]'"""+restriction+r"""[)].*')"""
                         if re.search(check_1, hidden_line) or re.search(check_2, hidden_line):
                             if not (re.search(anti_check_1, hidden_line) or re.search(anti_check_1_2, hidden_line) or re.search(anti_check_2, hidden_line) or re.search(anti_check_2_2, hidden_line)):
-                                break
-                            else:
                                 hits.append((hidden_line, check_1))
                                 hits.append((hidden_line, check_2))
                                 flag = True
@@ -110,9 +109,9 @@ class Marcus:
             if hits: 
                 print(f"erm... Marcus here, you might want to look at this!\n{hits}")
                 if random.random() < 0.5:
-                    self._marcus_says.post(content=f"Woah!! Hey, are you sure the code you are trying to run isn't breaking the rules defined by the creator of this bot? Or worse, trying to run malicious code? This seems a little suspicious, `{hits[0][0][hits[0][1].span()[0]:hits[0][1].span()[1]]}`! Let's look over our code and try again!")
+                    self._marcus_says.post(content=f"Woah!! Hey, are you sure the code you are trying to run isn't breaking the rules defined by the creator of this bot? Or worse, trying to run malicious code? This seems a little suspicious, `{hits[0][0]}`! Let's look over our code and try again!")
                 else:
-                    self._marcus_says.post(content=f"erm . . . what the flip dude! Thought you could get away with `{hits[0][0][hits[0][1].span()[0]:hits[0][1].span()[1]]}`?!")
+                    self._marcus_says.post(content=f"erm . . . what the flip dude! Thought you could get away with `{hits[0][0]}`?!")
             else: print(f"[tips hat]... Hey! Its Marcus, your code looks good my guy")
             return not flag
             return True if input("allow?: ").strip().lower() == "y" else False

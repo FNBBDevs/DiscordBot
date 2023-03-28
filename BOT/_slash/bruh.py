@@ -66,7 +66,7 @@ class bruh:
             view = View()
             view.add_item(initial_select)
 
-            await interaction.followup.send(view=view)
+            await interaction.followup.send(view=view, ephemeral=True)
 
     def get_help_options(self):
 
@@ -119,9 +119,8 @@ class bruh:
     def get_bruhpy_options(self):
 
         async def callback(interaction):
-            bruhpy_select.disabled = True
-            bruhpy_select.placeholder = "thinking . . ."
             show_code = bruhpy_select.values[0] == "show code"
+            bruhpy_select.placeholder = "executing program . . ."
             modal = BruhPyModal(
                 show_code=show_code,
                 prompt="Enter your python code below",
@@ -129,6 +128,9 @@ class bruh:
                 title="Enter your Code!"
             )
             await interaction.response.send_modal(modal)
+            bruhpy_select.disabled = True
+            bruhpy_select.placeholder = "get program from user . . ."
+            await interaction.edit_original_response(view=bruhpy_view)
         
         options = []
         for option in self._bruhpy_options:
@@ -147,15 +149,17 @@ class bruh:
 
     def get_life_options(self):
         async def callback(interaction):
-            life_select.disabled = True
-            life_select.placeholder = "thinking . . ."
             show_config = life_select.values[0] == "show config"
+            life_select.placeholder = "generating GOL gif . . ."
             modal = GameOfLifeModal(
                 show_config=show_config,
                 view=life_view,
                 title="Set Game of Life Options"
             )
             await interaction.response.send_modal(modal)
+            life_select.disabled = True
+            life_select.placeholder = "getting values from user . . ."
+            await interaction.edit_original_response(view=life_view)
         
         options = []
         for option in self._life_options:

@@ -1,10 +1,13 @@
 """DEFINE YOUR MODALS HERE"""
+import os
+import time
 import discord
+from discordwebhook import Discord
 from discord import ui as UI
 from discord.ui import Modal, Select, View
 from _utils.weather import get_weather as Weather
 from _utils.bruhpy import BruhPy
-from _utils.lifegen import gen_life_gif as GenLifeGif
+from _utils.lifegen import LifeGen
 
 class UserInputModal(Modal):
     def __init__(self, prompt, short_or_long, *args, **kwargs):
@@ -44,24 +47,27 @@ class BruhPyModal(Modal):
 
     async def on_submit(self, interaction: discord.Interaction):
         await interaction.response.defer()
-        orignal_response = await interaction.original_response()
-        await orignal_response.edit(view=self._view)
+        original_response = await interaction.original_response()
+        await original_response.edit(view=self._view)
         output = ''
         program = self.children[0].value.split(' ')
         for res in BruhPy(debug=False).run("-s" if self._show_code else program[0], program if self._show_code else program[1:]):
             output += f"```{self._tags[res[0]]}\n{res[1]}\n```\n"
-        await orignal_response.edit(content=output, view=None)
+        await original_response.edit(content=output, view=None)
 
 
 class GameOfLifeModal(Modal):
+    marcus_says = Discord(url=os.environ['MARCUS'])
     def __init__(self, show_config, view, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.marcus_says = Discord(url=os.environ['MARCUS'])
         self._view = view
         self._show_config = show_config
         self.add_item(UI.TextInput(label="Enter a Grid Size:", style=discord.TextStyle.short))
         self.add_item(UI.TextInput(label="Enter a Refresh Speed(ms):", style=discord.TextStyle.short))
         self.add_item(UI.TextInput(label="Enter a Color Map:", style=discord.TextStyle.short))
         self.add_item(UI.TextInput(label="Enter an Interpolation:", style=discord.TextStyle.short))
+        self.add_item(UI.TextInput(label="Render decay (0-no, 1-yes): ", style=discord.TextStyle.short))
 
     async def on_submit(self, interaction: discord.Interaction):
         await interaction.response.defer()
@@ -69,13 +75,16 @@ class GameOfLifeModal(Modal):
         await original_response.edit(view=self._view)
         values = [child.value for child in self.children]
         try:
-            GenLifeGif(int(values[0]), int(values[1]), values[2], values[3])
+            life = LifeGen(values[4]=="1")
+            life.gen_life_gif(int(values[0]), int(values[1]), values[2], values[3])
             with open('./BOT/_utils/_gif/tmp.gif', 'rb') as life_gif:
                 gif = discord.File(life_gif)
                 await original_response.add_files(gif)
                 if self._show_config:
-                    await original_response.edit(content=f"""```\nSize         : {values[0]}\nSpeed        : {values[1]}\nColormap     : {values[2]}\nInterpolation: {values[3]}\n```""",view=None)
+                    await original_response.edit(content=f"""```\nSize          : {values[0]}\nSpeed         : {values[1]}\nColormap      : {values[2]}\nInterpolation : {values[3]}\n```""",view=None)
                 else:
                     await original_response.edit(view=None)
         except Exception as e:
-            await original_response.delete()
+            with open("./error.fnbbef", "a+") as f: f.write(f"{time.time()} -> {str(e)}\n")
+            await original_response.edit(content="erm . . . what you requested is too large for a wee little boy like me [shaking, looks at ground nervously]. .  . uwu!", view=None)
+            self.marcus_says.post(content="bro is not packing! 😭 🤣 🤣")

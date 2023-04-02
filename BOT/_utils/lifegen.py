@@ -5,7 +5,7 @@ import matplotlib.animation as animation
 class LifeGen:
 
     def __init__(self, decay=True):
-        self.decay=True
+        self.decay=decay
         self.color_maps = plt.colormaps()
         self.color_maps_lower = {cmap.lower():i for i, cmap in enumerate(self.color_maps)}
         self.color_maps_upper =  {cmap.upper():i for i, cmap in enumerate(self.color_maps)}
@@ -75,8 +75,7 @@ class LifeGen:
         writer = animation.PillowWriter(fps=20)
         ani1 = animation.FuncAnimation(fig, self.update, fargs=(img1, grid, N, ),
                                     frames = 120,
-                                    interval=updateInterval,
-                                    save_count=50)
+                                    interval=updateInterval)
         if show:
             plt.show()
         else:

@@ -37,10 +37,10 @@ class BruhPyModal(Modal):
         super().__init__(*args, **kwargs)
         self.add_item(UI.TextInput(label=prompt, style=discord.TextStyle.long))
         self._tags = {
-            'ERROR':  'diff',
+            'ERROR':  'ansi',
             'NORMAL': '',
             'PY':     'py',
-            'INFO':   'fix', 
+            'INFO':   'ansi', 
         }
         self._view = view
         self._show_code = show_code
@@ -51,7 +51,7 @@ class BruhPyModal(Modal):
         await original_response.edit(view=self._view)
         output = ''
         program = self.children[0].value.split(' ')
-        for res in BruhPy(debug=False).run("-s" if self._show_code else program[0], program if self._show_code else program[1:]):
+        for res in BruhPy(debug=False).run("-s" if self._show_code else program[0], program if self._show_code else program[1:], str(interaction.user)):
             output += f"```{self._tags[res[0]]}\n{res[1]}\n```\n"
         await original_response.edit(content=output, view=None)
 

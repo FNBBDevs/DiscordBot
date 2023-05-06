@@ -60,7 +60,7 @@ class LifeGen:
 
 
     def gen_life_gif(self, size, update_time, color_map, interp, show=False):
-        N = size if size < 151 else 150
+        N = size if size < 101 else 100
         updateInterval = update_time
         cm = self.reference_cmap(color_map)
         it = interp if interp in self.interps else "none"

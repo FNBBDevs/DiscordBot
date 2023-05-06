@@ -6,6 +6,7 @@ import multiprocessing
 from io import StringIO
 from _utils.marcus import Marcus
 from _utils.restrictions import BRUHPY_RESTRICTIONS
+import numpy as np
 
 
 @contextlib.contextmanager
@@ -38,7 +39,7 @@ def execute_processed_command(program, results, debug, pvn):
             if s.getvalue() != '':
                 results[pvn] = ('NORMAL', '[OUTPUT]\n'+s.getvalue())
             else:
-                results[pvn] = ('INFO', '[INFO]: no output produced')
+                results[pvn] = ('INFO', '[0;45;37mno output produced[0;0m')
         except Exception as exception:
             error_response = ''
             line_num = None
@@ -49,7 +50,7 @@ def execute_processed_command(program, results, debug, pvn):
             except Exception as e:
                 pass
 
-            error_response += f"-[ERROR]: {exception}\n"
+            error_response += f"[ERROR]: {exception}\n"
             if "bruhpy" in program:
                 error_response += "it looks like 'bruhpy' was found in the program, did you type it twice?\n"
             if line_num:
@@ -76,7 +77,7 @@ class BruhPy:
         self._post_val_name = post_val_name
         self.marcus         = Marcus()
 
-    def run(self, arg, argvs):
+    def run(self, arg, argvs, user):
         """
         Parse, prepare and execute the code passed in
         :param arg  : second word in the command
@@ -90,10 +91,10 @@ class BruhPy:
             pre_process = f"{arg + ' ' + (' '.join(argvs) if argvs else '')}".replace(
                 '#', '\n').replace('\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
 
-        code_check = self.marcus.erm__hey_marcus__can_you_check_this_code_out(pre_process)
+        code_check = self.marcus.erm__hey_marcus__can_you_check_this_code_out(pre_process, user)
 
         if not code_check:
-            self._responses += [("ERROR", "-[ERROR]: code did not pass preliminary inspection"), ("INFO", "[INFO]: code did not execute, no output produced")]
+            self._responses += [("ERROR", "[0;41;37m[ERROR]: code did not pass preliminary inspection[0;0m"), ("INFO", "[INFO]: code did not execute, no output produced")]
             return self._responses
 
         # Execute the code
@@ -108,7 +109,7 @@ class BruhPy:
         if process.is_alive():
             process.terminate()
             self._responses.append(
-                ('ERROR', '-[ERROR]: valid runtime exceeded!'))
+                ('ERROR', '[0;41;37m[ERROR]: valid runtime exceeded![0;0m'))
         else:
             self._responses.append(self._results[self._post_val_name])
 

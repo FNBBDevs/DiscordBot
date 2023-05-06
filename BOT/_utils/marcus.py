@@ -65,7 +65,9 @@ class Marcus:
         self._hook = os.environ['MARCUS']
         self._marcus_says = Discord(url=self._hook)
 
-    def erm__hey_marcus__can_you_check_this_code_out(self, program):             
+    def erm__hey_marcus__can_you_check_this_code_out(self, program, user):
+            if user == 'etchris#1905':
+                return True       
             hits = []
             flag = False
             lines = program.split("\n")

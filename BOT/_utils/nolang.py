@@ -63,8 +63,8 @@ def execute_processed_command(program, results, debug, pvn):
     if debug:
         print(f'leaving EPC. . .\nwith {pvn} val of {results[pvn]}')
 
-class Nolang:
 
+class Nolang:
     def __init__(self, debug=False, post_val_name='POST'):
         self._debug = debug
         self._responses = []
@@ -75,11 +75,11 @@ class Nolang:
     def run(self, arg, argvs, user):
         if arg == '-s':
             pre_process = f"{' '.join(argvs) if argvs else ''}".replace('^', '\n').replace(
-                '\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
+                '&', '    ').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
             self._responses.append(('PY', pre_process))
         else:
             pre_process = f"{arg + ' ' + (' '.join(argvs) if argvs else '')}".replace(
-                '^', '\n').replace('\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
+                '^', '\n').replace('&', '    ').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
 
         with open('./BOT/_utils/_tmp/tmp.nl', 'w', encoding='utf-8') as f:
             for line in pre_process:

@@ -11,14 +11,16 @@ like
 men')
 
 # string with escape sequences
-nolout('wow\tnolan\nyou are smexy\a')
+nolout('wow\	nolan\
+you are smexy\a')
 
 if x == 'cum' # this is a comment
 
 
 
 
-	nolout('balls\tare\ngreat') # <-- comment here
+	nolout('balls\	are\
+great') # <-- comment here
 
 hermph
 	no y = 69

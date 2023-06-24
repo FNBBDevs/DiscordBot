@@ -1,12 +1,12 @@
 import re
+import os
 import sys
 import time
 import contextlib
 import multiprocessing
+import subprocess
 from io import StringIO
-from _utils.marcus import Marcus
-from _utils.restrictions import BRUHPY_RESTRICTIONS
-import numpy as np
+
 
 @contextlib.contextmanager
 def stdoutIO(stdout=None):
@@ -34,9 +34,11 @@ def execute_processed_command(program, results, debug, pvn):
         print(f"\nEPC called with\n{program}\n")
     with stdoutIO() as s:
         try:
-            exec(f"""\n{program}\n""")
-            if s.getvalue() != '':
-                results[pvn] = ('NORMAL', '[OUTPUT]\n'+s.getvalue())
+            proc = subprocess.Popen(['nolang', './BOT/_utils/_tmp/tmp.nl'], stdout=subprocess.PIPE)
+            out, err = proc.communicate()
+            #os.system('nolang ./BOT/_utils/_gif/tmp.nl')
+            if out != '':
+                results[pvn] = ('NORMAL', '[OUTPUT]\n'+ out.decode('utf-8'))
             else:
                 results[pvn] = ('INFO', '[0;45;37mno output produced[0;0m')
         except Exception as exception:
@@ -62,49 +64,33 @@ def execute_processed_command(program, results, debug, pvn):
         print(f'leaving EPC. . .\nwith {pvn} val of {results[pvn]}')
 
 
-class BruhPy:
-    """
-    Class responsible for processing of incoming python code from the /bruh command
-    """
-
+class Nolang:
     def __init__(self, debug=False, post_val_name='POST'):
-        self._debug         = debug
-        self._responses     = []
-        self._manager       = multiprocessing.Manager()
-        self._results       = self._manager.dict()
-        self._restictions   = BRUHPY_RESTRICTIONS + ['exec', 'eval']
+        self._debug = debug
+        self._responses = []
+        self._manager = multiprocessing.Manager()
+        self._results = self._manager.dict()
         self._post_val_name = post_val_name
-        self.marcus         = Marcus()
 
     def run(self, arg, argvs, user):
-        """
-        Parse, prepare and execute the code passed in
-        :param arg  : second word in the command
-        :param argvs: every other word in the command
-        """
         if arg == '-s':
             pre_process = f"{' '.join(argvs) if argvs else ''}".replace('^', '\n').replace(
-                '\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
+                '&', '    ').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
             self._responses.append(('PY', pre_process))
         else:
             pre_process = f"{arg + ' ' + (' '.join(argvs) if argvs else '')}".replace(
-                '^', '\n').replace('\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
+                '^', '\n').replace('&', '    ').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
 
-        code_check = self.marcus.erm__hey_marcus__can_you_check_this_code_out(pre_process, user)
-
-        if not code_check:
-            self._responses += [("ERROR", "[0;41;37m[ERROR]: code did not pass preliminary inspection[0;0m"), ("INFO", "[INFO]: code did not execute, no output produced")]
-            return self._responses
-
-        # Execute the code
+        with open('./BOT/_utils/_tmp/tmp.nl', 'w', encoding='utf-8') as f:
+            for line in pre_process:
+                f.write(line)
+        
         process = multiprocessing.Process(target=execute_processed_command, args=(
             pre_process, self._results, self._debug, self._post_val_name))
         process.start()
 
-        # sleep while code is running
         time.sleep(3)
 
-        # timeout after the two seconds
         if process.is_alive():
             process.terminate()
             self._responses.append(

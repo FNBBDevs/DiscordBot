@@ -8,6 +8,7 @@ from discord.ui import Modal, Select, View
 from _utils.weather import get_weather as Weather
 from _utils.bruhpy import BruhPy
 from _utils.lifegen import LifeGen
+from _utils.nolang import Nolang
 
 class UserInputModal(Modal):
     def __init__(self, prompt, short_or_long, *args, **kwargs):
@@ -52,6 +53,30 @@ class BruhPyModal(Modal):
         output = ''
         program = self.children[0].value.split(' ')
         for res in BruhPy(debug=False).run("-s" if self._show_code else program[0], program if self._show_code else program[1:], str(interaction.user)):
+            output += f"```{self._tags[res[0]]}\n{res[1]}\n```\n"
+        await original_response.edit(content=output, view=None)
+
+
+class NolangModal(Modal):
+    def __init__(self, show_code, prompt, view, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.add_item(UI.TextInput(label=prompt, style=discord.TextStyle.long))
+        self._tags = {
+            'ERROR':  'ansi',
+            'NORMAL': '',
+            'PY':     '',
+            'INFO':   'ansi', 
+        }
+        self._view = view
+        self._show_code = show_code
+
+    async def on_submit(self, interaction: discord.Interaction):
+        await interaction.response.defer()
+        original_response = await interaction.original_response()
+        await original_response.edit(view=self._view)
+        output = ''
+        program = self.children[0].value.split(' ')
+        for res in Nolang(debug=False).run(arg="-s" if self._show_code else program[0], argvs=program if self._show_code else program[1:], user=str(interaction.user)):
             output += f"```{self._tags[res[0]]}\n{res[1]}\n```\n"
         await original_response.edit(content=output, view=None)
 

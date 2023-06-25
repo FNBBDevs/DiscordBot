@@ -11,7 +11,7 @@ def main():
     CMDS_PATH = os.environ['CMDS_PATH']
     DEBUG = os.environ['DEBUG']
     
-    intents = discord.Intents.default()
+    intents = discord.Intents.all()
     intents.message_content = True
     intents.members = True
 

@@ -6,4 +6,3 @@ python-weather==0.4.3
 bruhcolor==0.0.56
 matplotlib==3.6.3
 discordwebhook==1.0.3
-beautifulsoup4==4.12.0

@@ -16,10 +16,10 @@ def main():
     intents.members = True
     intents.voice_states = True
 
-    handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+    #handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 
     bot = FortniteBallsBot(GUILD, CMDS_PATH, debug=DEBUG, intents=intents)
-    bot.run(TOKEN, log_handler=handler, log_level=logging.DEBUG)
+    bot.run(TOKEN)
 
 if __name__ == "__main__":
     main()

@@ -15,16 +15,16 @@ class kick(Group):
                 bot_channel = interaction.guild.voice_client
                 if bot_channel:
                     try:
+                        # Safely cleanup and disconnect the bot
                         bot_channel.cleanup()
                         await bot_channel.disconnect()
-                        
                         return 
+                    
                     except Exception as e:
                         # If user is not in the voice channel
                         await interaction.response.send_message(f"{e}")
                 else:
                     await interaction.response.send_message(f"Bruh I'm literally not in a voice channel rn...")
-
             except Exception as e:
                 # If user is not in the voice channel
                 await interaction.response.send_message(f"{e}")

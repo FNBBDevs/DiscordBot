@@ -2,6 +2,7 @@ import discord
 from discord.app_commands import Group
 from discord.app_commands import CommandTree
 
+# Bro this needs some serious help. A fix will need to be made to this whole command
 class playing(Group):
     def __init__(self, tree, guild):
         @tree.command(description="Show what song is currently playing", name="playing", guild=discord.Object(id=guild))

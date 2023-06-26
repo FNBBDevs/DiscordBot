@@ -52,8 +52,6 @@ def execute_processed_command(program, results, debug, pvn):
                 pass
 
             error_response += f"[ERROR]: {exception}\n"
-            if "bruhpy" in program:
-                error_response += "it looks like 'bruhpy' was found in the program, did you type it twice?\n"
             if line_num:
                 for i, line in enumerate(program.split("\n")):
                     if i == line_num - 2:

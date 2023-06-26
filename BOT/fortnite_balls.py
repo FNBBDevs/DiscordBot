@@ -33,7 +33,7 @@ class FortniteBallsBot(discord.Client):
         SlashMaster(self.tree, self._GUILD, self._CMDS_PATH, self._DEBUG).load_commands()
 
         # sync the commands with our guild (server)
-        await self.tree.sync(guild=discord.Object(id=self._GUILD))
+        await self.tree.sync(guild=discord.Object(id=self._GUILD)) 
 
     async def on_message(self, message):
         """

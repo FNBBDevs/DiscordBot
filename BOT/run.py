@@ -1,6 +1,6 @@
 from fortnite_balls import FortniteBallsBot
 from dotenv import load_dotenv
-
+import logging
 import os
 import discord
 
@@ -14,6 +14,9 @@ def main():
     intents = discord.Intents.default()
     intents.message_content = True
     intents.members = True
+    intents.voice_states = True
+
+    #handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 
     bot = FortniteBallsBot(GUILD, CMDS_PATH, debug=DEBUG, intents=intents)
     bot.run(TOKEN)

@@ -17,6 +17,8 @@ class skip(Group):
 
             # AWAIT A RESPONSE
             await interaction.response.defer()
+            print("channel" + str(type(voice_channel)))
+            print("voice_client" + str(type(interaction.guild.voice_client)))
 
             # IF THE USER IS NOT THE VOICE CHANNEL, ISSUE ERROR
             if not user_channel:
@@ -29,7 +31,7 @@ class skip(Group):
             # SEE IF THE BOT IS IN THE CHANNEL
             elif voice_channel:
                 # If the bot is currently playing music
-                if interaction.guild.voice_client.is_playing():
+                if voice_channel.is_playing():
                     voice_channel.stop()
                     embed = discord.Embed(title=f"Skipped song", description="Your song sucked and I did not want to listen to it anymore...", color= 0x28a745)
                     embed.set_footer(text=f'Skipped By: {interaction.user.name}', icon_url= interaction.user.guild_avatar)

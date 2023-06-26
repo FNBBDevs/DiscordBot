@@ -9,7 +9,7 @@ COLORS = {
     "WHITE": 0xFBFBFB
 }
 
-def on_success(title: str=None, description: str=None, footer_text: str=None, footer_img: str=None, footer_usr: str=None):
+def on_success(title: str=None, description: str="", footer_text: str=None, footer_img: str=None, footer_usr: str=None):
     COLOR = COLORS["SUCCESS"]
     embed = discord.Embed(
           title=f"{title}", 

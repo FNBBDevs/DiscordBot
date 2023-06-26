@@ -1,6 +1,6 @@
 from fortnite_balls import FortniteBallsBot
 from dotenv import load_dotenv
-
+import logging
 import os
 import discord
 
@@ -11,12 +11,15 @@ def main():
     CMDS_PATH = os.environ['CMDS_PATH']
     DEBUG = os.environ['DEBUG']
     
-    intents = discord.Intents.all()
+    intents = discord.Intents.default()
     intents.message_content = True
     intents.members = True
+    intents.voice_states = True
+
+    handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 
     bot = FortniteBallsBot(GUILD, CMDS_PATH, debug=DEBUG, intents=intents)
-    bot.run(TOKEN)
+    bot.run(TOKEN, log_handler=handler, log_level=logging.DEBUG)
 
 if __name__ == "__main__":
     main()

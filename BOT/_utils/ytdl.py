@@ -33,23 +33,41 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.data = data
         self.title = data.get('title')
         self.url = ""
+        self.thumbnail = data.get("thumbnail")
+        self.seconds = data.get("duration")
+        if self.seconds:
+            self.format_time = time.strftime("%H:%M:%S", time.gmtime(self.seconds))
 
+    def __getitem__(self, item: str):
+        return self.__getattribute__(item)
+    
     @classmethod
-    async def from_url(cls, url, *, loop=None, stream=False):
+    async def from_url(cls, url, *, loop=None, stream=True):
         loop = loop or asyncio.get_event_loop()
         data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
 
         if 'entries' in data:
             # take first item from a playlist
             data = data['entries'][0]
-            thumbnail = data["thumbnail"]
-            title = data["title"]
-            seconds = data["duration"]
+        
+        title = data.get('title')
+        thumbnail = data.get("thumbnail")
+        seconds = data.get("duration")
+
+        if seconds:
             format_time = time.strftime("%H:%M:%S", time.gmtime(seconds))
         else:
-            thumbnail="https://pbs.twimg.com/media/EAmr-PAWsAEoiWR.jpg"
-            format_time="00000000"
-            title="UNKNOWN"
+            format_time = "00000000"
 
-        filename = data['title'] if stream else ytdl.prepare_filename(data)
-        return filename, thumbnail, title, format_time
+        file_data = {"webpage": data['webpage_url'], "title": title, "thumbnail":thumbnail, "time":format_time}
+
+        return file_data
+    
+    @classmethod
+    async def regather_stream(cls, data, *, loop=None):
+        """Used for preparing a stream, instead of downloading.
+        Since Youtube Streaming links expire."""
+
+        loop = loop or asyncio.get_event_loop()
+        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url=data, download=False))
+        return data['url']

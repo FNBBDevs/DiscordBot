@@ -12,6 +12,7 @@ from _utils.weather import get_weather as Weather
 from _utils.bruhpy import BruhPy
 from _utils.lifegen import LifeGen
 from _utils.nolang import Nolang
+from embeds import weather as weather_embed
 
 class UserInputModal(Modal):
     def __init__(self, prompt, short_or_long, *args, **kwargs):
@@ -28,43 +29,13 @@ class WeatherModal(Modal):
         super().__init__(*args, **kwargs)
         self.add_item(UI.TextInput(label=prompt, style=discord.TextStyle.short))
         self._typE = typE
-        self._emoji_to_image = {
-            '☀️':'https://cdn.discordapp.com/attachments/1036736606465445898/1122596586854289538/sunny.png',
-            '⛅️':'https://cdn.discordapp.com/attachments/1036736606465445898/1122596586485194792/partly_cloudy.png',
-            '🌦':'https://cdn.discordapp.com/attachments/1036736606465445898/1122598864042610769/partly_cloudy_rain.jpg',
-            '✨':'https://cdn.discordapp.com/attachments/1036736606465445898/1122599045102317720/starry.png',
-            '☁️':'https://cdn.discordapp.com/attachments/1036736606465445898/1122599260903452693/cloudy.png',
-            '❄️':'https://cdn.discordapp.com/attachments/1036736606465445898/1122616573786595358/heavy_rain_and_snow.png',
-            '🌫️':'https://cdn.discordapp.com/attachments/1036736606465445898/1122601157425111190/fog.jpg',
-            '🌧️':'https://cdn.discordapp.com/attachments/1036736606465445898/1122601267013885992/raining.jpg',
-            '🌨️':'https://cdn.discordapp.com/attachments/1036736606465445898/1122616094096642148/light_snow.jpg',
-            '🌨':'https://cdn.discordapp.com/attachments/1036736606465445898/1122616573786595358/heavy_rain_and_snow.png',
-            None: 'https://cdn.discordapp.com/attachments/1080959650389839872/1122615384714002433/co.gif'
-        }
 
     async def on_submit(self, interaction: discord.Interaction):
         await interaction.response.defer()
         orignal_response = await interaction.original_response()
         try:
             weather = await Weather(self.children[0].value, self._typE)
-            embed = discord.Embed(
-                title=f"{weather.get('temp')} {weather.get('type')} {weather.get('desc')}", 
-                description=f"weather for {weather.get('city')}",
-                color=random.randint(0, 0xffffff),
-                timestamp=datetime.datetime.now())
-            if weather.get('type') in self._emoji_to_image:
-                embed.set_image(url=self._emoji_to_image.get(weather.get('type')))
-            else:
-                embed.set_image(url=self._emoji_to_image.get(weather.get(None)))
-            if weather.get('mode') == 'current':
-                pass
-            elif weather.get('mode') == 'both':
-                embed.add_field(name='Sunrise', value=f"{weather.get('sunrise')}", inline=True)
-                embed.add_field(name='Sunset', value=f"{weather.get('sunset')}", inline=True)
-                for i, hourly in enumerate(weather.get('hourly')):
-                    embed.add_field(name=f'{hourly[0]}', value=f'{hourly[1]}, {hourly[2]}', inline=False)
-            else:
-                pass
+            embed = weather_embed(weather, type=self._typE)
         except ValueError as ve:
             embed = discord.Embed(
                 title=f"Unable to get weather for {self.children[0].value}", 

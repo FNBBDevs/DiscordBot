@@ -8,7 +8,7 @@ Intent: This multifaceted bot is to promote user activity within
 """
 
 import discord
-from discord import app_commands
+from discord import Message, app_commands
 from slash_master import SlashMaster
 from _commands.contains import Contains
 
@@ -33,9 +33,9 @@ class FortniteBallsBot(discord.Client):
         SlashMaster(self.tree, self._GUILD, self._CMDS_PATH, self._DEBUG).load_commands()
 
         # sync the commands with our guild (server)
-        await self.tree.sync(guild=discord.Object(id=self._GUILD))
+        await self.tree.sync(guild=discord.Object(id=self._GUILD)) 
 
-    async def on_message(self, message):
+    async def on_message(self, message: Message):
         """
         This functions reads incoming messages and replies appropriately
         if the message contains certain flags ;)

@@ -73,11 +73,11 @@ class play(Group):
                     # Load the song data from the URL passed in
                     file = await load_song(song, interaction=interaction)
                     # Reload the state of the song
-                    #source = await regather_stream(file)
+                    source = await regather_stream(file)
                     # Load and display the custom embed
                     await load(file, channel, interaction)
                     # Stream the song to the channel and call the play_next function on completion
-                    channel.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", options= f'-vn -filter_complex "{af.audio_filters["nightcore"]}"', source=file["webpage"]), after=lambda x: print(f"ERROR: {x}") if x else play_next(channel, interaction))
+                    channel.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options= f'-vn -filter_complex "{af.audio_filters["sigma"]}"', source=source), after=lambda x: print(f"ERROR: {x}") if x else play_next(channel, interaction))
 
         # Add the song data to the queue
         async def add_song(url):
@@ -122,9 +122,9 @@ class play(Group):
                 queue_url = self.queue.pop(0)
 
                 # Get URL data dictionary by loading the song
-                file_dict = asyncio.run(load_song(queue_url, interaction=interaction))
+                file_dict = asyncio.run_coroutine_threadsafe(load_song(queue_url, interaction=interaction))
                 # Regather the URL data in case the link went bad
-                source = asyncio.run(regather_stream(file_dict))
+                source = asyncio.run_coroutine_threadsafe(regather_stream(file_dict))
 
                 # Grab the data items for the custom embed
                 time = file_dict["time"]

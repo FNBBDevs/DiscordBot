@@ -5,6 +5,7 @@ import youtube_dl
 import asyncio
 import time
 import pprint
+from functools import partial
 
 # SHUT UP
 #youtube_dl.utils.bug_reports_message = lambda: ''
@@ -57,7 +58,8 @@ class YTDLSource(discord.PCMVolumeTransformer):
         """
         # Bruh. Gets the information from the youtube listing and sets data to a huge json payload
         loop = loop or asyncio.get_event_loop()
-        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
+        prepare = partial(ytdl.extract_info, url=url, download=not stream)
+        data = await loop.run_in_executor(None, prepare)
 
         # Check if this is a playlist
         if 'entries' in data:

@@ -2,7 +2,7 @@
 
 discord.py==2.3.0
 python-dotenv==1.0.0
-python-weather==0.4.3
+python-weather==1.0.3
 bruhcolor==0.0.56
 matplotlib==3.6.3
 youtube-dl==2021.2.10

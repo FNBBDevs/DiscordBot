@@ -13,6 +13,7 @@ class Contains:
             'etchris': "https://soundcloud.com/etchris?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
             'c++': "C++ Dev be like:\nhttps://tenor.com/view/giga-moai-gif-26488016",
             'python': "Python Dev be like :P\nPwease use python i can't understand anything besides python\nhttps://tenor.com/view/gun-tears-cat-point-gun-crying-cat-gif-17741904",
+            'stroke': '<:fortniteballs:1075285121990672435>'
         }
     
     def execute(self, message_in, debug):

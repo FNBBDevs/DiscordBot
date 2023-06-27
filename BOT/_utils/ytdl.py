@@ -7,25 +7,25 @@ import time
 import pprint
 
 # SHUT UP
-youtube_dl.utils.bug_reports_message = lambda: ''
+#youtube_dl.utils.bug_reports_message = lambda: ''
 
 # YTDL format options. Standard stuff. Nothing new here.
 ytdl_format_options = {
+    'prefer_ffmpeg': True,
     'format': 'bestaudio/best',
     'restrictfilenames': True,
     'noplaylist': True,
     'nocheckcertificate': True,
-    'ignoreerrors': False,
-    'logtostderr': False,
-    'quiet': True,
-    'no_warnings': True,
+    'quiet': False,
+    'verbose': True,
+    'no_warnings': False,
+    'highWaterMark': 1<<25,
     'default_search': 'auto',
-    'source_address': '0.0.0.0'
+    'source_address': '0.0.0.0',
 }
 
-# FFMPEG options (no video)
 ffmpeg_options = {
-    'options': '-vn'
+    'options': '-af "bass=g=20"',
 }
 
 # FileDownloader object with specific load instructions
@@ -33,7 +33,7 @@ ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
 # Class used to make YTDL object that we use to stream audio
 class YTDLSource(discord.PCMVolumeTransformer):
-    def __init__(self, source, *, data, volume=0.5):
+    def __init__(self, source, *, data, volume=1):
         super().__init__(source, volume)
         # Instance data for the YTDL object. Kind of pointless rn
         self.data = data
@@ -77,7 +77,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
             format_time = "00000000"
 
         # Send the data back as a dictionary that can be processed when the song is loaded
-        return {"webpage": data['webpage_url'], "title": title, "thumbnail":thumbnail, "time":format_time}
+        return {"webpage": data['webpage_url'], "title": title, "thumbnail":thumbnail, "time":format_time, "data": ffmpeg_options}
     
     # Convert the data from the queue into a useable URL (sometimes they expire, this is workaround)
     @classmethod
@@ -88,6 +88,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         # Similar to above, just using the previous data to reload state
         loop = loop or asyncio.get_event_loop()
         data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url=data, download=False))
+        print("erm")
 
         # Return a valid URL that can be streamed by FFMPEG
         return data['url']

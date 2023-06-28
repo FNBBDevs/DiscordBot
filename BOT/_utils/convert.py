@@ -5,5 +5,3 @@ with open('_tmp/tmp.py', 'r', encoding='utf-8') as f:
 out = ''
 for line in lines: out+=line[1:-1]
 print(out)
-asdfasdfasdfasdfasdf
-d

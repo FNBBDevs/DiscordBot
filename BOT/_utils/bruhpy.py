@@ -36,9 +36,9 @@ def execute_processed_command(program, results, debug, pvn):
         try:
             exec(f"""\n{program}\n""")
             if s.getvalue() != '':
-                results[pvn] = ('NORMAL', '[OUTPUT]\n'+s.getvalue())
+                results[pvn] = ('OUTPUT', s.getvalue())
             else:
-                results[pvn] = ('INFO', '[0;45;37mno output produced[0;0m')
+                results[pvn] = ('OUTPUT', 'No output produced')
         except Exception as exception:
             error_response = ''
             line_num = None
@@ -49,7 +49,7 @@ def execute_processed_command(program, results, debug, pvn):
             except Exception as e:
                 pass
 
-            error_response += f"[ERROR]: {exception}\n"
+            error_response += f"{exception}\n"
             if "bruhpy" in program:
                 error_response += "it looks like 'bruhpy' was found in the program, did you type it twice?\n"
             if line_num:
@@ -69,7 +69,7 @@ class BruhPy:
 
     def __init__(self, debug=False, post_val_name='POST'):
         self._debug         = debug
-        self._responses     = []
+        self.responses     = []
         self._manager       = multiprocessing.Manager()
         self._results       = self._manager.dict()
         self._restictions   = BRUHPY_RESTRICTIONS + ['exec', 'eval']
@@ -83,18 +83,18 @@ class BruhPy:
         :param argvs: every other word in the command
         """
         if arg == '-s':
-            pre_process = f"{' '.join(argvs) if argvs else ''}".replace('^', '\n').replace(
+            pre_process = f"{' '.join(argvs) if argvs else ''}".replace(
                 '\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
-            self._responses.append(('PY', pre_process))
+            self.responses.append(('PY', f"# your_code.py\n{pre_process}"))
         else:
             pre_process = f"{arg + ' ' + (' '.join(argvs) if argvs else '')}".replace(
-                '^', '\n').replace('\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
+                '\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
 
         code_check = self.marcus.erm__hey_marcus__can_you_check_this_code_out(pre_process, user)
 
         if not code_check:
-            self._responses += [("ERROR", "[0;41;37m[ERROR]: code did not pass preliminary inspection[0;0m"), ("INFO", "[INFO]: code did not execute, no output produced")]
-            return self._responses
+            self.responses += [("ERROR", "Code did not pass preliminary inspection"), ("INFO", "Code did not execute, no output produced")]
+            return self.responses
 
         # Execute the code
         process = multiprocessing.Process(target=execute_processed_command, args=(
@@ -107,9 +107,9 @@ class BruhPy:
         # timeout after the two seconds
         if process.is_alive():
             process.terminate()
-            self._responses.append(
-                ('ERROR', '[0;41;37m[ERROR]: valid runtime exceeded![0;0m'))
+            self.responses.append(
+                ("ERROR", "Valid runtime exceeded!"))
         else:
-            self._responses.append(self._results[self._post_val_name])
+            self.responses.append(self._results[self._post_val_name])
 
-        return self._responses
+        return self.responses

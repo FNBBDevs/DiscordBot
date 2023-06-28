@@ -12,7 +12,8 @@ from _utils.weather import get_weather as Weather
 from _utils.bruhpy import BruhPy
 from _utils.lifegen import LifeGen
 from _utils.nolang import Nolang
-from embeds import weather as weather_embed
+from .embeds import weather as weather_embed
+from .embeds import bruhby as bruhpy_embed
 
 class UserInputModal(Modal):
     def __init__(self, prompt, short_or_long, *args, **kwargs):
@@ -36,7 +37,7 @@ class WeatherModal(Modal):
         try:
             weather = await Weather(self.children[0].value, self._typE)
             embed = weather_embed(weather, type=self._typE)
-        except ValueError as ve:
+        except ValueError as value_error:
             embed = discord.Embed(
                 title=f"Unable to get weather for {self.children[0].value}", 
                 description='Hey man! Not sure what happened but I guess I couldn\'t get the weather for that city. No worries though, I am sure you can google it!!!',
@@ -65,11 +66,27 @@ class BruhPyModal(Modal):
         await interaction.response.defer()
         original_response = await interaction.original_response()
         await original_response.edit(view=self._view)
-        output = ''
         program = self.children[0].value.split(' ')
-        for res in BruhPy(debug=False).run("-s" if self._show_code else program[0], program if self._show_code else program[1:], str(interaction.user)):
-            output += f"```{self._tags[res[0]]}\n{res[1]}\n```\n"
-        await original_response.edit(content=output, view=None)
+        run_result = BruhPy(debug=False).run("-s" if self._show_code else program[0],
+                                             program if self._show_code else program[1:], 
+                                             str(interaction.user)
+                                            )
+        
+        embed = None
+        code  = None
+
+        for res in run_result:
+            if res[0] == 'OUTPUT' or res[0] == 'ERROR':
+                embed = bruhpy_embed(res, str(interaction.user))
+            elif res[0] == 'PY':
+                output = f"```py\n{res[1]}```"
+        
+
+        if embed:
+            await original_response.edit(content='' if not output else output, view=None, embed=embed)
+        else:
+            await original_response.edit(content='' if not output else output, view=None)
+
 
 
 class NolangModal(Modal):

@@ -27,7 +27,9 @@ class info(Group):
             await interaction.response.send_message(embed=embed)
 
         @self.command(
-            description="Display information about a specific user or yourself by default"
+            description=(
+                "Display information about a specific user or yourself by default"
+            )
         )
         async def user(
             interaction: discord.Interaction,

@@ -46,7 +46,9 @@ class ping(Group):
                 )
             else:
                 await interaction.response.send_message(
-                    content=f"Sending {member.name} the message {message} {amount} times.",
+                    content=(
+                        f"Sending {member.name} the message {message} {amount} times."
+                    ),
                     ephemeral=True,
                 )
 

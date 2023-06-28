@@ -29,7 +29,9 @@ class skip(Group):
                 await interaction.followup.send(
                     embed=embeds.on_error(
                         title="You are Not In a Voice Channel!",
-                        description="Hermph... You must be in a voice channel to skip songs.",
+                        description=(
+                            "Hermph... You must be in a voice channel to skip songs."
+                        ),
                         footer_text="(Attempted) Skip By:",
                         footer_usr=interaction.user.name,
                         footer_img=interaction.user.guild_avatar,
@@ -50,7 +52,10 @@ class skip(Group):
                     await interaction.followup.send(
                         embed=embeds.on_success(
                             title="Skipped Song!",
-                            description="Your song sucked and I did not want to listen to it anymore...",
+                            description=(
+                                "Your song sucked and I did not want to listen to it"
+                                " anymore..."
+                            ),
                             footer_text="Skipped By:",
                             footer_usr=interaction.user.name,
                             footer_img=interaction.user.guild_avatar,
@@ -61,7 +66,10 @@ class skip(Group):
                     await interaction.followup.send(
                         embed=embeds.on_warning(
                             title="No Song to Skip!",
-                            description="Erm... The queue is empty and there is no song to skip...",
+                            description=(
+                                "Erm... The queue is empty and there is no song to"
+                                " skip..."
+                            ),
                             footer_text="(Attempted) Skip By:",
                             footer_usr=interaction.user.name,
                             footer_img=interaction.user.guild_avatar,
@@ -73,7 +81,9 @@ class skip(Group):
                 await interaction.followup.send(
                     embed=embeds.on_error(
                         title="Bot Not In Voice Channel!",
-                        description="Hermph... I must be in a voice channel to skip songs...",
+                        description=(
+                            "Hermph... I must be in a voice channel to skip songs..."
+                        ),
                         footer_text="(Attempted) Skip By:",
                         footer_usr=interaction.user.name,
                         footer_img=interaction.user.guild_avatar,

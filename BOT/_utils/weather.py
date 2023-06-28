@@ -29,7 +29,9 @@ async def get_weather(city, typE="current"):
                 res["sunset"] = f"{forecast.astronomy.sun_set}"
                 res["hourly"] = [
                     (
-                        f"{str(hourly.time.hour).rjust(2, '0')}:{str(hourly.time.minute).ljust(2, '0')}",
+                        (
+                            f"{str(hourly.time.hour).rjust(2, '0')}:{str(hourly.time.minute).ljust(2, '0')}"
+                        ),
                         f"{str(hourly.temperature).rjust(3, ' ')}°F",
                         f"{str(hourly.description).ljust(14, ' ')}{hourly.type!r}",
                     )

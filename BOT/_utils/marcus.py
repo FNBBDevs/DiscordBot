@@ -124,11 +124,20 @@ class Marcus:
             print(f"erm... Marcus here, you might want to look at this!\n{hits}")
             if random.random() < 0.5:
                 self._marcus_says.post(
-                    content=f"Woah!! Hey, are you sure the code you are trying to run isn't breaking the rules defined by the creator of this bot? Or worse, trying to run malicious code? This seems a little suspicious, `{hits[0][0]}`! Let's look over our code and try again!"
+                    content=(
+                        "Woah!! Hey, are you sure the code you are trying to run isn't"
+                        " breaking the rules defined by the creator of this bot? Or"
+                        " worse, trying to run malicious code? This seems a little"
+                        f" suspicious, `{hits[0][0]}`! Let's look over our code and try"
+                        " again!"
+                    )
                 )
             else:
                 self._marcus_says.post(
-                    content=f"erm . . . what the flip dude! Thought you could get away with `{hits[0][0]}`?!"
+                    content=(
+                        "erm . . . what the flip dude! Thought you could get away with"
+                        f" `{hits[0][0]}`?!"
+                    )
                 )
         else:
             print("[tips hat]... Hey! Its Marcus, your code looks good my guy")

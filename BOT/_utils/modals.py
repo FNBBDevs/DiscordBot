@@ -48,7 +48,9 @@ class WeatherModal(Modal):
         try:
             weather = await Weather(self.children[0].value, self._typE)
             embed = discord.Embed(
-                title=f"{weather.get('temp')} {weather.get('type')} {weather.get('desc')}",
+                title=(
+                    f"{weather.get('temp')} {weather.get('type')} {weather.get('desc')}"
+                ),
                 description=f"weather for {weather.get('city')}",
                 color=random.randint(0, 0xFFFFFF),
                 timestamp=datetime.datetime.now(),
@@ -77,7 +79,11 @@ class WeatherModal(Modal):
         except ValueError:
             embed = discord.Embed(
                 title=f"Unable to get weather for {self.children[0].value}",
-                description="Hey man! Not sure what happened but I guess I couldn't get the weather for that city. No worries though, I am sure you can google it!!!",
+                description=(
+                    "Hey man! Not sure what happened but I guess I couldn't get the"
+                    " weather for that city. No worries though, I am sure you can"
+                    " google it!!!"
+                ),
                 color=random.randint(0, 0xFFFFFF),
                 timestamp=datetime.datetime.now(),
             )
@@ -196,7 +202,10 @@ class GameOfLifeModal(Modal):
             with open("./error.fnbbef", "a+") as f:
                 f.write(f"{time.time()} -> {str(e)}\n")
             await original_response.edit(
-                content="erm . . . what you requested is too large for a wee little boy like me [shaking, looks at ground nervously]. .  . uwu!",
+                content=(
+                    "erm . . . what you requested is too large for a wee little boy"
+                    " like me [shaking, looks at ground nervously]. .  . uwu!"
+                ),
                 view=None,
             )
             self.marcus_says.post(content="bro is not packing! 😭 🤣 🤣")

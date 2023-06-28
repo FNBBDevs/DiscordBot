@@ -10,11 +10,36 @@ class bruh:
         self._life_options = [("show config", "✅"), ("don't show config", "❌")]
         self._nolang_options = [("show code", "✅"), ("don't show code", "❌")]
         self._valid_commands = {
-            "help": "The **help** command provides information about each command, the arguments they take in, and the expected response. You provide a `command`, and the bot responds with information about that command.",
-            "weather": "The **weather** command allows you to get the current temperature or forecast for a given city. You provide whether you want the `current` temperature or `forecast`, and then provvide a `city`. The bot reponds with the corresponding information about that city.",
-            "bruhpy": 'The **bruhpy** command allows you to execute python code with the bot. You provide code the bot, and if it passes inspection, the code is executed and the bot displays the execution ouput.\nYour python code must follow a certain format where newlines in the program are replaced with `#` and tabs are still `\\t` If you want to use a newline within a string, use the standard `\\n`. An example program might look like this:\n```for i in range(10):#\\tprint("Hello, \\n world!")```',
-            "nolang": "The **nolang** command allows you to execute nolang code through the bot.",
-            "life": "The **life** command allows you to input various attributes to generate a Conway's Game of Life GIF. These attributes are `size`, `refresh rate`, `color map`, and `interpolation`.",
+            "help": (
+                "The **help** command provides information about each command, the"
+                " arguments they take in, and the expected response. You provide a"
+                " `command`, and the bot responds with information about that command."
+            ),
+            "weather": (
+                "The **weather** command allows you to get the current temperature or"
+                " forecast for a given city. You provide whether you want the `current`"
+                " temperature or `forecast`, and then provvide a `city`. The bot"
+                " reponds with the corresponding information about that city."
+            ),
+            "bruhpy": (
+                "The **bruhpy** command allows you to execute python code with the bot."
+                " You provide code the bot, and if it passes inspection, the code is"
+                " executed and the bot displays the execution ouput.\nYour python code"
+                " must follow a certain format where newlines in the program are"
+                " replaced with `#` and tabs are still `\\t` If you want to use a"
+                " newline within a string, use the standard `\\n`. An example program"
+                ' might look like this:\n```for i in range(10):#\\tprint("Hello, \\n'
+                ' world!")```'
+            ),
+            "nolang": (
+                "The **nolang** command allows you to execute nolang code through the"
+                " bot."
+            ),
+            "life": (
+                "The **life** command allows you to input various attributes to"
+                " generate a Conway's Game of Life GIF. These attributes are `size`,"
+                " `refresh rate`, `color map`, and `interpolation`."
+            ),
         }
         self._command_information = {
             "help": ("Learn about what the commands do!", "❔"),

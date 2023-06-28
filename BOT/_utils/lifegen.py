@@ -69,11 +69,13 @@ class LifeGen:
             [
                 sum(
                     [
-                        1
-                        if 0 < r + direction[0] < N
-                        and 0 <= c + direction[1] < N
-                        and current[r + direction[0]][c + direction[1]] >= 200
-                        else 0
+                        (
+                            1
+                            if 0 < r + direction[0] < N
+                            and 0 <= c + direction[1] < N
+                            and current[r + direction[0]][c + direction[1]] >= 200
+                            else 0
+                        )
                         for direction in self.directions
                     ]
                 )

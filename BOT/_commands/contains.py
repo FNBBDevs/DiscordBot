@@ -9,12 +9,19 @@ class Contains:
 
     def __init__(self):
         self.flags = {
-            "fortniteballs": "Fortnite balls\nhttps://www.youtube.com/watch?v=Kodx9em0mXE&ab_channel=Sergeantstinky-Topic",
+            "fortniteballs": (
+                "Fortnite"
+                " balls\nhttps://www.youtube.com/watch?v=Kodx9em0mXE&ab_channel=Sergeantstinky-Topic"
+            ),
             "lol": "https://i.imgflip.com/7b8363.gif",
             "bruhshell": "! ! ! BRUH SHELL IS A CRYPTO-MINING SPYWARE ! ! !",
             "etchris": "https://soundcloud.com/etchris?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
             "c++": "C++ Dev be like:\nhttps://tenor.com/view/giga-moai-gif-26488016",
-            "python": "Python Dev be like :P\nPwease use python i can't understand anything besides python\nhttps://tenor.com/view/gun-tears-cat-point-gun-crying-cat-gif-17741904",
+            "python": (
+                "Python Dev be like :P\nPwease use python i can't understand anything"
+                " besides"
+                " python\nhttps://tenor.com/view/gun-tears-cat-point-gun-crying-cat-gif-17741904"
+            ),
         }
 
     def execute(self, message_in, debug):
@@ -31,7 +38,8 @@ class Contains:
 
         if debug:
             print(
-                f"[Contains]: incoming message -> '{message_in}'\n[Contains]: checking flags . . ."
+                f"[Contains]: incoming message -> '{message_in}'\n[Contains]: checking"
+                " flags . . ."
             )
         for flag in self.flags:
             if debug:

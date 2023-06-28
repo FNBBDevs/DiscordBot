@@ -41,7 +41,9 @@ class SlashMaster:
                 print(f" ┗ {ErrorAlert('error encountered')}: {str(e)}")
                 with open(f"./error.fnbbef", "a+") as error_file:
                     error_file.write(
-                        f'{datetime.now().strftime("%d/%m/%Y %H:%M:%S")} - erm... I couldn\'t load that command...  erm... the one called \'{file}\', {e}\n'
+                        f'{datetime.now().strftime("%d/%m/%Y %H:%M:%S")} - erm... I'
+                        " couldn't load that command...  erm... the one called"
+                        f" '{file}', {e}\n"
                     )
 
     def get_next_command(self):

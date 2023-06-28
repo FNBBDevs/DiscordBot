@@ -31,7 +31,8 @@ class play(Group):
             # If the user is not in a voice channel, prompt them to join a voice channel
             if not user_channel:
                 await interaction.followup.send(
-                    "BRUH YOU NEED TO BE IN A VOICE CHANNEL SO I KNOW WHERE TO GO :rofl: :rofl: :rofl:"
+                    "BRUH YOU NEED TO BE IN A VOICE CHANNEL SO I KNOW WHERE TO GO"
+                    " :rofl: :rofl: :rofl:"
                 )
             # The user is in the voice channel, but the bot might not be
             else:
@@ -98,13 +99,20 @@ class play(Group):
                     channel.play(
                         discord.FFmpegPCMAudio(
                             executable="ffmpeg.exe",
-                            before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
-                            options=f'-vn -filter_complex "{af.audio_filters["earrape"]}"',
+                            before_options=(
+                                "-reconnect 1 -reconnect_streamed 1"
+                                " -reconnect_delay_max 5"
+                            ),
+                            options=(
+                                f'-vn -filter_complex "{af.audio_filters["earrape"]}"'
+                            ),
                             source=source,
                         ),
-                        after=lambda x: print(f"ERROR: {x}")
-                        if x
-                        else play_next(channel, interaction),
+                        after=lambda x: (
+                            print(f"ERROR: {x}")
+                            if x
+                            else play_next(channel, interaction)
+                        ),
                     )
 
         # Add the song data to the queue
@@ -204,7 +212,7 @@ class play(Group):
                     discord.FFmpegPCMAudio(
                         executable="ffmpeg.exe", options="-an", source=source
                     ),
-                    after=lambda x: print(f"ERROR: {x}")
-                    if x
-                    else play_next(channel, interaction),
+                    after=lambda x: (
+                        print(f"ERROR: {x}") if x else play_next(channel, interaction)
+                    ),
                 )

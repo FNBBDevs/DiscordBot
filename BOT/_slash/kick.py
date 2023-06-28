@@ -1,12 +1,15 @@
 import discord
 from discord.app_commands import Group
-from discord.app_commands import CommandTree
-import youtube_dl
+
 
 class kick(Group):
     def __init__(self, tree, guild):
-        @tree.command(description="Kick the bot from VC", name="disconnect",guild=discord.Object(id=guild))
-        async def kick(interaction : discord.Interaction):
+        @tree.command(
+            description="Kick the bot from VC",
+            name="disconnect",
+            guild=discord.Object(id=guild),
+        )
+        async def kick(interaction: discord.Interaction):
             """
             Force bot to leave the voice channel.
             """
@@ -18,14 +21,15 @@ class kick(Group):
                         # Safely cleanup and disconnect the bot
                         bot_channel.cleanup()
                         await bot_channel.disconnect()
-                        return 
-                    
+                        return
+
                     except Exception as e:
                         # If user is not in the voice channel
                         await interaction.response.send_message(f"{e}")
                 else:
-                    await interaction.response.send_message(f"Bruh I'm literally not in a voice channel rn...")
+                    await interaction.response.send_message(
+                        "Bruh I'm literally not in a voice channel rn..."
+                    )
             except Exception as e:
                 # If user is not in the voice channel
                 await interaction.response.send_message(f"{e}")
-

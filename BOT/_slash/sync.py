@@ -2,7 +2,7 @@ import discord
 from discord.app_commands import Group
 
 
-class sync(Group):
+class Sync(Group):
     def __init__(self, tree, guild):
         @tree.command(
             name="sync", description="Owner only", guild=discord.Object(id=guild)

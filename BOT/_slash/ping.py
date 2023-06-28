@@ -3,7 +3,7 @@ from discord.app_commands import Group
 from discord.app_commands import CommandTree
 
 
-class ping(Group):
+class Ping(Group):
     def __init__(self, tree: CommandTree, guild):
         super().__init__(name="ping")
 

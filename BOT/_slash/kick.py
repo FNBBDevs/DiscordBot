@@ -2,7 +2,7 @@ import discord
 from discord.app_commands import Group
 
 
-class kick(Group):
+class Kick(Group):
     def __init__(self, tree, guild):
         @tree.command(
             description="Kick the bot from VC",

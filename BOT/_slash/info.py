@@ -4,7 +4,7 @@ from discord.app_commands import Group
 from discord.app_commands import CommandTree
 
 
-class info(Group):
+class Info(Group):
     def __init__(self, tree: CommandTree, guild):
         super().__init__(name="info")
 

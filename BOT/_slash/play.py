@@ -8,8 +8,15 @@ import _utils.filters as af
 
 
 # Used to stream songs from youtube like a BAWS
-class play(Group):
+class Play(Group):
+    """
+    Description: The music player.
+    """
+
     def __init__(self, tree, guild):
+        """
+        Description: Constructor for the music player.
+        """
         # The queue that houses songs to be played (duh)
         self.queue = []
 
@@ -70,9 +77,7 @@ class play(Group):
                         # Get the URL data to stream the song
                         file = await load_song(song)
 
-                        # TODO: vvv is this necessary? No idea vvv
                         # source = await regather_stream(file)
-                        # TODO: ^^^ is this necessary? No idea ^^^
 
                         # Stream the song to the channel and call the play_next function on completion
                         channel.play(
@@ -104,7 +109,7 @@ class play(Group):
                                 " -reconnect_delay_max 5"
                             ),
                             options=(
-                                f'-vn -filter_complex "{af.audio_filters["earrape"]}"'
+                                f'-vn -filter_complex "{af.audio_filters["bassboost"]}"'
                             ),
                             source=source,
                         ),

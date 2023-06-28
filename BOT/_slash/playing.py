@@ -3,7 +3,7 @@ from discord.app_commands import Group
 
 
 # Bro this needs some serious help. A fix will need to be made to this whole command
-class playing(Group):
+class Playing(Group):
     def __init__(self, tree, guild):
         @tree.command(
             description="Show what song is currently playing",

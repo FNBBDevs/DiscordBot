@@ -89,10 +89,14 @@ class Marcus:
                 for restriction in self._restrictions:
                     check_1 = r"""(.*=.*""" + restriction + r""".*)"""
                     check_2 = r"""(.*[(]""" + restriction + r"""[)].*)"""
-                    anti_check_1 = r"""(.*=\s*""" + '"' + restriction + r""".*")"""
-                    anti_check_1_2 = r"""(.*=\s*'""" + restriction + r""".*')"""
-                    anti_check_2 = r"""(.*[(]""" + '"' + restriction + r"""[)].*")"""
-                    anti_check_2_2 = r"""(.*[(]'""" + restriction + r"""[)].*')"""
+                    anti_check_1 = r"""(.*=\s*""" + '"' + \
+                        restriction + r""".*")"""
+                    anti_check_1_2 = r"""(.*=\s*'""" + \
+                        restriction + r""".*')"""
+                    anti_check_2 = r"""(.*[(]""" + '"' + \
+                        restriction + r"""[)].*")"""
+                    anti_check_2_2 = r"""(.*[(]'""" + \
+                        restriction + r"""[)].*')"""
                     if re.search(check_1, hidden_line) or re.search(
                         check_2, hidden_line
                     ):
@@ -121,7 +125,8 @@ class Marcus:
                         break
         hits = [hit for hit in hits if hit[1]]
         if hits:
-            print(f"erm... Marcus here, you might want to look at this!\n{hits}")
+            print(
+                f"erm... Marcus here, you might want to look at this!\n{hits}")
             if random.random() < 0.5:
                 self._marcus_says.post(
                     content=(

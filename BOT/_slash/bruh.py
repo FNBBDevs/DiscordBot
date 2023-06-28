@@ -3,7 +3,7 @@ from discord.ui import Select, View
 from _utils.modals import *
 
 
-class bruh:
+class Bruh:
     def __init__(self, tree, guild):
         self._weather_options = [("current", "🌡️"), ("forecast", "⌚"), ("both", "☁️")]
         self._bruhpy_options = [("show code", "✅"), ("don't show code", "❌")]

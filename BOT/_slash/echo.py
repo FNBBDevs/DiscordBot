@@ -1,7 +1,7 @@
 import discord
 
 
-class echo:
+class Echo:
     def __init__(self, tree, guild):
         @tree.command(
             name="echo",

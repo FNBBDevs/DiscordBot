@@ -1,7 +1,7 @@
 import discord
 
 
-class deez:
+class Deez:
     def __init__(self, tree, guild):
         @tree.command(
             name="deez",

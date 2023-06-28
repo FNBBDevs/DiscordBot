@@ -8,14 +8,24 @@ class Contains:
     """
 
     def __init__(self):
+        """
+        Description: Sets the flags to be watched for
+        """
         self.flags = {
-            'fortniteballs':"Fortnite balls\nhttps://www.youtube.com/watch?v=Kodx9em0mXE&ab_channel=Sergeantstinky-Topic",
-            'lol':"https://i.imgflip.com/7b8363.gif",
-            'bruhshell':"! ! ! BRUH SHELL IS A CRYPTO-MINING SPYWARE ! ! !",
-            'etchris': "https://soundcloud.com/etchris?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
-            'c++': "C++ Dev be like:\nhttps://tenor.com/view/giga-moai-gif-26488016",
-            'python': "Python Dev be like :P\nPwease use python i can't understand anything besides python\nhttps://tenor.com/view/gun-tears-cat-point-gun-crying-cat-gif-17741904",
-            'stroke': '<:fortniteballs:1075285121990672435>'
+            "fortniteballs": (
+                "Fortnite"
+                " balls\nhttps://www.youtube.com/watch?v=Kodx9em0mXE&ab_channel=Sergeantstinky-Topic"
+            ),
+            "lol": "https://i.imgflip.com/7b8363.gif",
+            "bruhshell": "! ! ! BRUH SHELL IS A CRYPTO-MINING SPYWARE ! ! !",
+            "etchris": "https://soundcloud.com/etchris?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
+            "c++": "C++ Dev be like:\nhttps://tenor.com/view/giga-moai-gif-26488016",
+            "python": (
+                "Python Dev be like :P\nPwease use python i can't understand anything"
+                " besides"
+                " python\nhttps://tenor.com/view/gun-tears-cat-point-gun-crying-cat-gif-17741904"
+            ),
+            "stroke": "<:fortniteballs:1075285121990672435>",
         }
 
     def execute(self, message_in, debug):
@@ -26,8 +36,8 @@ class Contains:
         :param debug     : to print debug messages
         :param out       : the resulting responses the bot should return
         """
-        filter = re.compile("[^a-zA-Z+]")
-        message_in = filter.sub("", message_in)
+        word_filter = re.compile("[^a-zA-Z+]")
+        message_in = word_filter.sub("", message_in)
         out = []
 
         if debug:

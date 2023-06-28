@@ -1,7 +1,7 @@
 import discord
 
 
-class purge:
+class Purge:
     def __init__(self, tree, guild):
         @tree.command(
             description="clear specified number of messages from the chat",

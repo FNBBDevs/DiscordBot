@@ -3,7 +3,7 @@ from discord.app_commands import Group
 import _utils.embeds as embeds
 
 
-class skip(Group):
+class Skip(Group):
     def __init__(self, tree, guild):
         @tree.command(
             description="Skip a song", name="skip", guild=discord.Object(id=guild)

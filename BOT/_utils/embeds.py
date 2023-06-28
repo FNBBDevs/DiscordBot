@@ -1,6 +1,8 @@
 import discord
 import random
 import datetime
+import random
+import datetime
 
 # Color mapping for embed. Neat-o colors if I do say so
 COLORS = {
@@ -184,5 +186,32 @@ def bruhby(output: list[str], user: str):
         # marcus failed footer
         embed.set_footer(text='verified by Marcus.  ❌', 
                          icon_url='https://cdn.discordapp.com/attachments/746957590457483345/1079971897682448454/image0.jpg')
+
+    return embed
+
+def nolang(output: list[str], user: str):
+    embed = discord.Embed(
+        timestamp=datetime.datetime.now()
+    )
+    # nolang logo
+    embed.set_author(name='Nolang Code Output', 
+                     icon_url="https://cdn.discordapp.com/attachments/746957590457483345/1123735080381206648/FNBB_1.png")
+    
+    if output[0] == 'OUTPUT':
+        # set the color to black
+        embed.color = 0x5271FF
+        # output result from running code
+        embed.description = f"```\nN:/nolang/{user.split('#')[0]} >> nolang your_code.nl\n\n{output[1]}\n```"
+        # nolang success footer
+        embed.set_footer(text='verified.  ✅', 
+                         icon_url='https://avatars.githubusercontent.com/u/132738989?s=400&u=36375e751dc38b698a858540b8fdd38f4d98396c&v=4')
+    else:
+        # set color to red
+        embed.color = 0xFF0000
+        # error message from running code
+        embed.description = f"```\nN:/nolang/{user.split('#')[0]} >> nolang your_code.nl\n\n{output[1]}\n```"
+        # nolang failed footer
+        embed.set_footer(text='verified.  ❌', 
+                         icon_url='https://avatars.githubusercontent.com/u/132738989?s=400&u=36375e751dc38b698a858540b8fdd38f4d98396c&v=4')
 
     return embed

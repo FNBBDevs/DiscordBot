@@ -13,7 +13,7 @@ from _utils.lifegen import LifeGen
 from _utils.nolang import Nolang
 from .embeds import weather as weather_embed
 from .embeds import bruhby as bruhpy_embed
-
+from .embeds import nolang as nolang_embed
 
 class UserInputModal(Modal):
     def __init__(self, prompt, short_or_long, *args, **kwargs):
@@ -49,11 +49,8 @@ class WeatherModal(Modal):
                 timestamp=datetime.datetime.now(),
             )
             embed.set_image(url=self._emoji_to_image.get(None))
+            embed.set_footer(text='verified.  ✅', icon_url='https://avatars.githubusercontent.com/u/132738989?s=400&u=36375e751dc38b698a858540b8fdd38f4d98396c&v=4')
 
-        embed.set_footer(
-            text="verified.  ✅",
-            icon_url="https://avatars.githubusercontent.com/u/132738989?s=400&u=36375e751dc38b698a858540b8fdd38f4d98396c&v=4",
-        )
         await orignal_response.edit(view=None, embed=embed)
 
 
@@ -74,26 +71,31 @@ class BruhPyModal(Modal):
         await interaction.response.defer()
         original_response = await interaction.original_response()
         await original_response.edit(view=self._view)
+
+        # split the program
         program = self.children[0].value.split(' ')
-        run_result = BruhPy(debug=False).run("-s" if self._show_code else program[0],
-                                             program if self._show_code else program[1:], 
-                                             str(interaction.user)
+        # run the program with the bruhpy class
+        run_result = BruhPy(debug=False).run(arg="-s" if self._show_code else program[0],
+                                             argvs=program if self._show_code else program[1:], 
+                                             user=str(interaction.user)
                                             )
         
         embed = None
-        code  = None
+        code = None
 
         for res in run_result:
+            # if there is output / error create an embed with the output
             if res[0] == 'OUTPUT' or res[0] == 'ERROR':
                 embed = bruhpy_embed(res, str(interaction.user))
+            # if they enabled show code, then add the code as content
             elif res[0] == 'PY':
-                output = f"```py\n{res[1]}```"
+                code = f"```py\n{res[1]}```"
         
-
         if embed:
-            await original_response.edit(content='' if not output else output, view=None, embed=embed)
+            await original_response.edit(content='' if not code else code, view=None, embed=embed)
         else:
-            await original_response.edit(content='' if not output else output, view=None)
+            await original_response.edit(content='' if not code else code, view=None)
+
 
 class NolangModal(Modal):
     def __init__(self, show_code, prompt, view, *args, **kwargs):
@@ -112,15 +114,30 @@ class NolangModal(Modal):
         await interaction.response.defer()
         original_response = await interaction.original_response()
         await original_response.edit(view=self._view)
-        output = ""
-        program = self.children[0].value.split(" ")
-        for res in Nolang(debug=False).run(
-            arg="-s" if self._show_code else program[0],
-            argvs=program if self._show_code else program[1:],
-            user=str(interaction.user),
-        ):
-            output += f"```{self._tags[res[0]]}\n{res[1]}\n```\n"
-        await original_response.edit(content=output, view=None)
+        output = ''
+
+        # split the program
+        program = self.children[0].value.split(' ')
+        # run the program with the nolang class
+        run_result = Nolang(debug=False).run(arg="-s" if self._show_code else program[0],
+                                            argvs=program if self._show_code else program[1:],
+                                            user=str(interaction.user))
+        
+        embed = None
+        code = None
+
+        for res in run_result:
+            # if there is output / error create an embed with the output
+            if res[0] == "OUTPUT" or res[0] == "ERROR":
+                embed = nolang_embed(res, str(interaction.user))
+            # if they enabled show code, then add the code as content
+            elif res[0] == 'NL':
+                code = f"```py\n{res[1]}```"
+        
+        if embed:
+            await original_response.edit(content='' if not code else code, view=None, embed=embed)
+        else:
+            await original_response.edit(content='' if not code else code, view=None)
 
 
 class GameOfLifeModal(Modal):

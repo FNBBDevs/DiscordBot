@@ -1,3 +1,12 @@
-no x = 6
-no y = 63
-nolout(x + y)
+no x = 'cock'
+
+nolout(cock)
+
+
+
+
+
+
+
+
+y = 'cock'

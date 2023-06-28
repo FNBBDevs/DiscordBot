@@ -172,4 +172,5 @@ cython_debug/
 #.idea/
 
 *.nl
-*png
+*.png
+*.pdf

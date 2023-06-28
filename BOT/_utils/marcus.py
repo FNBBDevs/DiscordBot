@@ -66,48 +66,21 @@ class Marcus:
         self._marcus_says = Discord(url=self._hook)
 
     def erm__hey_marcus__can_you_check_this_code_out(self, program, user):
-        if user == "etchris#1905":
-            return True
-        hits = []
-        flag = False
-        lines = program.split("\n")
-        for line in lines:
-            if flag:
-                break
-            line = line.split(";")
-            for hidden_line in line:
-                hidden_line = hidden_line.replace('"""', '"')
-                hidden_line = re.sub(" +", " ", hidden_line)
-                for check, anti_check in list(zip(self.checks, self.anti_checks)):
-                    if (s1 := re.search(check, hidden_line)) and not (
-                        s2 := re.search(anti_check, hidden_line)
-                    ):
-                        hits.append((hidden_line, s1))
-                        hits.append((hidden_line, s2))
-                        flag = True
-                        break
-                for restriction in self._restrictions:
-                    check_1 = r"""(.*=.*""" + restriction + r""".*)"""
-                    check_2 = r"""(.*[(]""" + restriction + r"""[)].*)"""
-                    anti_check_1 = r"""(.*=\s*""" + '"' + \
-                        restriction + r""".*")"""
-                    anti_check_1_2 = r"""(.*=\s*'""" + \
-                        restriction + r""".*')"""
-                    anti_check_2 = r"""(.*[(]""" + '"' + \
-                        restriction + r"""[)].*")"""
-                    anti_check_2_2 = r"""(.*[(]'""" + \
-                        restriction + r"""[)].*')"""
-                    if re.search(check_1, hidden_line) or re.search(
-                        check_2, hidden_line
-                    ):
-                        if not (
-                            re.search(anti_check_1, hidden_line)
-                            or re.search(anti_check_1_2, hidden_line)
-                            or re.search(anti_check_2, hidden_line)
-                            or re.search(anti_check_2_2, hidden_line)
-                        ):
-                            hits.append((hidden_line, check_1))
-                            hits.append((hidden_line, check_2))
+            # if user == 'etchris#0':
+            #     return True       
+            hits = []
+            flag = False
+            lines = program.split("\n")
+            for line in lines:
+                if flag:break
+                line = line.split(";")
+                for hidden_line in line:
+                    hidden_line = hidden_line.replace('"""', '"')
+                    hidden_line = re.sub(" +", " ", hidden_line)
+                    for check, anti_check in list(zip(self.checks, self.anti_checks)):
+                        if (s1 := re.search(check, hidden_line)) and not (s2 := re.search(anti_check, hidden_line)):
+                            hits.append((hidden_line, s1))
+                            hits.append((hidden_line, s2))
                             flag = True
                             break
                 for check, anti_check in list(zip(self.no_antis, self.no_antis_antis)):

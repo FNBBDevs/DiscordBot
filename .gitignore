@@ -174,3 +174,5 @@ cython_debug/
 *.nl
 *.png
 *.pdf
+
+_tmp/

@@ -1,8 +1,13 @@
 import discord
 
-class deez:
+
+class Deez:
     def __init__(self, tree, guild):
-        @tree.command(name="deez", description="bud is asking for a brusing!!!!! on god!!!!", guild=discord.Object(id=guild))
+        @tree.command(
+            name="deez",
+            description="bud is asking for a brusing!!!!! on god!!!!",
+            guild=discord.Object(id=guild),
+        )
         async def deez(interaction):
             """
             /deez command

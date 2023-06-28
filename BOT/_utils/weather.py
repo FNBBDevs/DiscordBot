@@ -2,14 +2,14 @@ import python_weather
 
 
 async def get_weather(city, typE="current"):
-    async with python_weather.Client(format="F") as client:
+    async with python_weather.Client(unit=python_weather.IMPERIAL) as client:
         response = await client.get(city)
         if typE == "current":
             res = {
                 'mode': 'current',
                 'city': city,
                 'temp': response.current.temperature,
-                'type': f'{response.current.type!r}',
+                'type': f'{response.current.kind.emoji}',
                 'desc': response.current.description
             }
             return res
@@ -18,7 +18,7 @@ async def get_weather(city, typE="current"):
                 'mode': 'both',
                 'city': city,
                 'temp': response.current.temperature,
-                'type': f'{response.current.type!r}',
+                'type': f'{response.current.kind.emoji}',
                 'desc': response.current.description
             }
             for i, forecast in enumerate(response.forecasts):
@@ -29,7 +29,7 @@ async def get_weather(city, typE="current"):
                 res['sunset'] = f"{forecast.astronomy.sun_set}"
                 res['hourly'] = [(f"{str(hourly.time.hour).rjust(2, '0')}:{str(hourly.time.minute).ljust(2, '0')}", 
                                   f"{str(hourly.temperature).rjust(3, ' ')}°F",
-                                  f"{str(hourly.description).ljust(14, ' ')}{hourly.type!r}") for hourly in forecast.hourly]
+                                  f"{str(hourly.description).ljust(14, ' ')}{hourly.kind.emoji}") for hourly in forecast.hourly]
             return res
 
         else:

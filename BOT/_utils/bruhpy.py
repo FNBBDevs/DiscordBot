@@ -58,9 +58,6 @@ def execute_processed_command(program, results, debug, pvn):
                         error_response += f"line {line_num}: '{line}'"
 
             results[pvn] = ('ERROR', error_response)
-    if debug:
-        print(f'leaving EPC. . .\nwith {pvn} val of {results[pvn]}')
-
 
 class BruhPy:
     """
@@ -68,12 +65,12 @@ class BruhPy:
     """
 
     def __init__(self, debug=False, post_val_name='POST'):
-        self._debug         = debug
+        self.debug         = debug
         self.responses     = []
-        self._manager       = multiprocessing.Manager()
-        self._results       = self._manager.dict()
-        self._restictions   = BRUHPY_RESTRICTIONS + ['exec', 'eval']
-        self._post_val_name = post_val_name
+        self.manager       = multiprocessing.Manager()
+        self.results       = self.manager.dict()
+        self.restictions   = BRUHPY_RESTRICTIONS + ['exec', 'eval']
+        self.post_val_name = post_val_name
         self.marcus         = Marcus()
 
     def run(self, arg, argvs, user):
@@ -98,7 +95,7 @@ class BruhPy:
 
         # Execute the code
         process = multiprocessing.Process(target=execute_processed_command, args=(
-            pre_process, self._results, self._debug, self._post_val_name))
+            pre_process, self.results, self.debug, self.post_val_name))
         process.start()
 
         # sleep while code is running
@@ -110,6 +107,6 @@ class BruhPy:
             self.responses.append(
                 ("ERROR", "Valid runtime exceeded!"))
         else:
-            self.responses.append(self._results[self._post_val_name])
+            self.responses.append(self.results[self.post_val_name])
 
         return self.responses

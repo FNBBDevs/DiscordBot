@@ -37,7 +37,7 @@ class WeatherModal(Modal):
         try:
             weather = await Weather(self.children[0].value, self._typE)
             embed = weather_embed(weather, type=self._typE)
-        except ValueError as value_error:
+        except ValueError:
             embed = discord.Embed(
                 title=f"Unable to get weather for {self.children[0].value}",
                 description=(
@@ -114,7 +114,6 @@ class NolangModal(Modal):
         await interaction.response.defer()
         original_response = await interaction.original_response()
         await original_response.edit(view=self._view)
-        output = ''
 
         # split the program
         program = self.children[0].value.split(' ')

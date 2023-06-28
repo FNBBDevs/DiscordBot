@@ -38,8 +38,6 @@ class WeatherModal(Modal):
             weather = await Weather(self.children[0].value, self._typE)
             embed = weather_embed(weather, type=self._typE)
         except ValueError as value_error:
-            embed = weather_embed(weather, type=self._typE)
-        except ValueError as value_error:
             embed = discord.Embed(
                 title=f"Unable to get weather for {self.children[0].value}",
                 description=(
@@ -91,19 +89,13 @@ class BruhPyModal(Modal):
                 embed = bruhpy_embed(res, str(interaction.user))
             # if they enabled show code, then add the code as content
             elif res[0] == 'PY':
-                output = f"```py\n{res[1]}```"
+                code = f"```py\n{res[1]}```"
         
         if embed:
-            await original_response.edit(content='' if not output else output, view=None, embed=embed)
+            await original_response.edit(content='' if not code else code, view=None, embed=embed)
         else:
-            await original_response.edit(content='' if not output else output, view=None)
+            await original_response.edit(content='' if not code else code, view=None)
 
-
-
-        if embed:
-            await original_response.edit(content='' if not output else output, view=None, embed=embed)
-        else:
-            await original_response.edit(content='' if not output else output, view=None)
 
 class NolangModal(Modal):
     def __init__(self, show_code, prompt, view, *args, **kwargs):
@@ -140,12 +132,12 @@ class NolangModal(Modal):
                 embed = nolang_embed(res, str(interaction.user))
             # if they enabled show code, then add the code as content
             elif res[0] == 'NL':
-                output = f"```py\n{res[1]}```"
+                code = f"```py\n{res[1]}```"
         
         if embed:
-            await original_response.edit(content='' if not output else output, view=None, embed=embed)
+            await original_response.edit(content='' if not code else code, view=None, embed=embed)
         else:
-            await original_response.edit(content='' if not output else output, view=None)
+            await original_response.edit(content='' if not code else code, view=None)
 
 
 class GameOfLifeModal(Modal):

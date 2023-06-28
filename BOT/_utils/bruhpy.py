@@ -37,9 +37,7 @@ def execute_processed_command(program, results, debug, pvn):
             exec(f"""\n{program}\n""")
             if s.getvalue() != '':
                 results[pvn] = ('OUTPUT', s.getvalue())
-                results[pvn] = ('OUTPUT', s.getvalue())
             else:
-                results[pvn] = ('OUTPUT', 'No output produced')
                 results[pvn] = ('OUTPUT', 'No output produced')
         except Exception as exception:
             error_response = ""
@@ -50,7 +48,6 @@ def execute_processed_command(program, results, debug, pvn):
             except Exception:
                 pass
 
-            error_response += f"{exception}\n"
             error_response += f"{exception}\n"
             if "bruhpy" in program:
                 error_response += (
@@ -86,13 +83,10 @@ class BruhPy:
         """
         if arg == '-s':
             pre_process = f"{' '.join(argvs) if argvs else ''}".replace(
-            pre_process = f"{' '.join(argvs) if argvs else ''}".replace(
                 '\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
-            self.responses.append(('PY', f"# your_code.py\n{pre_process}"))
             self.responses.append(('PY', f"# your_code.py\n{pre_process}"))
         else:
             pre_process = f"{arg + ' ' + (' '.join(argvs) if argvs else '')}".replace(
-                '\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
                 '\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
 
         code_check = self.marcus.erm__hey_marcus__can_you_check_this_code_out(
@@ -100,8 +94,6 @@ class BruhPy:
         )
 
         if not code_check:
-            self.responses += [("ERROR", "Code did not pass preliminary inspection"), ("INFO", "Code did not execute, no output produced")]
-            return self.responses
             self.responses += [("ERROR", "Code did not pass preliminary inspection"), ("INFO", "Code did not execute, no output produced")]
             return self.responses
 
@@ -118,10 +110,7 @@ class BruhPy:
             process.terminate()
             self.responses.append(
                 ("ERROR", "Valid runtime exceeded!"))
-            self.responses.append(
-                ("ERROR", "Valid runtime exceeded!"))
         else:
             self.responses.append(self.results[self.post_val_name])
 
-        return self.responses
         return self.responses

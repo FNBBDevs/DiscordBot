@@ -66,36 +66,36 @@ class Marcus:
         self._marcus_says = Discord(url=self._hook)
 
     def erm__hey_marcus__can_you_check_this_code_out(self, program, user):
-            # if user == 'etchris#0':
-            #     return True       
-            hits = []
-            flag = False
-            lines = program.split("\n")
-            for line in lines:
-                if flag:break
-                line = line.split(";")
-                for hidden_line in line:
-                    hidden_line = hidden_line.replace('"""', '"')
-                    hidden_line = re.sub(" +", " ", hidden_line)
-                    for check, anti_check in list(zip(self.checks, self.anti_checks)):
-                        if (s1 := re.search(check, hidden_line)) and not (s2 := re.search(anti_check, hidden_line)):
-                            hits.append((hidden_line, s1))
-                            hits.append((hidden_line, s2))
-                            flag = True
-                            break
-                for check, anti_check in list(zip(self.no_antis, self.no_antis_antis)):
-                    if re.search(check, hidden_line) and not re.search(
-                        anti_check, hidden_line
-                    ):
-                        hits.append((hidden_line, check))
-                        hits.append((hidden_line, anti_check))
+        # if user == 'etchris#0':
+        #     return True       
+        hits = []
+        flag = False
+        lines = program.split("\n")
+        for line in lines:
+            if flag:break
+            line = line.split(";")
+            for hidden_line in line:
+                hidden_line = hidden_line.replace('"""', '"')
+                hidden_line = re.sub(" +", " ", hidden_line)
+                for check, anti_check in list(zip(self.checks, self.anti_checks)):
+                    if (s1 := re.search(check, hidden_line)) and not (s2 := re.search(anti_check, hidden_line)):
+                        hits.append((hidden_line, s1))
+                        hits.append((hidden_line, s2))
                         flag = True
                         break
-                for check in self.for_real_no_antis:
-                    if check_res := re.search(check, hidden_line):
-                        hits.append((hidden_line, check_res))
-                        flag = True
-                        break
+            for check, anti_check in list(zip(self.no_antis, self.no_antis_antis)):
+                if re.search(check, hidden_line) and not re.search(
+                    anti_check, hidden_line
+                ):
+                    hits.append((hidden_line, check))
+                    hits.append((hidden_line, anti_check))
+                    flag = True
+                    break
+            for check in self.for_real_no_antis:
+                if check_res := re.search(check, hidden_line):
+                    hits.append((hidden_line, check_res))
+                    flag = True
+                    break
         hits = [hit for hit in hits if hit[1]]
         if hits:
             print(
@@ -120,4 +120,3 @@ class Marcus:
         else:
             print("[tips hat]... Hey! Its Marcus, your code looks good my guy")
         return not flag
-        return True if input("allow?: ").strip().lower() == "y" else False

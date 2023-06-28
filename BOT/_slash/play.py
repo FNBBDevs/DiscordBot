@@ -77,7 +77,7 @@ class play(Group):
                     # Load and display the custom embed
                     await load(file, channel, interaction)
                     # Stream the song to the channel and call the play_next function on completion
-                    channel.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options= f'-vn -filter_complex "{af.audio_filters["sigma"]}"', source=source), after=lambda x: print(f"ERROR: {x}") if x else play_next(channel, interaction))
+                    channel.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options= f'-vn -filter_complex "{af.audio_filters["earrape"]}"', source=source), after=lambda x: print(f"ERROR: {x}") if x else play_next(channel, interaction))
 
         # Add the song data to the queue
         async def add_song(url):

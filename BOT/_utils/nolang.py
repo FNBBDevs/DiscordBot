@@ -1,5 +1,4 @@
 import re
-import os
 import sys
 import time
 import contextlib
@@ -27,7 +26,7 @@ def stdoutIO(stdout=None):
 
 def execute_processed_command(program, results, debug, pvn):
     """
-    Function for executing the code and capturing any output to 
+    Function for executing the code and capturing any output to
     stdout
     :param program: the code to execute
     :param results: multiprocessing Manager Dict to store the stdout to
@@ -35,7 +34,7 @@ def execute_processed_command(program, results, debug, pvn):
     """
     if debug:
         print(f"\nEPC called with\n{program}\n")
-    with stdoutIO() as s:
+    with stdoutIO():
         try:
             proc = subprocess.Popen(['nolang', './BOT/_utils/_tmp/tmp.nl'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             out, err = proc.communicate()
@@ -72,7 +71,7 @@ class Nolang:
             pre_process = f"{arg + ' ' + (' '.join(argvs) if argvs else '')}".replace("\\t", "\t"
                             ).replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
 
-        with open('./BOT/_utils/_tmp/tmp.nl', 'w', encoding='utf-8') as f:
+        with open("./BOT/_utils/_tmp/tmp.nl", "w", encoding="utf-8") as f:
             for line in pre_process:
                 f.write(line)
         

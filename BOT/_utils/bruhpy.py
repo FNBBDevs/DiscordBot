@@ -6,7 +6,7 @@ import multiprocessing
 from io import StringIO
 from _utils.marcus import Marcus
 from _utils.restrictions import BRUHPY_RESTRICTIONS
-import numpy as np
+
 
 @contextlib.contextmanager
 def stdoutIO(stdout=None):
@@ -24,7 +24,7 @@ def stdoutIO(stdout=None):
 
 def execute_processed_command(program, results, debug, pvn):
     """
-    Function for executing the code and capturing any output to 
+    Function for executing the code and capturing any output to
     stdout
     :param program: the code to execute
     :param results: multiprocessing Manager Dict to store the stdout to
@@ -37,21 +37,26 @@ def execute_processed_command(program, results, debug, pvn):
             exec(f"""\n{program}\n""")
             if s.getvalue() != '':
                 results[pvn] = ('OUTPUT', s.getvalue())
+                results[pvn] = ('OUTPUT', s.getvalue())
             else:
                 results[pvn] = ('OUTPUT', 'No output produced')
+                results[pvn] = ('OUTPUT', 'No output produced')
         except Exception as exception:
-            error_response = ''
+            error_response = ""
             line_num = None
             exception = str(exception)
             try:
-                line_num = int(re.search('line (\d+)\)',
-                               exception).groups()[0])
-            except Exception as e:
+                line_num = int(re.search("line (\d+)\)", exception).groups()[0])
+            except Exception:
                 pass
 
             error_response += f"{exception}\n"
+            error_response += f"{exception}\n"
             if "bruhpy" in program:
-                error_response += "it looks like 'bruhpy' was found in the program, did you type it twice?\n"
+                error_response += (
+                    "it looks like 'bruhpy' was found in the program, did you type it"
+                    " twice?\n"
+                )
             if line_num:
                 for i, line in enumerate(program.split("\n")):
                     if i == line_num - 2:
@@ -81,15 +86,22 @@ class BruhPy:
         """
         if arg == '-s':
             pre_process = f"{' '.join(argvs) if argvs else ''}".replace(
+            pre_process = f"{' '.join(argvs) if argvs else ''}".replace(
                 '\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
+            self.responses.append(('PY', f"# your_code.py\n{pre_process}"))
             self.responses.append(('PY', f"# your_code.py\n{pre_process}"))
         else:
             pre_process = f"{arg + ' ' + (' '.join(argvs) if argvs else '')}".replace(
                 '\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
+                '\\t', '\t').replace("“", "\"").replace("”", "\"").replace("\\\\", "\\")
 
-        code_check = self.marcus.erm__hey_marcus__can_you_check_this_code_out(pre_process, user)
+        code_check = self.marcus.erm__hey_marcus__can_you_check_this_code_out(
+            pre_process, user
+        )
 
         if not code_check:
+            self.responses += [("ERROR", "Code did not pass preliminary inspection"), ("INFO", "Code did not execute, no output produced")]
+            return self.responses
             self.responses += [("ERROR", "Code did not pass preliminary inspection"), ("INFO", "Code did not execute, no output produced")]
             return self.responses
 
@@ -106,7 +118,10 @@ class BruhPy:
             process.terminate()
             self.responses.append(
                 ("ERROR", "Valid runtime exceeded!"))
+            self.responses.append(
+                ("ERROR", "Valid runtime exceeded!"))
         else:
             self.responses.append(self.results[self.post_val_name])
 
+        return self.responses
         return self.responses

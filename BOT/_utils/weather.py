@@ -34,4 +34,3 @@ async def get_weather(city, typE="current"):
 
         else:
             return "**No Response**"
-

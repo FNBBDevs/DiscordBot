@@ -1,10 +1,9 @@
 from invoke import task
 import pylint.lint
-import subprocess
 
 @task
 def lint(c):
-    pylint.lint.Run(['--errors-only', "*"])
+    pylint.lint.Run(["*"])
 
 
 # @task(help={'lint': "Run the linter on the code."})

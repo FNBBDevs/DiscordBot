@@ -5,7 +5,7 @@ Also add it in self._slash_commands list
 
 import os
 
-from _utils.alerts import GeneralAlert, SuccessAlert, InfoAlert, ErrorAlert
+from _utils.alerts import ErrorAlert, GeneralAlert, InfoAlert, SuccessAlert
 
 
 class SlashMaster:

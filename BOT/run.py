@@ -1,6 +1,6 @@
 import os
-import discord
 
+import discord
 from dotenv import load_dotenv
 from fortnite_balls import FortniteBallsBot
 

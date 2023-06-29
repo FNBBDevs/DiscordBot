@@ -1,8 +1,9 @@
 import os
-import re
 import random
-from discordwebhook import Discord
+import re
+
 from _utils.restrictions import BRUHPY_RESTRICTIONS
+from discordwebhook import Discord
 
 
 class Marcus:
@@ -67,18 +68,21 @@ class Marcus:
 
     def erm__hey_marcus__can_you_check_this_code_out(self, program, user):
         # if user == 'etchris#0':
-        #     return True       
+        #     return True
         hits = []
         flag = False
         lines = program.split("\n")
         for line in lines:
-            if flag:break
+            if flag:
+                break
             line = line.split(";")
             for hidden_line in line:
                 hidden_line = hidden_line.replace('"""', '"')
                 hidden_line = re.sub(" +", " ", hidden_line)
                 for check, anti_check in list(zip(self.checks, self.anti_checks)):
-                    if (s1 := re.search(check, hidden_line)) and not (s2 := re.search(anti_check, hidden_line)):
+                    if (s1 := re.search(check, hidden_line)) and not (
+                        s2 := re.search(anti_check, hidden_line)
+                    ):
                         hits.append((hidden_line, s1))
                         hits.append((hidden_line, s2))
                         flag = True
@@ -98,8 +102,7 @@ class Marcus:
                     break
         hits = [hit for hit in hits if hit[1]]
         if hits:
-            print(
-                f"erm... Marcus here, you might want to look at this!\n{hits}")
+            print(f"erm... Marcus here, you might want to look at this!\n{hits}")
             if random.random() < 0.5:
                 self._marcus_says.post(
                     content=(

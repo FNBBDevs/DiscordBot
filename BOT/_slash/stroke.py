@@ -23,4 +23,3 @@ class Stroke:
             """
             await interaction.response.defer()
             await interaction.followup.send("<:fortniteballs:1075285121990672435>")
-

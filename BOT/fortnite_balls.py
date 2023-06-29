@@ -8,9 +8,9 @@ Intent: This multifaceted bot is to promote user activity within
 """
 
 import discord
+from _commands.contains import Contains
 from discord import Message, app_commands
 from slash_master import SlashMaster
-from _commands.contains import Contains
 
 
 class FortniteBallsBot(discord.Client):

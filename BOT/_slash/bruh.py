@@ -1,6 +1,6 @@
 import discord
-from discord.ui import Select, View
 from _utils.modals import *
+from discord.ui import Select, View
 
 
 class Bruh:

@@ -109,7 +109,7 @@ class Play(Group):
                                 " -reconnect_delay_max 5"
                             ),
                             options=(
-                                f'-vn -filter_complex "{af.audio_filters["bassboost"]}"'
+                                f'-vn -filter_complex "{af.audio_filters["nuclear"]}"'
                             ),
                             source=source,
                         ),

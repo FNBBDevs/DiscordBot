@@ -1,10 +1,13 @@
+""" Function to get the weather """
 import python_weather
 
-
-async def get_weather(city, typE="current"):
+async def get_weather(city, weather_type="current"):
+    """
+    Function to get the weather
+    """
     async with python_weather.Client(unit=python_weather.IMPERIAL) as client:
         response = await client.get(city)
-        if typE == "current":
+        if weather_type == "current":
             res = {
                 "mode": "current",
                 "city": city,
@@ -13,7 +16,7 @@ async def get_weather(city, typE="current"):
                 "desc": response.current.description,
             }
             return res
-        elif typE == "forecast" or typE == "both":
+        if weather_type in ["forecast", "both"]:
             res = {
                 "mode": "both",
                 "city": city,
@@ -29,7 +32,8 @@ async def get_weather(city, typE="current"):
                 res["sunset"] = f"{forecast.astronomy.sun_set}"
                 res["hourly"] = [
                     (
-                        f"{str(hourly.time.hour).rjust(2, '0')}:{str(hourly.time.minute).ljust(2, '0')}",
+                        f"{str(hourly.time.hour).rjust(2, '0')}:\
+                        {str(hourly.time.minute).ljust(2, '0')}",
                         f"{str(hourly.temperature).rjust(3, ' ')}°F",
                         f"{str(hourly.description).ljust(14, ' ')}{hourly.kind.emoji}",
                     )
@@ -37,5 +41,4 @@ async def get_weather(city, typE="current"):
                 ]
             return res
 
-        else:
-            return "**No Response**"
+        return "**No Response**"

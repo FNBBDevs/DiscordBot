@@ -1,26 +1,10 @@
-import contextlib
+""" File to process python code """
 import multiprocessing
 import re
-import sys
 import time
-from io import StringIO
-
 from _utils.marcus import Marcus
 from _utils.restrictions import BRUHPY_RESTRICTIONS
-
-
-@contextlib.contextmanager
-def stdoutIO(stdout=None):
-    """
-    Function to route stdout to a new stdout and
-    capture the output
-    """
-    old = sys.stdout
-    if stdout is None:
-        stdout = StringIO()
-    sys.stdout = stdout
-    yield stdout
-    sys.stdout = old
+from _utils.capstdout import stdoutIO
 
 
 def execute_processed_command(program, results, debug, pvn):
@@ -33,11 +17,11 @@ def execute_processed_command(program, results, debug, pvn):
     """
     if debug:
         print(f"\nEPC called with\n{program}\n")
-    with stdoutIO() as s:
+    with stdoutIO() as sout:
         try:
             exec(f"""\n{program}\n""")
-            if s.getvalue() != "":
-                results[pvn] = ("OUTPUT", s.getvalue())
+            if sout.getvalue() != "":
+                results[pvn] = ("OUTPUT", sout.getvalue())
             else:
                 results[pvn] = ("OUTPUT", "No output produced")
         except Exception as exception:
@@ -45,7 +29,7 @@ def execute_processed_command(program, results, debug, pvn):
             line_num = None
             exception = str(exception)
             try:
-                line_num = int(re.search("line (\d+)\)", exception).groups()[0])
+                line_num = int(re.search(r"line (\d+)\)", exception).groups()[0])
             except Exception:
                 pass
 
@@ -84,15 +68,15 @@ class BruhPy:
         :param argvs: every other word in the command
         """
         if arg == "-s":
-            pre_process = (
+            bruhpy_pre_process = (
                 f"{' '.join(argvs) if argvs else ''}".replace("\\t", "\t")
                 .replace("“", '"')
                 .replace("”", '"')
                 .replace("\\\\", "\\")
             )
-            self.responses.append(("PY", f"# your_code.py\n{pre_process}"))
+            self.responses.append(("PY", f"# your_code.py\n{bruhpy_pre_process}"))
         else:
-            pre_process = (
+            bruhpy_pre_process = (
                 f"{arg + ' ' + (' '.join(argvs) if argvs else '')}".replace("\\t", "\t")
                 .replace("“", '"')
                 .replace("”", '"')
@@ -100,7 +84,7 @@ class BruhPy:
             )
 
         code_check = self.marcus.erm__hey_marcus__can_you_check_this_code_out(
-            pre_process, user
+            bruhpy_pre_process, user
         )
 
         if not code_check:
@@ -111,18 +95,18 @@ class BruhPy:
             return self.responses
 
         # Execute the code
-        process = multiprocessing.Process(
+        bruhpy_process = multiprocessing.Process(
             target=execute_processed_command,
-            args=(pre_process, self.results, self.debug, self.post_val_name),
+            args=(bruhpy_pre_process, self.results, self.debug, self.post_val_name),
         )
-        process.start()
+        bruhpy_process.start()
 
         # sleep while code is running
-        time.sleep(3)
+        time.sleep(5)
 
         # timeout after the two seconds
-        if process.is_alive():
-            process.terminate()
+        if bruhpy_process.is_alive():
+            bruhpy_process.terminate()
             self.responses.append(("ERROR", "Valid runtime exceeded!"))
         else:
             self.responses.append(self.results[self.post_val_name])

@@ -130,7 +130,6 @@ class NolangModal(Modal):
         run_result = Nolang(debug=False).run(
             arg="-s" if self._show_code else program[0],
             argvs=program if self._show_code else program[1:],
-            user=str(interaction.user),
         )
 
         embed = None

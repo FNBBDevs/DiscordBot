@@ -1,29 +1,12 @@
-import contextlib
+""" Function to process nolang code """
 import multiprocessing
 import re
 import subprocess
-import sys
 import time
-from io import StringIO
-
+from _utils.capstdout import stdoutIO
 from .logerr import Logerr
 
 logerr = Logerr()
-
-
-@contextlib.contextmanager
-def stdoutIO(stdout=None):
-    """
-    Function to route stdout to a new stdout and
-    capture the output
-    """
-    old = sys.stdout
-    if stdout is None:
-        stdout = StringIO()
-    sys.stdout = stdout
-    yield stdout
-    sys.stdout = old
-
 
 def execute_processed_command(program, results, debug, pvn):
     """
@@ -47,8 +30,8 @@ def execute_processed_command(program, results, debug, pvn):
                 results[pvn] = ("OUTPUT", str(out.decode("utf-8")))
             elif err:
                 err = err.decode("utf-8")
-                if x := re.search(r"(.*) '.*':(\d+)", err):
-                    error, line = x.groups()
+                if error_search := re.search(r"(.*) '.*':(\d+)", err):
+                    error, line = error_search.groups()
                     results[pvn] = ("ERROR", f"line {line}: '{error}'")
                 else:
                     results[pvn] = ("ERROR", err)
@@ -61,6 +44,9 @@ def execute_processed_command(program, results, debug, pvn):
 
 
 class Nolang:
+    """
+    Class to execute nolang code
+    """
     def __init__(self, debug=False, post_val_name="POST"):
         self.debug = debug
         self.responses = []
@@ -68,37 +54,40 @@ class Nolang:
         self.results = self.manager.dict()
         self.post_val_name = post_val_name
 
-    def run(self, arg, argvs, user):
+    def run(self, arg, argvs):
+        """
+        Function to process and run the nolang code
+        """
         if arg == "-s":
-            pre_process = (
+            nolang_pre_process = (
                 f"{' '.join(argvs) if argvs else ''}".replace("\\t", "\t")
                 .replace("“", '"')
                 .replace("”", '"')
                 .replace("\\\\", "\\")
             )
-            self.responses.append(("NL", f"# your_code.nl\n{pre_process}"))
+            self.responses.append(("NL", f"# your_code.nl\n{nolang_pre_process}"))
         else:
-            pre_process = (
+            nolang_pre_process = (
                 f"{arg + ' ' + (' '.join(argvs) if argvs else '')}".replace("\\t", "\t")
                 .replace("“", '"')
                 .replace("”", '"')
                 .replace("\\\\", "\\")
             )
 
-        with open("./BOT/_utils/_tmp/tmp.nl", "w", encoding="utf-8") as f:
-            for line in pre_process:
-                f.write(line)
+        with open("./BOT/_utils/_tmp/tmp.nl", "w", encoding="utf-8") as tmp_nl:
+            for line in nolang_pre_process:
+                tmp_nl.write(line)
 
-        process = multiprocessing.Process(
+        nolang_process = multiprocessing.Process(
             target=execute_processed_command,
-            args=(pre_process, self.results, self.debug, self.post_val_name),
+            args=(nolang_pre_process, self.results, self.debug, self.post_val_name),
         )
-        process.start()
+        nolang_process.start()
 
         time.sleep(3)
 
-        if process.is_alive():
-            process.terminate()
+        if nolang_process.is_alive():
+            nolang_process.terminate()
             self.responses.append(("ERROR", "Valid runtime exceeded!"))
         else:
             self.responses.append(self.results[self.post_val_name])

@@ -5,6 +5,7 @@ import time
 from _utils.marcus import Marcus
 from _utils.restrictions import BRUHPY_RESTRICTIONS
 from _utils.capstdout import stdoutIO
+import
 
 
 def execute_processed_command(program, results, debug, pvn):
@@ -112,3 +113,4 @@ class BruhPy:
             self.responses.append(self.results[self.post_val_name])
 
         return self.responses
+    

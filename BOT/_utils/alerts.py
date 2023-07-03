@@ -1,5 +1,6 @@
 import bruhcolor
 
+
 VALID_TYPES = {"ERROR": 196, "INFO": 220, "SUCCESS": 76, "GENERAL": 105}
 
 

@@ -2,10 +2,7 @@ import os
 import random
 import re
 
-import re
-
 from _utils.restrictions import BRUHPY_RESTRICTIONS
-from discordwebhook import Discord
 from discordwebhook import Discord
 
 

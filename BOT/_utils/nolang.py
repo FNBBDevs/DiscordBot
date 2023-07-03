@@ -6,9 +6,13 @@ import sys
 import time
 from io import StringIO
 
+from _utils.capstdout import stdoutIO
+
 from .logerr import Logerr
 
+
 logerr = Logerr()
+
 
 def execute_processed_command(program, results, debug, pvn):
     """
@@ -55,6 +59,7 @@ class Nolang:
     """
     Class to execute nolang code
     """
+
     def __init__(self, debug=False, post_val_name="POST"):
         self.debug = debug
         self.responses = []

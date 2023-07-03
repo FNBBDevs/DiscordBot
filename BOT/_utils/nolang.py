@@ -1,9 +1,11 @@
-""" Function to process nolang code """
+import contextlib
 import multiprocessing
 import re
 import subprocess
+import sys
 import time
-from _utils.capstdout import stdoutIO
+from io import StringIO
+
 from .logerr import Logerr
 
 logerr = Logerr()
@@ -28,6 +30,8 @@ def execute_processed_command(program, results, debug, pvn):
             out, err = proc.communicate()
             if out.decode("utf-8") != "":
                 results[pvn] = ("OUTPUT", str(out.decode("utf-8")))
+            if out.decode("utf-8") != "":
+                results[pvn] = ("OUTPUT", str(out.decode("utf-8")))
             elif err:
                 err = err.decode("utf-8")
                 if error_search := re.search(r"(.*) '.*':(\d+)", err):
@@ -35,11 +39,15 @@ def execute_processed_command(program, results, debug, pvn):
                     results[pvn] = ("ERROR", f"line {line}: '{error}'")
                 else:
                     results[pvn] = ("ERROR", err)
+                    results[pvn] = ("ERROR", err)
             else:
+                results[pvn] = ("OUTPUT", "No output produced")
                 results[pvn] = ("OUTPUT", "No output produced")
         except Exception as exception:
             # should not happen as the error is caught above . . .
             logerr.log(str(exception))
+            results[pvn] = ("ERROR", "An error was encountered. Check the logs.")
+
             results[pvn] = ("ERROR", "An error was encountered. Check the logs.")
 
 

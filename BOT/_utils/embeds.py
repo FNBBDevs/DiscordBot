@@ -3,8 +3,10 @@ import random
 
 import discord
 
+# pylint: disable=C0301
+
 # Color mapping for embed. Neat-o colors if I do say so
-COLORS = {
+colors = {
     "SUCCESS": 0x5CB85C,
     "WARNING": 0xFFE70A,
     "ERROR": 0xDC4C64,
@@ -22,8 +24,8 @@ def on_success(
     footer_img: str = None,
     footer_usr: str = None,
 ):
-    COLOR = COLORS["SUCCESS"]
-    embed = discord.Embed(title=f"{title}", description=f"{description}", color=COLOR)
+    color = colors["SUCCESS"]
+    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color)
     embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
     return embed
 
@@ -36,8 +38,8 @@ def on_warning(
     footer_img: str = None,
     footer_usr: str = None,
 ):
-    COLOR = COLORS["WARNING"]
-    embed = discord.Embed(title=f"{title}", description=f"{description}", color=COLOR)
+    color = colors["WARNING"]
+    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color)
     embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
     return embed
 
@@ -50,8 +52,8 @@ def on_error(
     footer_img: str = None,
     footer_usr: str = None,
 ):
-    COLOR = COLORS["ERROR"]
-    embed = discord.Embed(title=f"{title}", description=f"{description}", color=COLOR)
+    color = colors["ERROR"]
+    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color)
     embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
     return embed
 
@@ -64,8 +66,8 @@ def on_info(
     footer_img: str = None,
     footer_usr: str = None,
 ):
-    COLOR = COLORS["INFO"]
-    embed = discord.Embed(title=f"{title}", description=f"{description}", color=COLOR)
+    color = colors["INFO"]
+    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color)
     embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
     return embed
 
@@ -78,8 +80,8 @@ def on_general(
     footer_img: str = None,
     footer_usr: str = None,
 ):
-    COLOR = COLORS["BLACK"]
-    embed = discord.Embed(title=f"{title}", description=f"{description}", color=COLOR)
+    color = colors["BLACK"]
+    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color)
     embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
     return embed
 
@@ -92,8 +94,8 @@ def on_light(
     footer_img: str = None,
     footer_usr: str = None,
 ):
-    COLOR = COLORS["WHITE"]
-    embed = discord.Embed(title=f"{title}", description=f"{description}", color=COLOR)
+    color = colors["WHITE"]
+    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color)
     embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
     return embed
 
@@ -106,8 +108,8 @@ def on_dark(
     footer_img: str = None,
     footer_usr: str = None,
 ):
-    COLOR = COLORS["BLACK"]
-    embed = discord.Embed(title=f"{title}", description=f"{description}", color=COLOR)
+    color = colors["BLACK"]
+    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color)
     embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
     return embed
 

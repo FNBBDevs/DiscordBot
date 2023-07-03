@@ -19,7 +19,6 @@ help:
 
 .PHONY: install
 install:
-	pyproject.toml poetry.lock
 	$(POETRY) install
 
 .PHONY: lint

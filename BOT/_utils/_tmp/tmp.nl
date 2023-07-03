@@ -1,12 +1,1 @@
-no x = 'cock'
-
-nolout(cock)
-
-
-
-
-
-
-
-
-y = 'cock'
+nolan = nolan

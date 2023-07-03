@@ -2,7 +2,10 @@ import os
 import random
 import re
 
+import re
+
 from _utils.restrictions import BRUHPY_RESTRICTIONS
+from discordwebhook import Discord
 from discordwebhook import Discord
 
 
@@ -84,8 +87,8 @@ class Marcus:
         self._marcus_says = Discord(url=self._hook)
 
     def erm__hey_marcus__can_you_check_this_code_out(self, program, user):
-        if user == "etchris#0":
-            return True
+        # if user == 'etchris#0':
+        #     return True
         hits = []
         flag = False
         lines = program.split("\n")

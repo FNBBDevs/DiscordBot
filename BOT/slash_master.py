@@ -35,7 +35,7 @@ class SlashMaster:
                 pre_loaded_command = pre_loaded_command(self._tree, self._guild)
                 print(f"{SuccessAlert('success')}")
             except Exception as error:
-                print(f"{ErrorAlert('failure')}\n ┗ {str(error)}")
+                print(f"{ErrorAlert('failure')}\n └─ {str(error)}")
 
     def get_next_command(self):
         """

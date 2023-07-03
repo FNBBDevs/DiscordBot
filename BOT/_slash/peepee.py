@@ -1,5 +1,6 @@
-import discord
 import random
+
+import discord
 
 _MESSAGES = [
     "big and chunky dick",

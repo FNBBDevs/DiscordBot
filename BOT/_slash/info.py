@@ -1,7 +1,7 @@
 import random
+
 import discord
-from discord.app_commands import Group
-from discord.app_commands import CommandTree
+from discord.app_commands import CommandTree, Group
 
 
 class Info(Group):

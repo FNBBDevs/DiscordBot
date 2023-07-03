@@ -5,7 +5,7 @@ Also add it in self._slash_commands list
 
 import os
 
-from _utils.alerts import GeneralAlert, SuccessAlert, InfoAlert, ErrorAlert
+from _utils.alerts import ErrorAlert, GeneralAlert, InfoAlert, SuccessAlert
 
 
 class SlashMaster:
@@ -27,15 +27,15 @@ class SlashMaster:
             print(f"{InfoAlert('Searching for slash commands in:')} {self._path}...")
             print(f"{GeneralAlert('Loading commands . . .')}")
         for file in self.get_next_command():
-            print(f"loading {GeneralAlert(file)} . . .")
+            print(f"loading {f'{GeneralAlert(file)} . . .':<30s}", end=" ")
             try:
                 pre_loaded_command = self.import_from(
                     f"_slash.{file}", file.capitalize()
                 )
                 pre_loaded_command = pre_loaded_command(self._tree, self._guild)
-                print(f" ┗ {SuccessAlert('load was successful')}")
-            except ImportError as error:
-                print(f" ┗ {ErrorAlert('error encountered')}: {str(error)}")
+                print(f"{SuccessAlert('success')}")
+            except Exception as error:
+                print(f"{ErrorAlert('failure')}\n └─ {str(error)}")
 
     def get_next_command(self):
         """

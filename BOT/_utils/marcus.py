@@ -1,8 +1,9 @@
 import os
-import re
 import random
-from discordwebhook import Discord
+import re
+
 from _utils.restrictions import BRUHPY_RESTRICTIONS
+from discordwebhook import Discord
 
 
 class Marcus:
@@ -41,44 +42,64 @@ class Marcus:
             r"""(.*(f".*{.*__builtins__.*}.*").*)|(.*(f'.*{.*__builtins__.*}.*').*)""",
         ]
         self.no_antis_antis = [
-            r"""(.*(f".*{.*'.*eval.*[(].*[)].*'.*}.*").*)|(.*(f'.*{.*".*eval.*[(].*[)].*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*exec.*[(].*[)].*'.*}.*").*)|(.*(f'.*{.*".*exec.*[(].*[)].*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*import .*'.*}.*").*)|(.*(f'.*{.*".*import .*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*__import__[(].*[)].*'.*}.*").*)|(.*(f'.*{.*".*__import__[(].*[)].*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*globals[(][)].*'.*}.*").*)|(.*(f'.*{.*".*globals[(][)].*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*getattr[(].*[)].*'.*}.*").*)|(.*(f'.*{.*".*getattr[(].*[)].*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*open[(].*[)].*'.*}.*").*)|(.*(f'.*{.*".*open[(].*[)].*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*while True:.*'.*}.*").*)|(.*(f'.*{.*".*while True:.*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*__builtins__.*'.*}.*").*)|(.*(f'.*{.*".*__builtins__.*".*}.*').*)""",
+            r"""(.*(f".*{.*'.*eval.*[(].*[)].*'.*}.*").*)
+            |(.*(f'.*{.*".*eval.*[(].*[)].*".*}.*').*)""",
+            r"""(.*(f".*{.*'.*exec.*[(].*[)].*'.*}.*").*)
+            |(.*(f'.*{.*".*exec.*[(].*[)].*".*}.*').*)""",
+            r"""(.*(f".*{.*'.*import .*'.*}.*").*)
+            |(.*(f'.*{.*".*import .*".*}.*').*)""",
+            r"""(.*(f".*{.*'.*__import__[(].*[)].*'.*}.*").*)
+            |(.*(f'.*{.*".*__import__[(].*[)].*".*}.*').*)""",
+            r"""(.*(f".*{.*'.*globals[(][)].*'.*}.*").*)
+            |(.*(f'.*{.*".*globals[(][)].*".*}.*').*)""",
+            r"""(.*(f".*{.*'.*getattr[(].*[)].*'.*}.*").*)
+            |(.*(f'.*{.*".*getattr[(].*[)].*".*}.*').*)""",
+            r"""(.*(f".*{.*'.*open[(].*[)].*'.*}.*").*)
+            |(.*(f'.*{.*".*open[(].*[)].*".*}.*').*)""",
+            r"""(.*(f".*{.*'.*while True:.*'.*}.*").*)
+            |(.*(f'.*{.*".*while True:.*".*}.*').*)""",
+            r"""(.*(f".*{.*'.*__builtins__.*'.*}.*").*)
+            |(.*(f'.*{.*".*__builtins__.*".*}.*').*)""",
         ]
         self.for_real_no_antis = [
-            r"""(.*(f".*{.*f'.*{.*(__builtins__).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(__builtins__).*}.*".*}.*').*)""",
-            r"""(.*(f".*{.*f'.*{.*(__import__[(].*[)].*).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(__import__[(].*[)].*).*}.*".*}.*').*)""",
-            r"""(.*(f".*{.*f'.*{.*(import .*).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(import).*}.*".*}.*').*)""",
-            r"""(.*(f".*{.*f'.*{.*(while True:).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(while True:).*}.*".*}.*').*)""",
-            r"""(.*(f".*{.*f'.*{.*(exec[(].*[)].*).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(exec[(].*[)].*).*}.*".*}.*').*)""",
-            r"""(.*(f".*{.*f'.*{.*(eval[(].*[)].*).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(eval[(].*[)].*).*}.*".*}.*').*)""",
-            r"""(.*(f".*{.*f'.*{.*(getattr[(].*[)].*).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(getattr[(].*[)].*).*}.*".*}.*').*)""",
-            r"""(.*(f".*{.*f'.*{.*(open[(].*[)].*).*}.*'.*}.*").*)|(.*(f'.*{.*f".*{.*(open[(].*[)].*).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(__builtins__).*}.*'.*}.*").*)
+            |(.*(f'.*{.*f".*{.*(__builtins__).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(__import__[(].*[)].*).*}.*'.*}.*").*)
+            |(.*(f'.*{.*f".*{.*(__import__[(].*[)].*).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(import .*).*}.*'.*}.*").*)
+            |(.*(f'.*{.*f".*{.*(import).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(while True:).*}.*'.*}.*").*)
+            |(.*(f'.*{.*f".*{.*(while True:).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(exec[(].*[)].*).*}.*'.*}.*").*)
+            |(.*(f'.*{.*f".*{.*(exec[(].*[)].*).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(eval[(].*[)].*).*}.*'.*}.*").*)
+            |(.*(f'.*{.*f".*{.*(eval[(].*[)].*).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(getattr[(].*[)].*).*}.*'.*}.*").*)
+            |(.*(f'.*{.*f".*{.*(getattr[(].*[)].*).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(open[(].*[)].*).*}.*'.*}.*").*)
+            |(.*(f'.*{.*f".*{.*(open[(].*[)].*).*}.*".*}.*').*)""",
         ]
         self._restrictions = BRUHPY_RESTRICTIONS
         self._hook = os.environ["MARCUS"]
         self._marcus_says = Discord(url=self._hook)
 
     def erm__hey_marcus__can_you_check_this_code_out(self, program, user):
-        # if user == 'etchris#0':
-        #     return True       
+        if user == "etchris#0":
+            return True
         hits = []
         flag = False
         lines = program.split("\n")
         for line in lines:
-            if flag:break
+            if flag:
+                break
             line = line.split(";")
             for hidden_line in line:
                 hidden_line = hidden_line.replace('"""', '"')
                 hidden_line = re.sub(" +", " ", hidden_line)
                 for check, anti_check in list(zip(self.checks, self.anti_checks)):
-                    if (s1 := re.search(check, hidden_line)) and not (s2 := re.search(anti_check, hidden_line)):
+                    if (s1 := re.search(check, hidden_line)) and not (
+                        s2 := re.search(anti_check, hidden_line)
+                    ):
                         hits.append((hidden_line, s1))
                         hits.append((hidden_line, s2))
                         flag = True
@@ -98,8 +119,7 @@ class Marcus:
                     break
         hits = [hit for hit in hits if hit[1]]
         if hits:
-            print(
-                f"erm... Marcus here, you might want to look at this!\n{hits}")
+            print(f"erm... Marcus here, you might want to look at this!\n{hits}")
             if random.random() < 0.5:
                 self._marcus_says.post(
                     content=(

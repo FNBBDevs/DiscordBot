@@ -17,8 +17,8 @@ def lint(c, reports=False):
 def format(c, check_only=False):
     check = "--check" if check_only else ""
     c.run(
-        f"black tasks {bot_dir}{check}"
+        f"black {bot_dir}{check}"
     )
     c.run(
-        f"isort --py auto tasks {bot_dir}{check}"
+        f"isort --py auto {bot_dir}{check}"
     )

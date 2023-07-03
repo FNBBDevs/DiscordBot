@@ -1,6 +1,6 @@
+import _utils.embeds as embeds
 import discord
 from discord.app_commands import Group
-import _utils.embeds as embeds
 
 
 class Skip(Group):

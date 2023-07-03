@@ -1,3 +1,4 @@
+""" List of restricted words for bruhpy """
 BRUHPY_RESTRICTIONS = [
     "IPython",
     "bruhanimate",

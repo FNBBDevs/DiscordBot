@@ -1,8 +1,9 @@
-import discord
-import youtube_dl
 import asyncio
 import time
 from functools import partial
+
+import discord
+import youtube_dl
 
 # SHUT UP
 # youtube_dl.utils.bug_reports_message = lambda: ''

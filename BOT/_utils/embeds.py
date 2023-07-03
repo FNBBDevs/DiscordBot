@@ -3,6 +3,7 @@ import random
 
 import discord
 
+
 # pylint: disable=C0301
 
 # Color mapping for embed. Neat-o colors if I do say so

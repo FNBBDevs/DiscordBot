@@ -2,6 +2,7 @@ import random
 
 import discord
 
+
 _MESSAGES = [
     "big and chunky dick",
     "non-existant dick like Koi Carpe",

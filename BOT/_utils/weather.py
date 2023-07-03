@@ -1,6 +1,7 @@
 """ Function to get the weather """
 import python_weather
 
+
 async def get_weather(city, weather_type="current"):
     """
     Function to get the weather

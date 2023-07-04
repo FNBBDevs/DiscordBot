@@ -82,16 +82,16 @@ class Play(Group):
 
                         # Stream the song to the channel and call the play_next function on completion
                         audio_player = discord.FFmpegPCMAudio(
-                                executable="ffmpeg.exe",
-                                before_options=(
-                                    "-reconnect 1 -reconnect_streamed 1"
-                                    " -reconnect_delay_max 5"
-                                ),
-                                options=(
-                                    f'-vn -filter_complex "{af.audio_filters["softclip"]}"'
-                                ),
-                                source=source,
-                            )
+                            executable="ffmpeg.exe",
+                            before_options=(
+                                "-reconnect 1 -reconnect_streamed 1"
+                                " -reconnect_delay_max 5"
+                            ),
+                            options=(
+                                f'-vn -filter_complex "{af.audio_filters["softclip"]}"'
+                            ),
+                            source=source,
+                        )
                         channel.play(
                             audio_player,
                             after=lambda x: (
@@ -116,16 +116,16 @@ class Play(Group):
                     await load(file, channel, interaction)
                     # Stream the song to the channel and call the play_next function on completion
                     audio_player = discord.FFmpegPCMAudio(
-                            executable="ffmpeg.exe",
-                            before_options=(
-                                "-reconnect 1 -reconnect_streamed 1"
-                                " -reconnect_delay_max 5"
-                            ),
-                            options=(
-                                f'-vn -filter_complex "{af.audio_filters["softclip"]}"'
-                            ),
-                            source=source,
-                        )
+                        executable="ffmpeg.exe",
+                        before_options=(
+                            "-reconnect 1 -reconnect_streamed 1"
+                            " -reconnect_delay_max 5"
+                        ),
+                        options=(
+                            f'-vn -filter_complex "{af.audio_filters["softclip"]}"'
+                        ),
+                        source=source,
+                    )
                     channel.play(
                         audio_player,
                         after=lambda x: (
@@ -182,20 +182,22 @@ class Play(Group):
             await interaction.followup.send(embed=embed)
 
         # Play the next song in the queue
-        def play_next(channel:VoiceProtocol, interaction: discord.Interaction, player: discord.FFmpegAudio):
+        def play_next(
+            channel: VoiceProtocol,
+            interaction: discord.Interaction,
+            player: discord.FFmpegAudio,
+        ):
             # If the queue is not empty, load the song from the front
             if len(self.queue) > 0:
                 # Get the song from the front
                 queue_url = self.queue.pop(0)
 
                 channel.stop()
-                
+
                 player._kill_process()
 
                 # Get URL data dictionary by loading the song
-                file_dict = asyncio.run(
-                    load_song(queue_url, interaction=interaction)
-                )
+                file_dict = asyncio.run(load_song(queue_url, interaction=interaction))
 
                 # Regather the URL data in case the link went bad
                 source = asyncio.run(regather_stream(file_dict))
@@ -234,18 +236,15 @@ class Play(Group):
                 )
 
                 audio_player = discord.FFmpegPCMAudio(
-                executable="ffmpeg.exe",
-                before_options=(
-                    "-reconnect 1 -reconnect_streamed 1"
-                    " -reconnect_delay_max 5"
-                ),
-                options=(
-                    f'-vn -filter_complex "{af.audio_filters["softclip"]}"'
-                ),
-                source=source,
+                    executable="ffmpeg.exe",
+                    before_options=(
+                        "-reconnect 1 -reconnect_streamed 1" " -reconnect_delay_max 5"
+                    ),
+                    options=(f'-vn -filter_complex "{af.audio_filters["softclip"]}"'),
+                    source=source,
                 )
-                    
-                channel.play (
+
+                channel.play(
                     audio_player,
                     after=lambda x: (
                         print(f"ERROR: {x}")

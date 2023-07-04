@@ -1,6 +1,6 @@
+import bruhcolor
 from bruhcolor import bruhcolored
 from invoke import task
-import bruhcolor
 
 
 bot_dir = "BOT"

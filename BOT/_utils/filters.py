@@ -7,6 +7,6 @@ audio_filters = {
     "nuclear": "apsyclip=level_in=64:level_out=64:clip=1",
     "softclip": "asoftclip=hard:output=1",
     "psyclip": "apsyclip=level_in=2:level_out=2, bass=f=110:w=1",
-    "test": "aresample=resampler=soxr -ar 44100",
-    "none": ""
+    "test": "aresample=48000",
+    "none": "aresample=48000"
 }

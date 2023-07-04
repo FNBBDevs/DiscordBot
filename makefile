@@ -55,7 +55,7 @@ build:
 
 .PHONY: run
 run:
-	python $(NAME)/run.py
+	poetry run $(NAME)\run.py
 
 .PHONY: fix-yt
 fix-yt:

@@ -76,16 +76,29 @@ class Play(Group):
                     # If the bot is not playing, the song can be played without queuing
                     else:
                         # Get the URL data to stream the song
-                        file = await load_song(song)
+                        file = await load_song(song, interaction=interaction)
 
-                        # source = await regather_stream(file)
+                        source = await regather_stream(file)
 
                         # Stream the song to the channel and call the play_next function on completion
+                        audio_player = discord.FFmpegPCMAudio(
+                                executable="ffmpeg.exe",
+                                before_options=(
+                                    "-reconnect 1 -reconnect_streamed 1"
+                                    " -reconnect_delay_max 5"
+                                ),
+                                options=(
+                                    f'-vn -filter_complex "{af.audio_filters["softclip"]}"'
+                                ),
+                                source=source,
+                            )
                         channel.play(
-                            discord.FFmpegPCMAudio(
-                                executable="ffmpeg.exe", source=file["webpage"]
+                            audio_player,
+                            after=lambda x: (
+                                print(f"ERROR: {x}")
+                                if x
+                                else play_next(channel, interaction, audio_player)
                             ),
-                            after=lambda x: play_next(channel, interaction),
                         )
 
                         # Load and display the custom embed for the "now playing" screen
@@ -102,22 +115,23 @@ class Play(Group):
                     # Load and display the custom embed
                     await load(file, channel, interaction)
                     # Stream the song to the channel and call the play_next function on completion
-                    channel.play(
-                        discord.FFmpegPCMAudio(
+                    audio_player = discord.FFmpegPCMAudio(
                             executable="ffmpeg.exe",
                             before_options=(
                                 "-reconnect 1 -reconnect_streamed 1"
                                 " -reconnect_delay_max 5"
                             ),
                             options=(
-                                f'-vn -filter_complex "{af.audio_filters["nightcore"]}"'
+                                f'-vn -filter_complex "{af.audio_filters["softclip"]}"'
                             ),
                             source=source,
-                        ),
+                        )
+                    channel.play(
+                        audio_player,
                         after=lambda x: (
                             print(f"ERROR: {x}")
                             if x
-                            else play_next(channel, interaction)
+                            else play_next(channel, interaction, audio_player)
                         ),
                     )
 
@@ -127,7 +141,7 @@ class Play(Group):
 
         # Load a song from the queue and return the URL data
         async def load_song(song: str, interaction: discord.Interaction):
-            return await yt.YTDLSource.from_url(song, loop=interaction.client.loop)
+            return await yt.YTDLSource.from_url(song)
 
         # Reload the state of a song URL from the queue incase the link went stale
         async def regather_stream(file_dict: dict):
@@ -168,18 +182,23 @@ class Play(Group):
             await interaction.followup.send(embed=embed)
 
         # Play the next song in the queue
-        def play_next(channel, interaction: discord.Interaction):
+        def play_next(channel:VoiceProtocol, interaction: discord.Interaction, player: discord.FFmpegAudio):
             # If the queue is not empty, load the song from the front
             if len(self.queue) > 0:
                 # Get the song from the front
                 queue_url = self.queue.pop(0)
 
+                channel.stop()
+                
+                player._kill_process()
+
                 # Get URL data dictionary by loading the song
-                file_dict = asyncio.run_coroutine_threadsafe(
+                file_dict = asyncio.run(
                     load_song(queue_url, interaction=interaction)
                 )
+
                 # Regather the URL data in case the link went bad
-                source = asyncio.run_coroutine_threadsafe(regather_stream(file_dict))
+                source = asyncio.run(regather_stream(file_dict))
 
                 # Grab the data items for the custom embed
                 time = file_dict["time"]
@@ -190,7 +209,7 @@ class Play(Group):
                 embed = embeds.on_light(
                     title="Now Playing",
                     description=" ",
-                    footer_text="Queued by:",
+                    footer_text="Played by:",
                     footer_usr=interaction.user.name,
                     footer_img=interaction.user.guild_avatar,
                 )
@@ -202,6 +221,7 @@ class Play(Group):
                     value=f"{int(time[3:5])} minutes {int(time[6:9])} seconds",
                     inline=False,
                 )
+
                 embed.set_thumbnail(url=thumb)
                 embed.set_footer(
                     text=f"Queued By: {interaction.user.name}",
@@ -213,12 +233,43 @@ class Play(Group):
                     interaction.channel.send(embed=embed)
                 )
 
-                # Stream the song, and call the function again after it completes to see if there are songs left in the queue
-                channel.play(
-                    discord.FFmpegPCMAudio(
-                        executable="ffmpeg.exe", options="-an", source=source
-                    ),
+                audio_player = discord.FFmpegPCMAudio(
+                executable="ffmpeg.exe",
+                before_options=(
+                    "-reconnect 1 -reconnect_streamed 1"
+                    " -reconnect_delay_max 5"
+                ),
+                options=(
+                    f'-vn -filter_complex "{af.audio_filters["softclip"]}"'
+                ),
+                source=source,
+                )
+                    
+                channel.play (
+                    audio_player,
                     after=lambda x: (
-                        print(f"ERROR: {x}") if x else play_next(channel, interaction)
+                        print(f"ERROR: {x}")
+                        if x
+                        else play_next(channel, interaction, audio_player)
                     ),
                 )
+
+                # # Stream the song, and call the function again after it completes to see if there are songs left in the queue
+                # channel.play(
+                #         discord.FFmpegPCMAudio(
+                #             executable="ffmpeg.exe",
+                #             before_options=(
+                #                 "-reconnect 1 -reconnect_streamed 1"
+                #                 " -reconnect_delay_max 5"
+                #             ),
+                #             options=(
+                #                 f'-vn -filter_complex "{af.audio_filters["bassboost"]}"'
+                #             ),
+                #             source=source,
+                #         ),
+                #         after=lambda x: (
+                #             print(f"ERROR: {x}")
+                #             if x
+                #             else play_next(channel, interaction, audio_player)
+                #         ),
+                #     )

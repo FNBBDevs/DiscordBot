@@ -6,6 +6,20 @@ import _utils.ytdl as yt
 import discord
 from discord import VoiceProtocol
 from discord.app_commands import Group
+from enum import Enum
+
+
+class Filters(Enum):
+    none = "none"
+    sigma = "sigma"
+    bassboost = "bassboost"
+    earrape = "earrape"
+    nuclear = "nuclear"
+    softclip = "softclip"
+    nightcore = "nightcore"
+    pulsar = "pulsar"
+    psyclip = "psyclip"
+    test = "test"
 
 
 # Used to stream songs from youtube like a BAWS
@@ -27,7 +41,7 @@ class Play(Group):
             name="play",
             guild=discord.Object(id=guild),
         )
-        async def play(interaction: discord.Interaction, song: str):
+        async def play(interaction: discord.Interaction, song: str, filter: Filters = "none"):
             """
             Play song from a youtube channel.
             """
@@ -42,6 +56,7 @@ class Play(Group):
                     "BRUH YOU NEED TO BE IN A VOICE CHANNEL SO I KNOW WHERE TO GO"
                     " :rofl: :rofl: :rofl:"
                 )
+
             # The user is in the voice channel, but the bot might not be
             else:
                 # Checks to see if the bot is in the voice channel with the user. If this is the case, it does not need to connect
@@ -54,7 +69,7 @@ class Play(Group):
                         embed = embeds.on_success(
                             title="Queuing Song Request",
                             description=f"{song}",
-                            footer_text="(Attempted) Skip By:",
+                            footer_text="Queued By:",
                             footer_usr=interaction.user.name,
                             footer_img=interaction.user.guild_avatar,
                         )
@@ -71,7 +86,7 @@ class Play(Group):
                         # Send the response back to the interaction (i.e. reply)
                         await interaction.followup.send(embed=embed)
                         # Add the song to the queue
-                        await add_song(song)
+                        await add_song(song, filter)
 
                     # If the bot is not playing, the song can be played without queuing
                     else:
@@ -88,7 +103,7 @@ class Play(Group):
                                 " -reconnect_delay_max 5"
                             ),
                             options=(
-                                f'-vn -filter_complex "{af.audio_filters["softclip"]}"'
+                                f'-vn -filter_complex "{af.audio_filters[str(filter.name)]}"'
                             ),
                             source=source,
                         )
@@ -122,7 +137,7 @@ class Play(Group):
                             " -reconnect_delay_max 5"
                         ),
                         options=(
-                            f'-vn -filter_complex "{af.audio_filters["softclip"]}"'
+                            f'-vn -filter_complex "{af.audio_filters[str(filter.name)]}"'
                         ),
                         source=source,
                     )
@@ -136,8 +151,8 @@ class Play(Group):
                     )
 
         # Add the song data to the queue
-        async def add_song(url):
-            self.queue.append(url)
+        async def add_song(url, audio_filter):
+            self.queue.append([url, audio_filter])
 
         # Load a song from the queue and return the URL data
         async def load_song(song: str, interaction: discord.Interaction):
@@ -155,7 +170,7 @@ class Play(Group):
             embed = embeds.on_light(
                 title="Now Playing",
                 description=" ",
-                footer_text="Queued by:",
+                footer_text="Requested by:",
                 footer_usr=interaction.user.name,
                 footer_img=interaction.user.guild_avatar,
             )
@@ -190,7 +205,9 @@ class Play(Group):
             # If the queue is not empty, load the song from the front
             if len(self.queue) > 0:
                 # Get the song from the front
-                queue_url = self.queue.pop(0)
+                song_data = self.queue.pop(0)
+                queue_url = song_data[0]
+                filter = song_data[1] 
 
                 channel.stop()
 
@@ -240,7 +257,7 @@ class Play(Group):
                     before_options=(
                         "-reconnect 1 -reconnect_streamed 1" " -reconnect_delay_max 5"
                     ),
-                    options=(f'-vn -filter_complex "{af.audio_filters["softclip"]}"'),
+                    options=(f'-vn -filter_complex "{af.audio_filters[str(filter.name)]}"'),
                     source=source,
                 )
 
@@ -252,23 +269,3 @@ class Play(Group):
                         else play_next(channel, interaction, audio_player)
                     ),
                 )
-
-                # # Stream the song, and call the function again after it completes to see if there are songs left in the queue
-                # channel.play(
-                #         discord.FFmpegPCMAudio(
-                #             executable="ffmpeg.exe",
-                #             before_options=(
-                #                 "-reconnect 1 -reconnect_streamed 1"
-                #                 " -reconnect_delay_max 5"
-                #             ),
-                #             options=(
-                #                 f'-vn -filter_complex "{af.audio_filters["bassboost"]}"'
-                #             ),
-                #             source=source,
-                #         ),
-                #         after=lambda x: (
-                #             print(f"ERROR: {x}")
-                #             if x
-                #             else play_next(channel, interaction, audio_player)
-                #         ),
-                #     )

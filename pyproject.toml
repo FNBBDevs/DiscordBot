@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "discordbot"
+name = "BOT"
 version = "0.1.0"
 description = "A discord bot that can do stuff."
 authors = ["Nolan Gregory <65730528+nulzo@users.noreply.github.com>"]
 readme = "README.md"
 
 [project]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -30,6 +30,8 @@ flake8 = "^6.0.0"
 mypy = "^1.4.1"
 bandit = "^1.7.5"
 
+[tool.poetry.dev-dependencies]
+pytest = "^7.4"
 
 [build-system]
 requires = ["poetry-core"]

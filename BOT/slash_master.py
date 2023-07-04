@@ -6,6 +6,7 @@ Also add it in self._slash_commands list
 import os
 
 from _utils.alerts import ErrorAlert, GeneralAlert, InfoAlert, SuccessAlert
+from sys import platform
 
 
 class SlashMaster:
@@ -14,7 +15,11 @@ class SlashMaster:
     """
 
     def __init__(self, tree, guild, path, debug):
-        self._path = os.path.dirname(__file__) + "\\" + path
+        if platform == "linux" or platform == "linux2" or platform == "darwin":
+            self._path = os.path.dirname(__file__) + "/" + path
+        else:
+            self._path = os.path.dirname(__file__) + "\\" + path
+        
         self._debug = debug
         self._tree = tree
         self._guild = guild

@@ -41,7 +41,7 @@ class Play(Group):
             name="play",
             guild=discord.Object(id=guild),
         )
-        async def play(interaction: discord.Interaction, song: str, filter: Filters = "none"):
+        async def play(interaction: discord.Interaction, song: str, filter: Filters = Filters.none):
             """
             Play song from a youtube channel.
             """

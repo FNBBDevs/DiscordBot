@@ -16,16 +16,12 @@ ytdl_format_options = {
     "restrictfilenames": True,
     "noplaylist": True,
     "nocheckcertificate": True,
-    "quiet": False,
-    "verbose": True,
-    "no_warnings": False,
+    "quiet": True,
+    "verbose": False,
+    "no_warnings": True,
     "highWaterMark": 1 << 25,
     "default_search": "auto",
     "source_address": "0.0.0.0",
-}
-
-ffmpeg_options = {
-    "options": '-af "bass=g=20"',
 }
 
 # FileDownloader object with specific load instructions
@@ -84,7 +80,6 @@ class YTDLSource(discord.PCMVolumeTransformer):
             "title": title,
             "thumbnail": thumbnail,
             "time": format_time,
-            "data": ffmpeg_options,
         }
 
     # Convert the data from the queue into a useable URL (sometimes they expire, this is workaround)
@@ -98,7 +93,6 @@ class YTDLSource(discord.PCMVolumeTransformer):
         data = await loop.run_in_executor(
             None, lambda: ytdl.extract_info(url=data, download=False)
         )
-        print("erm")
 
         # Return a valid URL that can be streamed by FFMPEG
         return data["url"]

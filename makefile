@@ -31,14 +31,18 @@ lint:
 	-$(POETRY) run mypy $(NAME) --ignore-missing-imports
 	-$(POETRY) run bandit -r $(NAME) -s B608
 
-.PHONY: lint-silent
-.SILENT: lint-silent
-lint-silent:
-	-($(POETRY) run isort --profile=black --lines-after-imports=2 --check-only $(NAME) || @echo isort:..................................................... $(FAILED))
-	-$(POETRY) run black $(NAME) --check > lint.txt || @echo black:..................................................... $(FAILED)
-	-$(POETRY) run flake8 --ignore=W503,E501 $(NAME) > lint.txt || @echo flake8:..................................................... $(FAILED)
-	-$(POETRY) run mypy $(NAME) --ignore-missing-imports > lint.txt || @echo mypy:..................................................... $(FAILED)
-	-$(POETRY) run bandit -r $(NAME) -s B608 > lint.txt || @echo bandit:..................................................... $(FAILED)
+.PHONY: lint-test
+lint-test:
+	@python linting.py
+
+.PHONY: check-lint
+.SILENT: check-lint
+check-lint:
+	-$(POETRY) run pylint --reports yes $(NAME) > NUL || @echo pylint:..................................................... $(FAILED)
+	$(POETRY) run isort --profile=black --lines-after-imports=2 --check-only $(NAME) || @echo isort:..................................................... $(FAILED)
+	$(POETRY) run black $(NAME) --check > NUL || @echo black:..................................................... $(FAILED)
+	-$(POETRY) run flake8 --ignore=W503,E501 $(NAME) > NUL || @echo flake8:..................................................... $(FAILED)
+	-$(POETRY) run mypy $(NAME) --ignore-missing-imports > NUL || @echo mypy:..................................................... $(FAILED)
 
 .PHONY: format
 format:
@@ -51,7 +55,7 @@ build:
 
 .PHONY: run
 run:
-	python $(NAME)/run.py
+	poetry run $(NAME)\run.py
 
 .PHONY: fix-yt
 fix-yt:

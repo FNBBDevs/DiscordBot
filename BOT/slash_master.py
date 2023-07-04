@@ -14,7 +14,7 @@ class SlashMaster:
     """
 
     def __init__(self, tree, guild, path, debug):
-        self._path = f"{os.path.dirname(__file__)}\{path}"
+        self._path = os.path.dirname(__file__) + "\\" + path
         self._debug = debug
         self._tree = tree
         self._guild = guild

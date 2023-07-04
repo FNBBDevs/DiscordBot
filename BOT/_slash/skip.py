@@ -19,10 +19,6 @@ class Skip(Group):
 
             # AWAIT A RESPONSE
             await interaction.response.defer()
-            # DEBUG stuff
-            print("channel" + str(type(voice_channel)))
-            # DEBUG stuff
-            print("voice_client" + str(type(interaction.guild.voice_client)))
 
             # IF THE USER IS NOT THE VOICE CHANNEL, ISSUE ERROR
             if not user_channel:
@@ -44,18 +40,11 @@ class Skip(Group):
                 if voice_channel.is_playing():
                     # This is BROKEN
                     voice_channel.stop()
-                    # TODO: fix the shitty disconnect issue ^^^ Currently just closing the whole socket like bruh wtf
 
-                    # Load an embed to tell the user they skipped the song
-                    # embed = discord.Embed(title=f"Skipped song", description="Your song sucked and I did not want to listen to it anymore...", color= 0x28a745)
-                    # embed.set_footer(text=f'Skipped By: {interaction.user.name}', icon_url= interaction.user.guild_avatar)
                     await interaction.followup.send(
                         embed=embeds.on_success(
-                            title="Skipped Song!",
-                            description=(
-                                "Your song sucked and I did not want to listen to it"
-                                " anymore..."
-                            ),
+                            title="Successfully Skipped Song!",
+                            description="",
                             footer_text="Skipped By:",
                             footer_usr=interaction.user.name,
                             footer_img=interaction.user.guild_avatar,

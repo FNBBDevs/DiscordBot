@@ -5,6 +5,9 @@ description = "A discord bot that can do stuff."
 authors = ["Nolan Gregory <65730528+nulzo@users.noreply.github.com>"]
 readme = "README.md"
 
+[project]
+requires-python = ">=3.10"
+
 [tool.poetry.dependencies]
 python = "^3.11"
 "discord.py" = "^2.3.0"
@@ -18,7 +21,7 @@ PyNaCl = "^1.5.0"
 cffi = "^1.15.1"
 pycparser = "^2.21"
 discordwebhook = "^1.0.3"
-ruff = "^0.0.275"
+ruff = "^0.0.276"
 pylint = "^2.17.4"
 black = "^23.3.0"
 invoke = "^2.1.3"

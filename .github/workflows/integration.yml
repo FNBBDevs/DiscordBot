@@ -21,11 +21,11 @@ jobs:
       with:
         python-version: "3.11"
         
-    - name: Install poetry 1.51
+    - name: Install poetry 1.5.1
       run: |
         python -m ensurepip
         python -m pip install --upgrade pip
-        python -m pip install poetry==1.51
+        python -m pip install poetry==1.5.1
 
     - name: Install dependencies
       shell: bash

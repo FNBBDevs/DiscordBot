@@ -19,9 +19,13 @@ class Filters(Enum):
     nightcore = "nightcore"
     pulsar = "pulsar"
     psyclip = "psyclip"
-    test = "test"
     reverb = "reverb"
     slowedandreverb = "slowedandreverb"
+    lowpass = "lowpass"
+    vaporwave = "vaporwave"
+    POVUrGfBangsKlimWhileUrInTheBathroom = "POVUrGfBangsKlimWhileUrInTheBathroom"
+    slowwwwww = "slowwwwww"
+    wide = "wide"
 
 
 # Used to stream songs from youtube like a BAWS
@@ -109,6 +113,7 @@ class Play(Group):
                             ),
                             source=source,
                         )
+                        
                         channel.play(
                             audio_player,
                             after=lambda x: (

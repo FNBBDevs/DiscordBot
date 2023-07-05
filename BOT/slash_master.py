@@ -4,9 +4,9 @@ Also add it in self._slash_commands list
 """
 
 import os
+from sys import platform
 
 from _utils.alerts import ErrorAlert, GeneralAlert, InfoAlert, SuccessAlert
-from sys import platform
 
 
 class SlashMaster:
@@ -19,7 +19,7 @@ class SlashMaster:
             self._path = os.path.dirname(__file__) + "/" + path
         else:
             self._path = os.path.dirname(__file__) + "\\" + path
-        
+
         self._debug = debug
         self._tree = tree
         self._guild = guild

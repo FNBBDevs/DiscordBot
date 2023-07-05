@@ -1,4 +1,5 @@
 import asyncio
+from enum import Enum
 
 import _utils.embeds as embeds
 import _utils.filters as af
@@ -6,7 +7,6 @@ import _utils.ytdl as yt
 import discord
 from discord import VoiceProtocol
 from discord.app_commands import Group
-from enum import Enum
 
 
 class Filters(Enum):
@@ -47,7 +47,9 @@ class Play(Group):
             name="play",
             guild=discord.Object(id=guild),
         )
-        async def play(interaction: discord.Interaction, song: str, filter: Filters = Filters.none):
+        async def play(
+            interaction: discord.Interaction, song: str, filter: Filters = Filters.none
+        ):
             """
             Play song from a youtube channel.
             """
@@ -113,7 +115,7 @@ class Play(Group):
                             ),
                             source=source,
                         )
-                        
+
                         channel.play(
                             audio_player,
                             after=lambda x: (
@@ -214,7 +216,7 @@ class Play(Group):
                 # Get the song from the front
                 song_data = self.queue.pop(0)
                 queue_url = song_data[0]
-                filter = song_data[1] 
+                filter = song_data[1]
 
                 channel.stop()
 
@@ -264,7 +266,9 @@ class Play(Group):
                     before_options=(
                         "-reconnect 1 -reconnect_streamed 1" " -reconnect_delay_max 5"
                     ),
-                    options=(f'-vn -filter_complex "{af.audio_filters[str(filter.name)]}"'),
+                    options=(
+                        f'-vn -filter_complex "{af.audio_filters[str(filter.name)]}"'
+                    ),
                     source=source,
                 )
 

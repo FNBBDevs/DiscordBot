@@ -1,71 +1,74 @@
+from enum import Enum
+
 import _utils.embeds as embeds
 import _utils.filters as af
 import discord
+import gtts
 from discord import VoiceProtocol
 from discord.app_commands import Group
-import gtts
-from enum import Enum
+
 
 class Language(Enum):
-    Afrikaans = 'af'
-    Arabic = 'ar'
-    Bulgarian = 'bg'
-    Bengali = 'bn'
-    Bosnian = 'bs'
-    Catalan = 'ca'
-    Czech = 'cs'
-    Danish = 'da'
-    German = 'de'
-    Greek = 'el'
-    English = 'en'
-    Spanish = 'es'
-    Estonian = 'et'
-    Finnish = 'fi'
-    French = 'fr'
-    Gujarati = 'gu'
-    Hindi = 'hi'
-    Croatian = 'hr'
-    Hungarian = 'hu'
-    Indonesian = 'id'
-    Icelandic = 'is'
-    Italian = 'it'
-    Hebrew = 'iw'
-    Japanese = 'ja'
-    Javanese = 'jw'
-    Khmer = 'km'
-    Kannada = 'kn'
-    Korean = 'ko'
-    Latin = 'la'
-    Latvian = 'lv'
-    Malayalam = 'ml'
-    Marathi = 'mr'
-    Malay = 'ms'
-    Myanmar  = 'my'
-    Nepali = 'ne'
-    Dutch = 'nl'
-    Norwegian = 'no'
-    Polish = 'pl'
-    Portuguese = 'pt'
-    Romanian = 'ro'
-    Russian = 'ru'
-    Sinhala = 'si'
-    Slovak = 'sk'
-    Albanian = 'sq'
-    Serbian = 'sr'
-    Sundanese = 'su'
-    Swedish = 'sv'
-    Swahili = 'sw'
-    Tamil = 'ta'
-    Telugu = 'te'
-    Thai = 'th'
-    Filipino = 'tl'
-    Turkish = 'tr'
-    Ukrainian = 'uk'
-    Urdu = 'ur'
-    Vietnamese = 'vi'
-    Chinese = 'zh-CN'
-    Taiwan = 'zh-TW'
-    Mandarin = 'zh'
+    Afrikaans = "af"
+    Arabic = "ar"
+    Bulgarian = "bg"
+    Bengali = "bn"
+    Bosnian = "bs"
+    Catalan = "ca"
+    Czech = "cs"
+    Danish = "da"
+    German = "de"
+    Greek = "el"
+    English = "en"
+    Spanish = "es"
+    Estonian = "et"
+    Finnish = "fi"
+    French = "fr"
+    Gujarati = "gu"
+    Hindi = "hi"
+    Croatian = "hr"
+    Hungarian = "hu"
+    Indonesian = "id"
+    Icelandic = "is"
+    Italian = "it"
+    Hebrew = "iw"
+    Japanese = "ja"
+    Javanese = "jw"
+    Khmer = "km"
+    Kannada = "kn"
+    Korean = "ko"
+    Latin = "la"
+    Latvian = "lv"
+    Malayalam = "ml"
+    Marathi = "mr"
+    Malay = "ms"
+    Myanmar = "my"
+    Nepali = "ne"
+    Dutch = "nl"
+    Norwegian = "no"
+    Polish = "pl"
+    Portuguese = "pt"
+    Romanian = "ro"
+    Russian = "ru"
+    Sinhala = "si"
+    Slovak = "sk"
+    Albanian = "sq"
+    Serbian = "sr"
+    Sundanese = "su"
+    Swedish = "sv"
+    Swahili = "sw"
+    Tamil = "ta"
+    Telugu = "te"
+    Thai = "th"
+    Filipino = "tl"
+    Turkish = "tr"
+    Ukrainian = "uk"
+    Urdu = "ur"
+    Vietnamese = "vi"
+    Chinese = "zh-CN"
+    Taiwan = "zh-TW"
+    Mandarin = "zh"
+
 
 class Filters(Enum):
     none = "none"
@@ -85,6 +88,7 @@ class Filters(Enum):
     slowwwwww = "slowwwwww"
     wide = "wide"
 
+
 class Talk(Group):
     """
     Description: The music player.
@@ -94,13 +98,19 @@ class Talk(Group):
         """
         Description: Constructor for the music player.
         """
+
         # Command that is called when the user types /play. Big bulky command that does a lot
         @tree.command(
             description="Type it and I'll say it",
             name="talk",
             guild=discord.Object(id=guild),
         )
-        async def play(interaction: discord.Interaction, text: str, filter: Filters = Filters.none, language: Language = Language.English):
+        async def play(
+            interaction: discord.Interaction,
+            text: str,
+            filter: Filters = Filters.none,
+            language: Language = Language.English,
+        ):
             """
             Play song from a youtube channel.
             """
@@ -119,7 +129,7 @@ class Talk(Group):
             else:
                 tts = gtts.gTTS(f"{text}", lang=language)
                 tts.save("tts.mp3")
-            
+
                 # Checks to see if the bot is in the voice channel with the user. If this is the case, it does not need to connect
                 if interaction.guild.voice_client:
                     # Get the VoiceClient object to make requests to
@@ -136,11 +146,10 @@ class Talk(Group):
                             source="tts.mp3",
                             options=(
                                 f'-vn -filter_complex "{af.audio_filters[str(filter.name)]}"'
-                            )
+                            ),
                         )
-                        
-                        channel.play(
-                            audio_player)
+
+                        channel.play(audio_player)
 
                 # If the bot is not in the channel, but the user is, add the bot to the channel
                 else:
@@ -150,8 +159,8 @@ class Talk(Group):
                         executable="ffmpeg.exe",
                         source="tts.mp3",
                         options=(
-                                f'-vn -filter_complex "{af.audio_filters[str(filter.name)]}"'
-                            )
+                            f'-vn -filter_complex "{af.audio_filters[str(filter.name)]}"'
+                        ),
                     )
-                    
+
                     channel.play(audio_player)

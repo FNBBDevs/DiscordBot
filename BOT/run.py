@@ -10,7 +10,7 @@ def main():
     Description: Invoke the bot and prepare the tokens.
     """
     load_dotenv()
-    print(os.environ)
+
     token = os.environ["BOT_token"]
     guild = os.environ["guild_ID"]
     cmds_path = os.environ["cmds_path"]

@@ -7,6 +7,7 @@ audio_filters = {
     "nuclear": "apsyclip=level_in=64:level_out=64:clip=1",
     "softclip": "asoftclip=hard:output=1",
     "psyclip": "apsyclip=level_in=2:level_out=2, bass=f=110:w=1",
-    "test": "aresample=48000",
+    "reverb": "aecho=1.0:0.7:30:0.5",
+    "slowedandreverb": "aecho=1.0:0.7:50:0.5, aresample=48000, asetrate=48000*0.9",
     "none": "aresample=48000"
 }

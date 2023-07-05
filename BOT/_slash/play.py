@@ -20,6 +20,8 @@ class Filters(Enum):
     pulsar = "pulsar"
     psyclip = "psyclip"
     test = "test"
+    reverb = "reverb"
+    slowedandreverb = "slowedandreverb"
 
 
 # Used to stream songs from youtube like a BAWS

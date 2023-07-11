@@ -10,10 +10,10 @@ class Alert:
         self.text = self.set_message(text)
 
     def set_message(self, text):
-        return str(bruhcolor.bruhcolored(text, color=VALID_TYPES[self.alert_type]))
+        return bruhcolor.bruhcolored(text, color=VALID_TYPES[self.alert_type])
 
-    def __str__(self):
-        return self.text
+    def __repr__(self):
+        return self.text.colored
 
 
 class ErrorAlert(Alert):

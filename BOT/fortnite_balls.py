@@ -42,7 +42,7 @@ class FortniteBallsBot(discord.Client):
         ).load_commands()
 
         # sync the commands with our guild (server)
-        await self.tree.sync(guild=discord.Object(id=self._guild))
+        # await self.tree.sync(guild=discord.Object(id=self._guild))
 
     async def on_message(self, message: Message):
         """

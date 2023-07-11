@@ -1,1 +1,1 @@
-nolan = nolan
+nolout("hello")

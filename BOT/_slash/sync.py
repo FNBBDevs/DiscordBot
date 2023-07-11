@@ -9,5 +9,5 @@ class Sync(Group):
         )
         async def sync(interaction: discord.Interaction):
             # Sync that command tree up!
-            await tree.sync(guild=discord.Object(id=self._GUILD))
+            await tree.sync(guild=discord.Object(id=guild))
             await interaction.response.send_message("Command tree synced.")

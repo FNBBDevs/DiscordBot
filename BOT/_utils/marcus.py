@@ -82,10 +82,10 @@ class Marcus:
         self._restrictions = BRUHPY_RESTRICTIONS
         self._hook = os.environ["MARCUS"]
         self._marcus_says = Discord(url=self._hook)
+        self._elevated = ["etchris"]
 
     def erm__hey_marcus__can_you_check_this_code_out(self, program, user):
-        # if user == 'etchris#0':
-        #     return True
+        if self.check_user(user): return True
         hits = []
         flag = False
         lines = program.split("\n")
@@ -140,3 +140,6 @@ class Marcus:
         else:
             print("[tips hat]... Hey! Its Marcus, your code looks good my guy")
         return not flag
+
+    def check_user(self, user):
+        return user in self._elevated

@@ -4,6 +4,7 @@ Also add it in self._slash_commands list
 """
 
 import os
+from datetime import datetime
 from sys import platform
 
 from _utils.alerts import ErrorAlert, GeneralAlert, InfoAlert, SuccessAlert
@@ -18,7 +19,7 @@ class SlashMaster:
         if platform == "linux" or platform == "linux2" or platform == "darwin":
             self._path = os.path.dirname(__file__) + "/" + path
         else:
-            self._path = os.path.dirname(__file__) + "\\" + path
+            self._path = os.path.dirname(__file__) + path
 
         self._debug = debug
         self._tree = tree
@@ -28,11 +29,9 @@ class SlashMaster:
         """
         initialize each command with the current tree and guild
         """
-        if self._debug:
-            print(f"{InfoAlert('Searching for slash commands in:')} {self._path}...")
-            print(f"{GeneralAlert('Loading commands . . .')}")
+        print(f"{InfoAlert('Searching for slash commands in:')} {self._path}...")
         for file in self.get_next_command():
-            print(f"loading {f'{GeneralAlert(file)} . . .':<30s}", end=" ")
+            print(f"loading {GeneralAlert(file).text:^10}", end=" ")
             try:
                 pre_loaded_command = self.import_from(
                     f"_slash.{file}", file.capitalize()

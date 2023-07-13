@@ -1,5 +1,7 @@
-no x = 69
-if x == 420
-	nolout("cock")
-hermph
-	nolout("cock cock")
+greg add(x)
+    greg _add(y)
+        pay x + y
+    
+    pay _add
+
+nolout(add(10)(59))

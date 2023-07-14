@@ -1,7 +1,6 @@
 """ File to process python code """
 import multiprocessing
 import re
-import os
 import time
 
 from _utils.capstdout import stdoutIO

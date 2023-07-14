@@ -18,6 +18,10 @@ class Marcus:
             r""".*(open[(].*[)]).*""",
             r""".*(while True:).*""",
             r""".*(__builtins__).*""",
+            r""".*(__class__).*""",
+            r""".*(__base__).*""",
+            r""".*(__subclasses__).*""",
+            r""".*(load_module\(.*\)).*""",
         ]
         self.anti_checks = [
             r"""(.*(".*eval.*[(].*[)].*").*)|(.*('.*eval.*[(].*[)].*').*)""",
@@ -29,6 +33,10 @@ class Marcus:
             r"""(.*(".*open[(].*[)].*").*)|(.*('.*open[(].*[)].*').*)""",
             r"""(.*(".*while True:.*").*)|(.*('.*while True:.*').*)""",
             r"""(.*(".*__builtins__.*").*)|(.*('.*__builtins__.*').*)""",
+            r"""(.*(".*__class__.*").*)|(.*('.*__class__.*').*)""",
+            r"""(.*(".*__base__.*").*)|(.*('.*__base__.*').*)""",
+            r"""(.*(".*__subclasses__.*").*)|(.*('.*__subclasses__.*').*)""",
+            r"""(.*(".*load_module\(.*\).*").*)|(.*('.*load_module\(.*\).*').*)""",
         ]
         self.no_antis = [
             r"""(.*(f".*{.*eval.*[(].*[)].*}.*").*)|(.*(f'.*{.*eval.*[(].*[)].*}.*').*)""",
@@ -40,6 +48,10 @@ class Marcus:
             r"""(.*(f".*{.*open[(].*[)].*}.*").*)|(.*(f'.*{.*open[(].*[)].*}.*').*)""",
             r"""(.*(f".*{.*while True:.*}.*").*)|(.*(f'.*{.*while True:.*}.*').*)""",
             r"""(.*(f".*{.*__builtins__.*}.*").*)|(.*(f'.*{.*__builtins__.*}.*').*)""",
+            r"""(.*(f".*{.*__class__.*}.*").*)|(.*(f'.*{.*__class__.*}.*').*)""",
+            r"""(.*(f".*{.*__base__.*}.*").*)|(.*(f'.*{.*__base__.*}.*').*)""",
+            r"""(.*(f".*{.*__subclasses__.*}.*").*)|(.*(f'.*{.*__subclasses__.*}.*').*)""",
+            r"""(.*(f".*{.*load_module\(.*\).*}.*").*)|(.*(f'.*{.*load_module\(.*\).*}.*').*)""",
         ]
         self.no_antis_antis = [
             r"""(.*(f".*{.*'.*eval.*[(].*[)].*'.*}.*").*)
@@ -60,10 +72,26 @@ class Marcus:
             |(.*(f'.*{.*".*while True:.*".*}.*').*)""",
             r"""(.*(f".*{.*'.*__builtins__.*'.*}.*").*)
             |(.*(f'.*{.*".*__builtins__.*".*}.*').*)""",
+            r"""(.*(f".*{.*'.*__class__.*'.*}.*").*)
+            |(.*(f'.*{.*".*__class__.*".*}.*').*)""",
+            r"""(.*(f".*{.*'.*__base__.*'.*}.*").*)
+            |(.*(f'.*{.*".*__base__.*".*}.*').*)""",
+            r"""(.*(f".*{.*'.*__subclasses__.*'.*}.*").*)
+            |(.*(f'.*{.*".*__subclasses__.*".*}.*').*)""",
+            r"""(.*(f".*{.*'.*load_module\(.*\).*'.*}.*").*)
+            |(.*(f'.*{.*".*load_module\(.*\).*".*}.*').*)""",
         ]
         self.for_real_no_antis = [
             r"""(.*(f".*{.*f'.*{.*(__builtins__).*}.*'.*}.*").*)
             |(.*(f'.*{.*f".*{.*(__builtins__).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(load_module\(.*\)).*}.*'.*}.*").*)
+            |(.*(f'.*{.*f".*{.*(load_module\(.*\)).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(__subclasses__).*}.*'.*}.*").*)
+            |(.*(f'.*{.*f".*{.*(__subclasses__).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(__base__).*}.*'.*}.*").*)
+            |(.*(f'.*{.*f".*{.*(__base__).*}.*".*}.*').*)""",
+            r"""(.*(f".*{.*f'.*{.*(__class__).*}.*'.*}.*").*)
+            |(.*(f'.*{.*f".*{.*(__class__).*}.*".*}.*').*)""",
             r"""(.*(f".*{.*f'.*{.*(__import__[(].*[)].*).*}.*'.*}.*").*)
             |(.*(f'.*{.*f".*{.*(__import__[(].*[)].*).*}.*".*}.*').*)""",
             r"""(.*(f".*{.*f'.*{.*(import .*).*}.*'.*}.*").*)
@@ -82,10 +110,8 @@ class Marcus:
         self._restrictions = BRUHPY_RESTRICTIONS
         self._hook = os.environ["MARCUS"]
         self._marcus_says = Discord(url=self._hook)
-        self._elevated = ["etchris"]
 
     def erm__hey_marcus__can_you_check_this_code_out(self, program, user):
-        if self.check_user(user): return True
         hits = []
         flag = False
         lines = program.split("\n")
@@ -140,6 +166,3 @@ class Marcus:
         else:
             print("[tips hat]... Hey! Its Marcus, your code looks good my guy")
         return not flag
-
-    def check_user(self, user):
-        return user in self._elevated

@@ -19,7 +19,7 @@ class SlashMaster:
         if platform == "linux" or platform == "linux2" or platform == "darwin":
             self._path = os.path.dirname(__file__) + "/" + path
         else:
-            self._path = os.path.dirname(__file__) + path
+            self._path = os.path.dirname(__file__) + "\\" + path
 
         self._debug = debug
         self._tree = tree

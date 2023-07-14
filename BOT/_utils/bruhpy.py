@@ -1,13 +1,12 @@
 """ File to process python code """
 import multiprocessing
 import re
+import os
 import time
-from io import StringIO
 
 from _utils.capstdout import stdoutIO
 from _utils.marcus import Marcus
 from _utils.restrictions import BRUHPY_RESTRICTIONS
-
 
 def execute_processed_command(program, results, debug, pvn):
     """

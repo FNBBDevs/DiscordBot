@@ -2,7 +2,6 @@
 import multiprocessing
 import re
 import time
-from io import StringIO
 
 from _utils.capstdout import stdoutIO
 from _utils.marcus import Marcus

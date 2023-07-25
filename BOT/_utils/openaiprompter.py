@@ -10,7 +10,7 @@ class OpenAIPrompter:
         print(f"[INFO] OpenAIPrompter: got this password from user: '{password}'")
         print(f"[INFO] OpenAIPrompter: comparing against: '{self.password}'")
 
-        if password==self.password:
+        if os.getenv("OPENAI_API_KEY") is not None and password==self.password:
             completion = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[

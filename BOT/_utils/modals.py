@@ -217,18 +217,19 @@ class OpenAIPasswordInputModal(Modal):
         self.prompt = prompt
         self.prompter = OpenAIPrompter()
         self.marcus = Discord(url=os.getenv("MARCUS"))
+        self.marcus_id = os.getenv("MARCUS_ID")
 
     async def on_submit(self, interaction: discord.Interaction):
 
-        webhooks = await interaction.guild.webhooks()
+        if self.marcus_id: webhooks = await interaction.guild.webhooks()
 
         await interaction.response.defer()
 
         # update marcus to response where the command was called
-
-        for webhook in webhooks:
-            if webhook.id == 1081850171253608458:
-                await webhook.edit(channel=interaction.channel)
+        if self.marcus_id:
+            for webhook in webhooks:
+                if webhook.id == self.marcus_id:
+                    await webhook.edit(channel=interaction.channel)
 
         password = self.children[0].value
 

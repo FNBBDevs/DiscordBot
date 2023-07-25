@@ -217,7 +217,7 @@ class OpenAIPasswordInputModal(Modal):
         self.prompt = prompt
         self.prompter = OpenAIPrompter()
         self.marcus = Discord(url=os.getenv("MARCUS"))
-        self.marcus_id = os.getenv("MARCUS_ID")
+        self.marcus_id = int(os.getenv("MARCUS_ID"))
 
     async def on_submit(self, interaction: discord.Interaction):
 

@@ -8,138 +8,96 @@ from discordwebhook import Discord
 
 class Marcus:
     def __init__(self):
-        self.checks = [
-            r""".*(eval[(].*[)]).*""",
-            r""".*(exec[(].*[)]).*""",
-            r""".*(import .*).*""",
-            r""".*(__import__[(].*[)]).*""",
-            r""".*(globals[(][)]).*""",
-            r""".*(getattr[(].*[)]).*""",
-            r""".*(open[(].*[)]).*""",
-            r""".*(while True:).*""",
-            r""".*(__builtins__).*""",
+        self.check_vals = [
+            r"""eval[(].*[)]""",
+            r"""exec[(].*[)]""",
+            r"""import\s[A-Za-z_]*""",
+            r"""__import__[(].*[)]""",
+            r"""globals[(][)]""",
+            r"""getattr[(].*[)]""",
+            r"""open[(].*[)]""",
+            r"""while True:""",
+            r"""__builtins__""",
+            r"""__class__""",
+            r"""__base__""",
+            r"""__subclasses__""",
+            r"""load_module[(].*[)]""",
         ]
-        self.anti_checks = [
-            r"""(.*(".*eval.*[(].*[)].*").*)|(.*('.*eval.*[(].*[)].*').*)""",
-            r"""(.*(".*exec.*[(].*[)].*").*)|(.*('.*exec.*[(].*[)].*').*)""",
-            r"""(.*(".*import .*").*)|(.*('.*import .*').*)""",
-            r"""(.*(".*__import__[(].*[)].*").*)|(.*('__import__[(].*[)].*').*)""",
-            r"""(.*(".*globals[(][)].*").*)|(.*('.*globals[(][)].*').*)""",
-            r"""(.*(".*getattr[(].*[)].*").*)|(.*('.*getattr[(].*[)].*').*)""",
-            r"""(.*(".*open[(].*[)].*").*)|(.*('.*open[(].*[)].*').*)""",
-            r"""(.*(".*while True:.*").*)|(.*('.*while True:.*').*)""",
-            r"""(.*(".*__builtins__.*").*)|(.*('.*__builtins__.*').*)""",
-        ]
-        self.no_antis = [
-            r"""(.*(f".*{.*eval.*[(].*[)].*}.*").*)|(.*(f'.*{.*eval.*[(].*[)].*}.*').*)""",
-            r"""(.*(f".*{.*exec.*[(].*[)].*}.*").*)|(.*(f'.*{.*exec.*[(].*[)].*}.*').*)""",
-            r"""(.*(f".*{.*import .*}.*").*)|(.*(f'.*{.*import .*}.*').*)""",
-            r"""(.*(f".*{.*__import__[(].*[)].*}.*").*)|(.*(f'.*{.*__import__[(].*[)].*}.*').*)""",
-            r"""(.*(f".*{.*globals[(][)].*}.*").*)|(.*(f'.*{.*globals[(][)].*}.*').*)""",
-            r"""(.*(f".*{.*getattr[(].*[)].*}.*").*)|(.*(f'.*{.*getattr[(].*[)].*}.*').*)""",
-            r"""(.*(f".*{.*open[(].*[)].*}.*").*)|(.*(f'.*{.*open[(].*[)].*}.*').*)""",
-            r"""(.*(f".*{.*while True:.*}.*").*)|(.*(f'.*{.*while True:.*}.*').*)""",
-            r"""(.*(f".*{.*__builtins__.*}.*").*)|(.*(f'.*{.*__builtins__.*}.*').*)""",
-        ]
-        self.no_antis_antis = [
-            r"""(.*(f".*{.*'.*eval.*[(].*[)].*'.*}.*").*)
-            |(.*(f'.*{.*".*eval.*[(].*[)].*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*exec.*[(].*[)].*'.*}.*").*)
-            |(.*(f'.*{.*".*exec.*[(].*[)].*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*import .*'.*}.*").*)
-            |(.*(f'.*{.*".*import .*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*__import__[(].*[)].*'.*}.*").*)
-            |(.*(f'.*{.*".*__import__[(].*[)].*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*globals[(][)].*'.*}.*").*)
-            |(.*(f'.*{.*".*globals[(][)].*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*getattr[(].*[)].*'.*}.*").*)
-            |(.*(f'.*{.*".*getattr[(].*[)].*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*open[(].*[)].*'.*}.*").*)
-            |(.*(f'.*{.*".*open[(].*[)].*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*while True:.*'.*}.*").*)
-            |(.*(f'.*{.*".*while True:.*".*}.*').*)""",
-            r"""(.*(f".*{.*'.*__builtins__.*'.*}.*").*)
-            |(.*(f'.*{.*".*__builtins__.*".*}.*').*)""",
-        ]
-        self.for_real_no_antis = [
-            r"""(.*(f".*{.*f'.*{.*(__builtins__).*}.*'.*}.*").*)
-            |(.*(f'.*{.*f".*{.*(__builtins__).*}.*".*}.*').*)""",
-            r"""(.*(f".*{.*f'.*{.*(__import__[(].*[)].*).*}.*'.*}.*").*)
-            |(.*(f'.*{.*f".*{.*(__import__[(].*[)].*).*}.*".*}.*').*)""",
-            r"""(.*(f".*{.*f'.*{.*(import .*).*}.*'.*}.*").*)
-            |(.*(f'.*{.*f".*{.*(import).*}.*".*}.*').*)""",
-            r"""(.*(f".*{.*f'.*{.*(while True:).*}.*'.*}.*").*)
-            |(.*(f'.*{.*f".*{.*(while True:).*}.*".*}.*').*)""",
-            r"""(.*(f".*{.*f'.*{.*(exec[(].*[)].*).*}.*'.*}.*").*)
-            |(.*(f'.*{.*f".*{.*(exec[(].*[)].*).*}.*".*}.*').*)""",
-            r"""(.*(f".*{.*f'.*{.*(eval[(].*[)].*).*}.*'.*}.*").*)
-            |(.*(f'.*{.*f".*{.*(eval[(].*[)].*).*}.*".*}.*').*)""",
-            r"""(.*(f".*{.*f'.*{.*(getattr[(].*[)].*).*}.*'.*}.*").*)
-            |(.*(f'.*{.*f".*{.*(getattr[(].*[)].*).*}.*".*}.*').*)""",
-            r"""(.*(f".*{.*f'.*{.*(open[(].*[)].*).*}.*'.*}.*").*)
-            |(.*(f'.*{.*f".*{.*(open[(].*[)].*).*}.*".*}.*').*)""",
-        ]
+
         self._restrictions = BRUHPY_RESTRICTIONS
         self._hook = os.environ["MARCUS"]
         self._marcus_says = Discord(url=self._hook)
-        self._elevated = ["etchris"]
+    
+    def check_for_anti(self, anti, hits):
+        flagged = None
+        for hit in hits:
+            if anti == hit:
+                flagged = anti
+                break
+        
+        if flagged:
+            hits.remove(flagged)
+            return True, hits
+        else:
+            return False, hits
+
+    def log_it(self, string):
+        with open("./marcusdebug.fnbbef", "a") as marcus:
+            marcus.write(f"{string}\n")
 
     def erm__hey_marcus__can_you_check_this_code_out(self, program, user):
-        if self.check_user(user): return True
         hits = []
-        flag = False
-        lines = program.split("\n")
-        for line in lines:
-            if flag:
-                break
-            line = line.split(";")
-            for hidden_line in line:
-                hidden_line = hidden_line.replace('"""', '"')
-                hidden_line = re.sub(" +", " ", hidden_line)
-                for check, anti_check in list(zip(self.checks, self.anti_checks)):
-                    if (s1 := re.search(check, hidden_line)) and not (
-                        s2 := re.search(anti_check, hidden_line)
-                    ):
-                        hits.append((hidden_line, s1))
-                        hits.append((hidden_line, s2))
-                        flag = True
-                        break
-            for check, anti_check in list(zip(self.no_antis, self.no_antis_antis)):
-                if re.search(check, hidden_line) and not re.search(
-                    anti_check, hidden_line
-                ):
-                    hits.append((hidden_line, check))
-                    hits.append((hidden_line, anti_check))
-                    flag = True
-                    break
-            for check in self.for_real_no_antis:
-                if check_res := re.search(check, hidden_line):
-                    hits.append((hidden_line, check_res))
-                    flag = True
-                    break
-        hits = [hit for hit in hits if hit[1]]
-        if hits:
-            print(f"erm... Marcus here, you might want to look at this!\n{hits}")
+        hits_expanded = []
+        for check in self.check_vals:
+            if x := re.search(check, program):
+                hits.append(x)
+
+        for i, hit in enumerate(hits):
+            if hit.groups():
+                for g in hit.groups():
+                    hits_expanded.append(g)
+            else:
+                hits_expanded.append(hit.group())
+
+        antis = []
+        tmp = program
+        while x := re.search(r"""(?<=(["]\b))(?:(?=(\\?))\2.)*?(?=\1)""", tmp):
+            antis.append(tmp[x.span()[0]:x.span()[1]])
+            tmp = ("#"*x.span()[1]) + tmp[x.span()[1]:]
+
+        tmp = program
+        while x := re.search(r"""(?<=([']\b))(?:(?=(\\?))\2.)*?(?=\1)""", tmp):
+            antis.append(tmp[x.span()[0]:x.span()[1]])
+            tmp = ("#"*x.span()[1]) + tmp[x.span()[1]:]
+
+        print(antis)
+        print(hits_expanded)
+
+        hit_count = len(hits)
+        for anti in antis:
+            anti_found, hits_expanded = self.check_for_anti(anti, hits_expanded)
+
+            if anti_found:
+                hit_count -= 1
+
+        
+
+        if hit_count > 0:
             if random.random() < 0.5:
                 self._marcus_says.post(
                     content=(
                         "Woah!! Hey, are you sure the code you are trying to run isn't"
                         " breaking the rules defined by the creator of this bot? Or"
-                        " worse, trying to run malicious code? This seems a little"
-                        f" suspicious, `{hits[0][0]}`! Let's look over our code and try"
-                        " again!"
+                        " worse, trying to run malicious code?"
                     )
                 )
             else:
                 self._marcus_says.post(
                     content=(
-                        "erm . . . what the flip dude! Thought you could get away with"
-                        f" `{hits[0][0]}`?!"
+                        "erm . . . what the flip dude!"
                     )
                 )
         else:
             print("[tips hat]... Hey! Its Marcus, your code looks good my guy")
-        return not flag
-
-    def check_user(self, user):
-        return user in self._elevated
+        return not hit_count > 0
+    

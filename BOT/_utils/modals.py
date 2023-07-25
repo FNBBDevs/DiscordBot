@@ -9,6 +9,7 @@ from _utils.bruhpy import BruhPy
 from _utils.lifegen import LifeGen
 from _utils.nolang import Nolang
 from _utils.weather import get_weather as Weather
+from _utils.openaiprompter import OpenAIPrompter
 from discord import ui as UI
 from discord.ui import Modal
 from discordwebhook import Discord
@@ -208,3 +209,37 @@ class GameOfLifeModal(Modal):
                 view=None,
             )
             self.marcus_says.post(content="bro is not packing! 😭 🤣 🤣")
+
+class OpenAIPasswordInputModal(Modal):
+    def __init__(self, prompt, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.add_item(UI.TextInput(label="Enter the password to use this command", style=discord.TextStyle.short))
+        self.prompt = prompt
+        self.prompter = OpenAIPrompter()
+        self.marcus = Discord(url=os.getenv("MARCUS"))
+
+    async def on_submit(self, interaction: discord.Interaction):
+
+        webhooks = await interaction.guild.webhooks()
+
+        await interaction.response.defer()
+
+        # update marcus to response where the command was called
+
+        for webhook in webhooks:
+            if webhook.id == 1081850171253608458:
+                await webhook.edit(channel=interaction.channel)
+
+        password = self.children[0].value
+
+        try:
+            marcus_should_say = self.prompter.complete(prompt=self.prompt, password=password)
+
+            if marcus_should_say is not None:
+                await interaction.followup.send(content=self.prompt)
+                self.marcus.post(content=marcus_should_say.content)
+            else:
+                await interaction.followup.send(content="ERROR")
+        except Exception as exception:
+            print(f"[ERROR] /chat: {exception}")
+            await interaction.followup.send(content="ERROR")

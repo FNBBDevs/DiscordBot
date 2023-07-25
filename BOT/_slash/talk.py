@@ -6,7 +6,7 @@ import discord
 import gtts
 from discord import VoiceProtocol
 from discord.app_commands import Group
-
+import importlib
 
 class Language(Enum):
     Afrikaans = "af"
@@ -89,7 +89,7 @@ class Talk(Group):
 
             # The user is in the voice channel, but the bot might not be
             else:
-                tts = gtts.gTTS(f"{text}", lang=language)
+                tts = gtts.gTTS(f"{text}", lang=language.value)
                 tts.save("tts.mp3")
 
                 # Checks to see if the bot is in the voice channel with the user. If this is the case, it does not need to connect

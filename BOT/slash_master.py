@@ -7,7 +7,7 @@ import os
 from datetime import datetime
 from sys import platform
 
-from _utils.alerts import ErrorAlert, GeneralAlert, InfoAlert, SuccessAlert
+from _utils.alerts import ErrorAlert, GeneralAlert, InfoAlert, SuccessAlert, DateTimeAlert
 
 
 class SlashMaster:
@@ -29,9 +29,11 @@ class SlashMaster:
         """
         initialize each command with the current tree and guild
         """
-        print(f"{InfoAlert('Searching for slash commands in:')} {self._path}...")
         for file in self.get_next_command():
-            print(f"loading {GeneralAlert(file).text:^10}", end=" ")
+            print(DateTimeAlert(f"loading {file} . . . ",
+                                dtia_alert_type="INFO",
+                                message_from="bot.slash_master").text,
+                                end="")
             try:
                 pre_loaded_command = self.import_from(
                     f"_slash.{file}", file.capitalize()

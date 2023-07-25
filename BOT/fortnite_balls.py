@@ -33,8 +33,6 @@ class FortniteBallsBot(discord.Client):
         """
         Description: Called when the bot is initialized (turned on)
         """
-        if self._debug:
-            print(f"Logged in as: {self.user}")
 
         # tell slash master to load commands
         SlashMaster(

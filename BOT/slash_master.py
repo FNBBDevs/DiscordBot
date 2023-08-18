@@ -39,7 +39,7 @@ class SlashMaster:
                 pre_loaded_command = self.import_from(
                     f"_slash.{file}", file_capitalized
                 )
-                pre_loaded_command = pre_loaded_command(self._tree, self._guild, args=(args[0],))
+                pre_loaded_command = pre_loaded_command(self._tree, self._guild, args=args)
                 print(f"{SuccessAlert('success')}")
             except Exception as error:
                 print(f"{ErrorAlert('failure')}\n └─ {str(error)}")

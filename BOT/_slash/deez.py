@@ -2,7 +2,7 @@ import discord
 
 
 class Deez:
-    def __init__(self, tree, guild):
+    def __init__(self, tree, guild, args=None):
         @tree.command(
             name="deez",
             description="bud is asking for a brusing!!!!! on god!!!!",

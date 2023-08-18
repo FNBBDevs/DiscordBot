@@ -42,7 +42,7 @@ _ICONS = [
 
 
 class Peepee:
-    def __init__(self, tree, guild):
+    def __init__(self, tree: discord.app_commands.CommandTree, guild: str, args=None):
         @tree.command(
             name="pp", description="Slimey and Gooey", guild=discord.Object(id=guild)
         )

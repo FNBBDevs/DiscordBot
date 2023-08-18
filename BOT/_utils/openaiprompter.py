@@ -13,7 +13,7 @@ class OpenAIPrompter:
                     {"role": "system", "content": "You are a cool dude named Marcus that is happy to talk to your friends."},
                     {"role": "user", "content": prompt}
                 ],
-                max_tokens=50
+                max_tokens=400
             )
             try:
                 return completion.choices[0].message

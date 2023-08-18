@@ -25,7 +25,7 @@ class SlashMaster:
         self._tree = tree
         self._guild = guild
 
-    def load_commands(self):
+    def load_commands(self, args=None):
         """
         initialize each command with the current tree and guild
         """
@@ -35,10 +35,11 @@ class SlashMaster:
                                 message_from="bot.slash_master").text,
                                 end="")
             try:
+                file_capitalized = "".join([word.capitalize() for word in file.split("_")])
                 pre_loaded_command = self.import_from(
-                    f"_slash.{file}", file.capitalize()
+                    f"_slash.{file}", file_capitalized
                 )
-                pre_loaded_command = pre_loaded_command(self._tree, self._guild)
+                pre_loaded_command = pre_loaded_command(self._tree, self._guild, args=(args[0],))
                 print(f"{SuccessAlert('success')}")
             except Exception as error:
                 print(f"{ErrorAlert('failure')}\n └─ {str(error)}")

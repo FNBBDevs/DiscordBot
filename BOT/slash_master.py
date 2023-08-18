@@ -4,7 +4,6 @@ Also add it in self._slash_commands list
 """
 
 import os
-from datetime import datetime
 from sys import platform
 
 from _utils.alerts import ErrorAlert, GeneralAlert, InfoAlert, SuccessAlert, DateTimeAlert

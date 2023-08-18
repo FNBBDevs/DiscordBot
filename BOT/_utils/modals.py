@@ -8,8 +8,8 @@ import discord
 from _utils.bruhpy import BruhPy
 from _utils.lifegen import LifeGen
 from _utils.nolang import Nolang
-from _utils.weather import get_weather as Weather
 from _utils.openaiprompter import OpenAIPrompter
+from _utils.weather import get_weather as Weather
 from discord import ui as UI
 from discord.ui import Modal
 from discordwebhook import Discord
@@ -210,18 +210,24 @@ class GameOfLifeModal(Modal):
             )
             self.marcus_says.post(content="bro is not packing! 😭 🤣 🤣")
 
+
 class OpenAIPasswordInputModal(Modal):
     def __init__(self, prompt, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.add_item(UI.TextInput(label="Enter the password to use this command", style=discord.TextStyle.short))
+        self.add_item(
+            UI.TextInput(
+                label="Enter the password to use this command",
+                style=discord.TextStyle.short,
+            )
+        )
         self.prompt = prompt
         self.prompter = OpenAIPrompter()
         self.marcus = Discord(url=os.getenv("MARCUS"))
         self.marcus_id = int(os.getenv("MARCUS_ID"))
 
     async def on_submit(self, interaction: discord.Interaction):
-
-        if self.marcus_id: webhooks = await interaction.guild.webhooks()
+        if self.marcus_id:
+            webhooks = await interaction.guild.webhooks()
 
         await interaction.response.defer()
 
@@ -234,7 +240,9 @@ class OpenAIPasswordInputModal(Modal):
         password = self.children[0].value
 
         try:
-            marcus_should_say = self.prompter.complete(prompt=self.prompt, password=password)
+            marcus_should_say = self.prompter.complete(
+                prompt=self.prompt, password=password
+            )
 
             if marcus_should_say is not None:
                 await interaction.followup.send(content=self.prompt)

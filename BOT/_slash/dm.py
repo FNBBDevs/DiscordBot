@@ -3,7 +3,7 @@ from discord.app_commands import CommandTree, Group
 
 
 class Dm(Group):
-    def __init__(self, tree: CommandTree, guild):
+    def __init__(self, tree: CommandTree, guild: str, args=None):
         super().__init__(name="dm")
 
         @self.command(description="Send a direct message to a specific user")

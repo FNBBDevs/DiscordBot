@@ -2,7 +2,7 @@ import discord
 
 
 class Echo:
-    def __init__(self, tree, guild):
+    def __init__(self, tree: discord.app_commands.CommandTree, guild: str, args=None):
         @tree.command(
             name="echo",
             description="let me talk to you ;)",

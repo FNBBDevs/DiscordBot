@@ -7,7 +7,7 @@ class Stroke:
     Description: Really klim
     """
 
-    def __init__(self, tree, guild):
+    def __init__(self, tree, guild, args=None):
         """
         Description: Really klim
         """

@@ -54,7 +54,7 @@ class Talk(Group):
     Description: The music player.
     """
 
-    def __init__(self, tree, guild):
+    def __init__(self, tree, guild, args=None):
         """
         Description: Constructor for the music player.
         """

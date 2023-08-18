@@ -3,7 +3,7 @@ from discord.app_commands import Group
 
 
 class Kick(Group):
-    def __init__(self, tree, guild):
+    def __init__(self, tree: discord.app_commands.CommandTree, guild: str, args=None):
         @tree.command(
             description="Kick the bot from VC",
             name="disconnect",

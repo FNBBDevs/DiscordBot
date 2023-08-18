@@ -2,7 +2,7 @@ import discord
 
 
 class Purge:
-    def __init__(self, tree, guild):
+    def __init__(self, tree, guild, args=None):
         @tree.command(
             description="clear specified number of messages from the chat",
             guild=discord.Object(id=guild),

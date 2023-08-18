@@ -3,7 +3,7 @@ from discord.app_commands import CommandTree, Group
 
 
 class Ping(Group):
-    def __init__(self, tree: CommandTree, guild):
+    def __init__(self, tree: CommandTree, guild: str, args=None):
         super().__init__(name="ping")
 
         @self.command(description="Ghost ping a user N amount of times.")

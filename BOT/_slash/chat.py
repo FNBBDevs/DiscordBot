@@ -9,7 +9,7 @@ class Chat:
     Description: adds two numbers.
     """
 
-    def __init__(self, tree, guild):
+    def __init__(self, tree, guild, args=None):
         """
         Description: Constructor.
         """

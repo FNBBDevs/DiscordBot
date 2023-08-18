@@ -4,7 +4,7 @@ from discord.ui import Select, View
 
 
 class Bruh:
-    def __init__(self, tree, guild):
+    def __init__(self, tree, guild, args=None):
         self._weather_options = [("current", "🌡️"), ("forecast", "⌚"), ("both", "☁️")]
         self._bruhpy_options = [("show code", "✅"), ("don't show code", "❌")]
         self._life_options = [("show config", "✅"), ("don't show config", "❌")]

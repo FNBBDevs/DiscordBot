@@ -4,7 +4,7 @@ from discord.app_commands import Group
 
 
 class Skip(Group):
-    def __init__(self, tree, guild):
+    def __init__(self, tree, guild, args=None):
         @tree.command(
             description="Skip a song", name="skip", guild=discord.Object(id=guild)
         )

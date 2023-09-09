@@ -1,6 +1,5 @@
-import os
+
 import discord
-from _utils.openaiprompter import OpenAIPrompter
 from _utils.modals import OpenAIPasswordInputModal
 
 
@@ -29,6 +28,3 @@ class Chat:
             modal = OpenAIPasswordInputModal(prompt=message, title="Chat Password")
 
             await interaction.response.send_modal(modal)
-
-            
-

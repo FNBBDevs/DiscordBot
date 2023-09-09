@@ -27,14 +27,14 @@ class Marcus:
         self._restrictions = BRUHPY_RESTRICTIONS
         self._hook = os.environ["MARCUS"]
         self._marcus_says = Discord(url=self._hook)
-    
+
     def check_for_anti(self, anti, hits):
         flagged = None
         for hit in hits:
             if anti == hit:
                 flagged = anti
                 break
-        
+
         if flagged:
             hits.remove(flagged)
             return True, hits
@@ -62,13 +62,13 @@ class Marcus:
         antis = []
         tmp = program
         while x := re.search(r"""(?<=(["]\b))(?:(?=(\\?))\2.)*?(?=\1)""", tmp):
-            antis.append(tmp[x.span()[0]:x.span()[1]])
-            tmp = ("#"*x.span()[1]) + tmp[x.span()[1]:]
+            antis.append(tmp[x.span()[0] : x.span()[1]])
+            tmp = ("#" * x.span()[1]) + tmp[x.span()[1] :]
 
         tmp = program
         while x := re.search(r"""(?<=([']\b))(?:(?=(\\?))\2.)*?(?=\1)""", tmp):
-            antis.append(tmp[x.span()[0]:x.span()[1]])
-            tmp = ("#"*x.span()[1]) + tmp[x.span()[1]:]
+            antis.append(tmp[x.span()[0] : x.span()[1]])
+            tmp = ("#" * x.span()[1]) + tmp[x.span()[1] :]
 
         print(antis)
         print(hits_expanded)
@@ -80,8 +80,6 @@ class Marcus:
             if anti_found:
                 hit_count -= 1
 
-        
-
         if hit_count > 0:
             if random.random() < 0.5:
                 self._marcus_says.post(
@@ -92,12 +90,7 @@ class Marcus:
                     )
                 )
             else:
-                self._marcus_says.post(
-                    content=(
-                        "erm . . . what the flip dude!"
-                    )
-                )
+                self._marcus_says.post(content=("erm . . . what the flip dude!"))
         else:
             print("[tips hat]... Hey! Its Marcus, your code looks good my guy")
         return not hit_count > 0
-    

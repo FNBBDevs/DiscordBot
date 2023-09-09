@@ -1,1 +1,1 @@
-asdfasd
+nolout(time())

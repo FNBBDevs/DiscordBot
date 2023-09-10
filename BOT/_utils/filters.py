@@ -3,7 +3,7 @@ audio_filters = {
     "nightcore": "aresample=48000, asetrate=48000*1.25",
     "pulsar": "apulsator=amount=1:width=2",
     "earrape": "acrusher=level_in=8:level_out=18:bits=8:mode=log:aa=1",
-    "bassboost": "bass=g=10",
+    "bassboost": "highpass=f=50, lowpass=f=2750, aresample=48000, bass=g=15, apsyclip=level_in=2:level_out=2",
     "nuclear": "apsyclip=level_in=64:level_out=64:clip=1",
     "softclip": "asoftclip=hard:output=1",
     "psyclip": "apsyclip=level_in=2:level_out=2, bass=f=110:w=1",

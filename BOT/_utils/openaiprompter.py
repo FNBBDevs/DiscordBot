@@ -1,5 +1,7 @@
 import os
+
 import openai
+
 
 class OpenAIPrompter:
     def __init__(self):
@@ -20,4 +22,3 @@ class OpenAIPrompter:
             except Exception as exception:
                 print(f"[ERROR] OpenAIPrompter: {exception}")
         return None
-    

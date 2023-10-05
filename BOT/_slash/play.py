@@ -199,12 +199,21 @@ class Play(Group):
             time_value = ""
 
             if hours != 0:
-                time_value += time[:2] + " hours "
+                if hours == 1:
+                    time_value += int(time[:2]) + " hours "
+                else:
+                    time_value += int(time[:2]) + " hours "
             if minutes != 0:
-                time_value += time[3:5] + " minutes "
+                if minutes == 1:
+                    time_value += int(time[3:5]) + " minutes "
+                else:
+                    time_value += int(time[3:5]) + " minutes "
             if seconds != 0:
-                time_value += time[6:9] + " seconds"
-
+                if seconds == 1:
+                    time_value += int(time[6:9]) + " seconds"
+                else:
+                    time_value += int(time[6:9]) + " seconds"
+                    
             embed.add_field(
                 name="Length:",
                 value=time_value,

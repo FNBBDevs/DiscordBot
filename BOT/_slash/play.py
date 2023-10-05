@@ -193,7 +193,7 @@ class Play(Group):
             embed.add_field(name="Song:", value=f"{title}", inline=False)
             embed.add_field(
                 name="Length:",
-                value=f"{int(time[3:5])} minutes {int(time[6:9])} seconds",
+                value=f"{int(time[:2])} hours {int(time[3:5])} minutes {int(time[6:9])} seconds",
                 inline=False,
             )
             embed.set_thumbnail(url=thumb)
@@ -223,7 +223,8 @@ class Play(Group):
                 player._kill_process()
 
                 # Get URL data dictionary by loading the song
-                file_dict = asyncio.run(load_song(queue_url, interaction=interaction))
+                file_dict = asyncio.run(
+                    load_song(queue_url, interaction=interaction))
 
                 # Regather the URL data in case the link went bad
                 source = asyncio.run(regather_stream(file_dict))
@@ -246,7 +247,7 @@ class Play(Group):
                 embed.add_field(name="Song:", value=f"{title}", inline=False)
                 embed.add_field(
                     name="Length:",
-                    value=f"{int(time[3:5])} minutes {int(time[6:9])} seconds",
+                    value=f"{int(time[:2])} hours {int(time[3:5])} minutes {int(time[6:9])} seconds",
                     inline=False,
                 )
 

@@ -191,9 +191,23 @@ class Play(Group):
 
             # Add some custom fields to the generic embed using the data from the youtube video
             embed.add_field(name="Song:", value=f"{title}", inline=False)
+
+            hours = int(time[:2])
+            minutes = int(time[3:5])
+            seconds = int(time[6:9])
+
+            time_value = ""
+
+            if hours != 0:
+                time_value += time[:2] + " hours "
+            if minutes != 0:
+                time_value += time[3:5] + " minutes "
+            if seconds != 0:
+                time_value += time[6:9] + " seconds"
+
             embed.add_field(
                 name="Length:",
-                value=f"{int(time[3:5])} minutes {int(time[6:9])} seconds",
+                value=time_value,
                 inline=False,
             )
             embed.set_thumbnail(url=thumb)

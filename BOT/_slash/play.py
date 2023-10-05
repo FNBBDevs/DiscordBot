@@ -196,27 +196,9 @@ class Play(Group):
             minutes = int(time[3:5])
             seconds = int(time[6:9])
 
-            time_value = ""
-
-            if hours != 0:
-                if hours == 1:
-                    time_value += int(time[:2]) + " hours "
-                else:
-                    time_value += int(time[:2]) + " hours "
-            if minutes != 0:
-                if minutes == 1:
-                    time_value += int(time[3:5]) + " minutes "
-                else:
-                    time_value += int(time[3:5]) + " minutes "
-            if seconds != 0:
-                if seconds == 1:
-                    time_value += int(time[6:9]) + " seconds"
-                else:
-                    time_value += int(time[6:9]) + " seconds"
-                    
             embed.add_field(
                 name="Length:",
-                value=time_value,
+                value=[[[f"{hours} hour " if hours == 1 else f"{hours} hours "][0] + [f"{minutes} minute "  if minutes == 1 else f"{minutes} minutes "][0] + [f"{seconds} second "  if seconds == 1 else f"{seconds} seconds "][0]][0] if hours != 0 else [[f"{minutes} minute "  if minutes == 1 else f"{minutes} minutes "][0] + [f"{seconds} second "  if seconds == 1 else f"{seconds} seconds "][0]][0] if minutes != 0 else [[f"{seconds} second "  if seconds == 1 else f"{seconds} seconds "][0]][0]][0],
                 inline=False,
             )
             embed.set_thumbnail(url=thumb)

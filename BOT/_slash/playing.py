@@ -21,7 +21,7 @@ class Playing(Group):
             # IF THE BOT IS NOT THE VOICE CHANNEL, ADD TO CHANNEL
             if not user_channel:
                 await interaction.followup.send(
-                    "NIGGA I AINT EVEN *IN* A VC RIGHT NOW! :skull: :rofl:"
+                    "BRUH I AINT EVEN *IN* A VC RIGHT NOW! :skull: :rofl:"
                 )
             # SEE IF THE BOT IS IN THE CHANNEL - WE DON'T NEED TO JOIN
             elif interaction.guild.voice_client:
@@ -41,5 +41,5 @@ class Playing(Group):
                         await interaction.followup.send(embed=embed)
                     else:
                         await interaction.followup.send(
-                            "NIGGA I AINT EVEN *PLAYING MUSIC*! :skull: :rofl:"
+                            "BRUH I AINT EVEN *PLAYING MUSIC*! :skull: :rofl:"
                         )

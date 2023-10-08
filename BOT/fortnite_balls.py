@@ -33,16 +33,15 @@ class FortniteBallsBot(discord.Client):
         """
         Description: Called when the bot is initialized (turned on)
         """
-        if self._debug:
-            print(f"Logged in as: {self.user}")
+
+        # get the text channels in the guild
+        guild = self.get_guild(int(self._guild))
+        text_channels = guild.text_channels
 
         # tell slash master to load commands
         SlashMaster(
             self.tree, self._guild, self._cmds_path, self._debug
-        ).load_commands()
-
-        # sync the commands with our guild (server)
-        await self.tree.sync(guild=discord.Object(id=self._guild))
+        ).load_commands(args=(text_channels,))
 
     async def on_message(self, message: Message):
         """

@@ -1,1 +1,1 @@
-nolout("hello")
+nolout(time())

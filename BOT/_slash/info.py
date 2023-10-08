@@ -5,7 +5,7 @@ from discord.app_commands import CommandTree, Group
 
 
 class Info(Group):
-    def __init__(self, tree: CommandTree, guild):
+    def __init__(self, tree: CommandTree, guild: str, args=None):
         super().__init__(name="info")
 
         @self.command(description="Display information about the discord server")

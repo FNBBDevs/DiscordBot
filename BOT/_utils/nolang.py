@@ -1,10 +1,7 @@
-import contextlib
 import multiprocessing
 import re
 import subprocess
-import sys
 import time
-from io import StringIO
 
 from _utils.capstdout import stdoutIO
 

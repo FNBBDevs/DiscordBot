@@ -1,10 +1,8 @@
 from enum import Enum
 
-import _utils.embeds as embeds
 import _utils.filters as af
 import discord
 import gtts
-from discord import VoiceProtocol
 from discord.app_commands import Group
 
 
@@ -56,7 +54,7 @@ class Talk(Group):
     Description: The music player.
     """
 
-    def __init__(self, tree, guild):
+    def __init__(self, tree, guild, args=None):
         """
         Description: Constructor for the music player.
         """
@@ -89,7 +87,7 @@ class Talk(Group):
 
             # The user is in the voice channel, but the bot might not be
             else:
-                tts = gtts.gTTS(f"{text}", lang=language)
+                tts = gtts.gTTS(f"{text}", lang=language.value)
                 tts.save("tts.mp3")
 
                 # Checks to see if the bot is in the voice channel with the user. If this is the case, it does not need to connect

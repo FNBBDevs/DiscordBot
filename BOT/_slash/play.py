@@ -34,7 +34,7 @@ class Play(Group):
     Description: The music player.
     """
 
-    def __init__(self, tree, guild):
+    def __init__(self, tree, guild, args=None):
         """
         Description: Constructor for the music player.
         """
@@ -191,9 +191,14 @@ class Play(Group):
 
             # Add some custom fields to the generic embed using the data from the youtube video
             embed.add_field(name="Song:", value=f"{title}", inline=False)
+
+            hours = int(time[:2])
+            minutes = int(time[3:5])
+            seconds = int(time[6:9])
+
             embed.add_field(
                 name="Length:",
-                value=f"{int(time[:2])} hours {int(time[3:5])} minutes {int(time[6:9])} seconds",
+                value=[[[f"{hours} hour " if hours == 1 else f"{hours} hours "][0] + [f"{minutes} minute "  if minutes == 1 else f"{minutes} minutes "][0] + [f"{seconds} second "  if seconds == 1 else f"{seconds} seconds "][0]][0] if hours != 0 else [[f"{minutes} minute "  if minutes == 1 else f"{minutes} minutes "][0] + [f"{seconds} second "  if seconds == 1 else f"{seconds} seconds "][0]][0] if minutes != 0 else [[f"{seconds} second "  if seconds == 1 else f"{seconds} seconds "][0]][0]][0],
                 inline=False,
             )
             embed.set_thumbnail(url=thumb)

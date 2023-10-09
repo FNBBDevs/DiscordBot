@@ -70,9 +70,6 @@ class Marcus:
             antis.append(tmp[x.span()[0] : x.span()[1]])
             tmp = ("#" * x.span()[1]) + tmp[x.span()[1] :]
 
-        print(antis)
-        print(hits_expanded)
-
         hit_count = len(hits)
         for anti in antis:
             anti_found, hits_expanded = self.check_for_anti(anti, hits_expanded)
@@ -91,6 +88,5 @@ class Marcus:
                 )
             else:
                 self._marcus_says.post(content=("erm . . . what the flip dude!"))
-        else:
-            print("[tips hat]... Hey! Its Marcus, your code looks good my guy")
+
         return not hit_count > 0

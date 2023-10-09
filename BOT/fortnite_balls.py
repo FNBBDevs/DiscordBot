@@ -7,10 +7,13 @@ Intent: This multifaceted bot is to promote user activity within
         servers that it is hosted in.
 """
 
+import re
 import discord
 from _commands.contains import Contains
 from discord import Message, app_commands
 from slash_master import SlashMaster
+from _utils.bruhpy import BruhPy
+from _utils.embeds import bruhby
 
 
 class FortniteBallsBot(discord.Client):
@@ -49,18 +52,15 @@ class FortniteBallsBot(discord.Client):
         if the message contains certain flags ;)
         :param message: message from the client
         """
-        if message.author == self.user or str(message.channel) in [
-            "testing",
-            "git-log",
-        ]:
+        if message.author == self.user:
             return
-
-        if self._debug:
-            print(f"Message from {message.author}: {message.content}")
 
         if results := self._contains.execute(
             message.content.strip().lower(), self._debug
-        ):
+        ) and str(message.channel) not in [
+            "testing",
+            "git-log",
+        ]:
             for response in results:
                 await message.channel.send(response)
 
@@ -69,6 +69,23 @@ class FortniteBallsBot(discord.Client):
                 f"Erm... <@{message.author.id}> ... [looks away nervously] ... pwease"
                 " don't ping me :("
             )
+        
+        if message.content[0:8] == ":python:":
+            code = message.content[8:].lstrip().rstrip()
+            response = BruhPy().run(code, "", message.author.display_name)
+            embed_response = bruhby(response[0], message.author.display_name)
+            await message.channel.send(embed=embed_response)
+            del response
+            del embed_response
+        elif x := re.search(r"\<\:python\:\d*\>", message.content):
+            start, end = x.span()
+            code = message.content[end:].lstrip().rstrip()
+            response = BruhPy().run(code, "", message.author.display_name)
+            embed_response = bruhby(response[0], message.author.display_name)
+            await message.channel.send(embed=embed_response)
+            del response
+            del embed_response
+
 
     async def on_message_delete(self, message):
         """

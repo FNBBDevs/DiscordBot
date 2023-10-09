@@ -33,19 +33,6 @@ class Contains:
         message_in = word_filter.sub("", message_in)
         out = []
 
-        if debug:
-            print(
-                f"[Contains]: incoming message -> '{message_in}'\n[Contains]: checking"
-                " flags . . ."
-            )
         for flag in self.flags:
-            if debug:
-                print(f"\t{flag:<20s}: ", end="")
-            if flag in message_in:
-                if debug:
-                    print(True)
-                out.append(self.flags[flag])
-            else:
-                if debug:
-                    print(False)
+            out.append(self.flags[flag])
         return out

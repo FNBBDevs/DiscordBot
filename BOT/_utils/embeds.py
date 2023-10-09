@@ -177,7 +177,7 @@ def bruhby(output: list[str], user: str):
         # set the color to black
         embed.color = 0x000000
         # output result from running code
-        embed.description = f"```\nB:/bruh/{user.split('#')[0]} >> python your_code.py\n\n{output[1]}\n```"
+        embed.description = f"```\nFNBB:/bruh/{user.split('#')[0]} >> python your_code.py\n\n{output[1]}\n```"
         # marcus success footer
         embed.set_footer(
             text="verified by Marcus.  ✅",
@@ -187,7 +187,7 @@ def bruhby(output: list[str], user: str):
         # set color to red
         embed.color = 0xFF0000
         # error message from running code
-        embed.description = f"```\nB:/bruh/{user.split('#')[0]} >> python your_code.py\n\n{output[1]}\n```"
+        embed.description = f"```\nFNBB:/bruh/{user.split('#')[0]} >> python your_code.py\n\n{output[1]}\n```"
         # marcus failed footer
         embed.set_footer(
             text="verified by Marcus.  ❌",
@@ -209,7 +209,7 @@ def nolang(output: list[str], user: str):
         # set the color to black
         embed.color = 0x5271FF
         # output result from running code
-        embed.description = f"```\nN:/nolang/{user.split('#')[0]} >> nolang your_code.nl\n\n{output[1]}\n```"
+        embed.description = f"```\nFNBB:/nolang/{user.split('#')[0]} >> nolang your_code.nl\n\n{output[1]}\n```"
         # nolang success footer
         embed.set_footer(
             text="verified.  ✅",
@@ -219,7 +219,7 @@ def nolang(output: list[str], user: str):
         # set color to red
         embed.color = 0xFF0000
         # error message from running code
-        embed.description = f"```\nN:/nolang/{user.split('#')[0]} >> nolang your_code.nl\n\n{output[1]}\n```"
+        embed.description = f"```\nFNBB:/nolang/{user.split('#')[0]} >> nolang your_code.nl\n\n{output[1]}\n```"
         # nolang failed footer
         embed.set_footer(
             text="verified.  ❌",

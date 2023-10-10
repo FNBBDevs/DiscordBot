@@ -3,6 +3,10 @@ import multiprocessing
 import re
 import time
 
+try:
+    from bruhanimate import images as images
+except: pass
+
 from _utils.capstdout import stdoutIO
 from _utils.marcus import Marcus
 from _utils.restrictions import BRUHPY_RESTRICTIONS

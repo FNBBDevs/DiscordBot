@@ -74,6 +74,7 @@ class Nolang:
                 .replace("“", '"')
                 .replace("”", '"')
                 .replace("\\\\", "\\")
+                .replace("`", "")
             )
             self.responses.append(("NL", f"# your_code.nl\n{nolang_pre_process}"))
         else:
@@ -82,6 +83,7 @@ class Nolang:
                 .replace("“", '"')
                 .replace("”", '"')
                 .replace("\\\\", "\\")
+                .replace("`", "")
             )
 
         with open("./BOT/_utils/_tmp/tmp.nl", "w", encoding="utf-8") as tmp_nl:

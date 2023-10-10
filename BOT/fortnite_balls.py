@@ -13,7 +13,10 @@ from _commands.contains import Contains
 from discord import Message, app_commands
 from slash_master import SlashMaster
 from _utils.bruhpy import BruhPy
+from _utils.nolang import Nolang
 from _utils.embeds import bruhby
+from _utils.embeds import nolang
+
 
 
 class FortniteBallsBot(discord.Client):
@@ -82,6 +85,22 @@ class FortniteBallsBot(discord.Client):
             code = message.content[end:].lstrip().rstrip()
             response = BruhPy().run(code, "", message.author.display_name)
             embed_response = bruhby(response[0], message.author.display_name)
+            await message.channel.send(embed=embed_response)
+            del response
+            del embed_response
+
+        if message.content[0:8] == ":nolang:":
+            code = message.content[8:].lstrip().rstrip()
+            response = Nolang().run(code, "")
+            embed_response = nolang(response[0], message.author.display_name)
+            await message.channel.send(embed=embed_response)
+            del response
+            del embed_response
+        elif x := re.search(r"\<\:nolang\:\d*\>", message.content):
+            start, end = x.span()
+            code = message.content[end:].lstrip().rstrip()
+            response = Nolang().run(code, "")
+            embed_response = nolang(response[0], message.author.display_name)
             await message.channel.send(embed=embed_response)
             del response
             del embed_response

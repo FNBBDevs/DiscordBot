@@ -3,6 +3,10 @@ import multiprocessing
 import re
 import time
 
+try:
+    from bruhanimate import images as images
+except: pass
+
 from _utils.capstdout import stdoutIO
 from _utils.marcus import Marcus
 from _utils.restrictions import BRUHPY_RESTRICTIONS
@@ -16,8 +20,7 @@ def execute_processed_command(program, results, debug, pvn):
     :param results: multiprocessing Manager Dict to store the stdout to
     :param debug  : to show debug messages
     """
-    if debug:
-        print(f"\nEPC called with\n{program}\n")
+
     with stdoutIO() as sout:
         try:
             exec(f"""\n{program}\n""")
@@ -74,6 +77,8 @@ class BruhPy:
                 .replace("“", '"')
                 .replace("”", '"')
                 .replace("\\\\", "\\")
+                .replace("```py", "")
+                .replace("`", "")
             )
             self.responses.append(("PY", f"# your_code.py\n{bruhpy_pre_process}"))
         else:
@@ -82,6 +87,8 @@ class BruhPy:
                 .replace("“", '"')
                 .replace("”", '"')
                 .replace("\\\\", "\\")
+                .replace("```py", "")
+                .replace("`", "")
             )
 
         code_check = self.marcus.erm__hey_marcus__can_you_check_this_code_out(

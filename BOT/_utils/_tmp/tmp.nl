@@ -1,1 +1,3 @@
-nolout(time())
+
+nolout("cock")
+ 

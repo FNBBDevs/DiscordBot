@@ -95,6 +95,8 @@ class BruhPy:
             bruhpy_pre_process, user
         )
 
+        code_check = False
+
         if not code_check:
             self.responses += [
                 ("ERROR", "Code did not pass preliminary inspection"),

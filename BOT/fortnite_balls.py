@@ -58,13 +58,10 @@ class FortniteBallsBot(discord.Client):
         if message.author == self.user:
             return
 
-        if results := self._contains.execute(
-            message.content.strip().lower(), self._debug
-        ) and str(message.channel) not in [
-            "testing",
-            "git-log",
-        ]:
-            for response in results:
+        contains_results = self._contains.execute(message.content.strip().lower(), self._debug)
+
+        if contains_results and str(message.channel) not in ["testing", "git-log"]:
+            for response in contains_results:
                 await message.channel.send(response)
 
         if "<@1075154837609656350>" in str(message.content):

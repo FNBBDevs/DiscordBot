@@ -95,7 +95,7 @@ class Play(Group):
                         # Send the response back to the interaction (i.e. reply)
                         await interaction.followup.send(embed=embed)
                         # Add the song to the queue
-                        await add_song(song, filter)
+                        await add_song(song, filter, interaction.user.name, interaction.user.guild_avatar)
 
                     # If the bot is not playing, the song can be played without queuing
                     else:
@@ -161,8 +161,8 @@ class Play(Group):
                     )
 
         # Add the song data to the queue
-        async def add_song(url, audio_filter):
-            self.queue.append([url, audio_filter])
+        async def add_song(url, audio_filter, user, user_icon):
+            self.queue.append([url, audio_filter, user, user_icon])
 
         # Load a song from the queue and return the URL data
         async def load_song(song: str, interaction: discord.Interaction):
@@ -265,6 +265,8 @@ class Play(Group):
                 song_data = self.queue.pop(0)
                 queue_url = song_data[0]
                 filter = song_data[1]
+                next_user = song_data[2]
+                next_user_icon = song_data[3]
 
                 channel.stop()
 
@@ -286,8 +288,8 @@ class Play(Group):
                     title="Now Playing",
                     description=" ",
                     footer_text="Played by:",
-                    footer_usr=interaction.user.name,
-                    footer_img=interaction.user.guild_avatar,
+                    footer_usr=next_user,
+                    footer_img=next_user_icon,
                 )
 
                 hours = int(run_time[:2])
@@ -297,8 +299,8 @@ class Play(Group):
                 interaction.client._fnbb_globals.get("playing")["time"] = (hours * 60 * 60) + (minutes * 60) + (seconds)
                 interaction.client._fnbb_globals.get("playing")["started_at"] = time()
                 interaction.client._fnbb_globals.get("playing")["thumbnail"] = thumb
-                interaction.client._fnbb_globals.get("playing")["requested_by"] = interaction.user.name
-                interaction.client._fnbb_globals.get("playing")["requested_by_icon"] = interaction.user.guild_avatar
+                interaction.client._fnbb_globals.get("playing")["requested_by"] = next_user
+                interaction.client._fnbb_globals.get("playing")["requested_by_icon"] = next_user_icon
 
                 # Add custom fields to the embed using data from youtube video
                 embed.add_field(name="Song:", value=f"{title}", inline=False)
@@ -346,8 +348,8 @@ class Play(Group):
 
                 embed.set_thumbnail(url=thumb)
                 embed.set_footer(
-                    text=f"Queued By: {interaction.user.name}",
-                    icon_url=interaction.user.guild_avatar,
+                    text=f"Song requested by: {next_user}",
+                    icon_url=next_user_icon,
                 )
 
                 # Send the "now playing" embed to the channel

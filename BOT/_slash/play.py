@@ -203,7 +203,6 @@ class Play(Group):
 
             # Add some custom fields to the generic embed using the data from the youtube video
             embed.add_field(name="Song:", value=f"{title}", inline=False)
-            embed.add_field(name="_fnbb_globals:", value=f"{interaction.client._fnbb_globals}", inline=False)
 
             embed.add_field(
                 name="Length:",
@@ -291,12 +290,18 @@ class Play(Group):
                     footer_img=interaction.user.guild_avatar,
                 )
 
-                # Add custom fields to the embed using data from youtube video
-                embed.add_field(name="Song:", value=f"{title}", inline=False)
-
                 hours = int(run_time[:2])
                 minutes = int(run_time[3:5])
                 seconds = int(run_time[6:9])
+
+                interaction.client._fnbb_globals.get("playing")["time"] = (hours * 60 * 60) + (minutes * 60) + (seconds)
+                interaction.client._fnbb_globals.get("playing")["started_at"] = time()
+                interaction.client._fnbb_globals.get("playing")["thumbnail"] = thumb
+                interaction.client._fnbb_globals.get("playing")["requested_by"] = interaction.user.name
+                interaction.client._fnbb_globals.get("playing")["requested_by_icon"] = interaction.user.guild_avatar
+
+                # Add custom fields to the embed using data from youtube video
+                embed.add_field(name="Song:", value=f"{title}", inline=False)
 
                 embed.add_field(
                     name="Length:",

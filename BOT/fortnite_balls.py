@@ -8,15 +8,14 @@ Intent: This multifaceted bot is to promote user activity within
 """
 
 import re
+
 import discord
 from _commands.contains import Contains
+from _utils.bruhpy import BruhPy
+from _utils.embeds import bruhby, nolang
+from _utils.nolang import Nolang
 from discord import Message, app_commands
 from slash_master import SlashMaster
-from _utils.bruhpy import BruhPy
-from _utils.nolang import Nolang
-from _utils.embeds import bruhby
-from _utils.embeds import nolang
-
 
 
 class FortniteBallsBot(discord.Client):
@@ -32,6 +31,9 @@ class FortniteBallsBot(discord.Client):
         self._debug = bool(int(debug))
         self._cmds_path = cmds_path
         self._contains = Contains()
+        self._fnbb_globals = {
+            "playing": {},
+        }
         # Create CommandTree object
         self.tree = app_commands.CommandTree(self)
 
@@ -45,9 +47,9 @@ class FortniteBallsBot(discord.Client):
         text_channels = guild.text_channels
 
         # tell slash master to load commands
-        SlashMaster(
-            self.tree, self._guild, self._cmds_path, self._debug
-        ).load_commands(args=(text_channels,))
+        SlashMaster(self.tree, self._guild, self._cmds_path, self._debug).load_commands(
+            args=(text_channels,)
+        )
 
     async def on_message(self, message: Message):
         """
@@ -58,7 +60,9 @@ class FortniteBallsBot(discord.Client):
         if message.author == self.user:
             return
 
-        contains_results = self._contains.execute(message.content.strip().lower(), self._debug)
+        contains_results = self._contains.execute(
+            message.content.strip().lower(), self._debug
+        )
 
         if contains_results and str(message.channel) not in ["testing", "git-log"]:
             for response in contains_results:
@@ -69,7 +73,7 @@ class FortniteBallsBot(discord.Client):
                 f"Erm... <@{message.author.id}> ... [looks away nervously] ... pwease"
                 " don't ping me :("
             )
-        
+
         if message.content[0:8] == ":python:":
             code = message.content[8:].lstrip().rstrip()
             response = BruhPy().run(code, "", message.author.display_name)
@@ -101,7 +105,6 @@ class FortniteBallsBot(discord.Client):
             await message.channel.send(embed=embed_response)
             del response
             del embed_response
-
 
     async def on_message_delete(self, message):
         """

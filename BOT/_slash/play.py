@@ -1,5 +1,6 @@
 import asyncio
 from enum import Enum
+from time import time
 
 import _utils.embeds as embeds
 import _utils.filters as af
@@ -175,6 +176,7 @@ class Play(Group):
         async def load(
             file_dict: dict, channel: VoiceProtocol, interaction: discord.Interaction
         ):
+            
             # Custom embed that is shown when a song is played
             embed = embeds.on_light(
                 title="Now Playing",
@@ -185,20 +187,62 @@ class Play(Group):
             )
 
             # Get the embed data from the song data dictionary
-            time = file_dict["time"]
+            run_time = file_dict["time"]
             title = file_dict["title"]
             thumb = file_dict["thumbnail"]
 
+            hours = int(run_time[:2])
+            minutes = int(run_time[3:5])
+            seconds = int(run_time[6:9])
+
+            interaction.client._fnbb_globals.get("playing")["time"] = (hours * 60 * 60) + (minutes * 60) + (seconds)
+            interaction.client._fnbb_globals.get("playing")["started_at"] = time()
+            interaction.client._fnbb_globals.get("playing")["thumbnail"] = thumb
+            interaction.client._fnbb_globals.get("playing")["requested_by"] = interaction.user.name
+            interaction.client._fnbb_globals.get("playing")["requested_by_icon"] = interaction.user.guild_avatar
+
             # Add some custom fields to the generic embed using the data from the youtube video
             embed.add_field(name="Song:", value=f"{title}", inline=False)
-
-            hours = int(time[:2])
-            minutes = int(time[3:5])
-            seconds = int(time[6:9])
+            embed.add_field(name="_fnbb_globals:", value=f"{interaction.client._fnbb_globals}", inline=False)
 
             embed.add_field(
                 name="Length:",
-                value=[[[f"{hours} hour " if hours == 1 else f"{hours} hours "][0] + [f"{minutes} minute "  if minutes == 1 else f"{minutes} minutes "][0] + [f"{seconds} second "  if seconds == 1 else f"{seconds} seconds "][0]][0] if hours != 0 else [[f"{minutes} minute "  if minutes == 1 else f"{minutes} minutes "][0] + [f"{seconds} second "  if seconds == 1 else f"{seconds} seconds "][0]][0] if minutes != 0 else [[f"{seconds} second "  if seconds == 1 else f"{seconds} seconds "][0]][0]][0],
+                value=[
+                    [
+                        [f"{hours} hour " if hours == 1 else f"{hours} hours "][0]
+                        + [
+                            f"{minutes} minute "
+                            if minutes == 1
+                            else f"{minutes} minutes "
+                        ][0]
+                        + [
+                            f"{seconds} second "
+                            if seconds == 1
+                            else f"{seconds} seconds "
+                        ][0]
+                    ][0]
+                    if hours != 0
+                    else [
+                        [
+                            f"{minutes} minute "
+                            if minutes == 1
+                            else f"{minutes} minutes "
+                        ][0]
+                        + [
+                            f"{seconds} second "
+                            if seconds == 1
+                            else f"{seconds} seconds "
+                        ][0]
+                    ][0]
+                    if minutes != 0
+                    else [
+                        [
+                            f"{seconds} second "
+                            if seconds == 1
+                            else f"{seconds} seconds "
+                        ][0]
+                    ][0]
+                ][0],
                 inline=False,
             )
             embed.set_thumbnail(url=thumb)
@@ -228,14 +272,13 @@ class Play(Group):
                 player._kill_process()
 
                 # Get URL data dictionary by loading the song
-                file_dict = asyncio.run(
-                    load_song(queue_url, interaction=interaction))
+                file_dict = asyncio.run(load_song(queue_url, interaction=interaction))
 
                 # Regather the URL data in case the link went bad
                 source = asyncio.run(regather_stream(file_dict))
 
                 # Grab the data items for the custom embed
-                time = file_dict["time"]
+                run_time = file_dict["time"]
                 title = file_dict["title"]
                 thumb = file_dict["thumbnail"]
 
@@ -251,13 +294,48 @@ class Play(Group):
                 # Add custom fields to the embed using data from youtube video
                 embed.add_field(name="Song:", value=f"{title}", inline=False)
 
-                hours = int(time[:2])
-                minutes = int(time[3:5])
-                seconds = int(time[6:9])
+                hours = int(run_time[:2])
+                minutes = int(run_time[3:5])
+                seconds = int(run_time[6:9])
 
                 embed.add_field(
                     name="Length:",
-                    value=[[[f"{hours} hour " if hours == 1 else f"{hours} hours "][0] + [f"{minutes} minute "  if minutes == 1 else f"{minutes} minutes "][0] + [f"{seconds} second "  if seconds == 1 else f"{seconds} seconds "][0]][0] if hours != 0 else [[f"{minutes} minute "  if minutes == 1 else f"{minutes} minutes "][0] + [f"{seconds} second "  if seconds == 1 else f"{seconds} seconds "][0]][0] if minutes != 0 else [[f"{seconds} second "  if seconds == 1 else f"{seconds} seconds "][0]][0]][0],
+                    value=[
+                        [
+                            [f"{hours} hour " if hours == 1 else f"{hours} hours "][0]
+                            + [
+                                f"{minutes} minute "
+                                if minutes == 1
+                                else f"{minutes} minutes "
+                            ][0]
+                            + [
+                                f"{seconds} second "
+                                if seconds == 1
+                                else f"{seconds} seconds "
+                            ][0]
+                        ][0]
+                        if hours != 0
+                        else [
+                            [
+                                f"{minutes} minute "
+                                if minutes == 1
+                                else f"{minutes} minutes "
+                            ][0]
+                            + [
+                                f"{seconds} second "
+                                if seconds == 1
+                                else f"{seconds} seconds "
+                            ][0]
+                        ][0]
+                        if minutes != 0
+                        else [
+                            [
+                                f"{seconds} second "
+                                if seconds == 1
+                                else f"{seconds} seconds "
+                            ][0]
+                        ][0]
+                    ][0],
                     inline=False,
                 )
 
@@ -291,3 +369,6 @@ class Play(Group):
                         else play_next(channel, interaction, audio_player)
                     ),
                 )
+
+        # Pause the song
+

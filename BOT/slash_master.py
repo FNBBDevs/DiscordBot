@@ -6,7 +6,13 @@ Also add it in self._slash_commands list
 import os
 from sys import platform
 
-from _utils.alerts import ErrorAlert, GeneralAlert, InfoAlert, SuccessAlert, DateTimeAlert
+from _utils.alerts import (
+    DateTimeAlert,
+    ErrorAlert,
+    GeneralAlert,
+    InfoAlert,
+    SuccessAlert,
+)
 
 
 class SlashMaster:
@@ -29,16 +35,24 @@ class SlashMaster:
         initialize each command with the current tree and guild
         """
         for file in self.get_next_command():
-            print(DateTimeAlert(f"loading {file} . . . ",
-                                dtia_alert_type="INFO",
-                                message_from="bot.slash_master").text,
-                                end="")
+            print(
+                DateTimeAlert(
+                    f"loading {file} . . . ",
+                    dtia_alert_type="INFO",
+                    message_from="bot.slash_master",
+                ).text,
+                end="",
+            )
             try:
-                file_capitalized = "".join([word.capitalize() for word in file.split("_")])
+                file_capitalized = "".join(
+                    [word.capitalize() for word in file.split("_")]
+                )
                 pre_loaded_command = self.import_from(
                     f"_slash.{file}", file_capitalized
                 )
-                pre_loaded_command = pre_loaded_command(self._tree, self._guild, args=args)
+                pre_loaded_command = pre_loaded_command(
+                    self._tree, self._guild, args=args
+                )
                 print(f"{SuccessAlert('success')}")
             except Exception as error:
                 print(f"{ErrorAlert('failure')}\n └─ {str(error)}")

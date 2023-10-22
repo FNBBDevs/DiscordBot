@@ -43,30 +43,47 @@ class Playing(Group):
 
                             streaming_for = "${hours} ${minutes} ${seconds}"
 
-                            if hours > 0: streaming_for = streaming_for.replace("${hours}", f"{hours} hours")
-                            else:  streaming_for = streaming_for.replace("${hours}", "")
-                            if minutes > 0:  streaming_for = streaming_for.replace("${minutes}", f"{minutes} minutes")
-                            else:  streaming_for = streaming_for.replace("${minutes}", "")
-                            if seconds > 0:  streaming_for = streaming_for.replace("${seconds}", f"{seconds} seconds")
-                            else:  streaming_for = streaming_for.replace("${seconds}", "")
+                            if hours > 0:
+                                streaming_for = streaming_for.replace("${hours}", f"{hours} hours")
+                                if hours == 1:
+                                    streaming_for = streaming_for.replace("hours", "hour")
+                            else: 
+                                streaming_for = streaming_for.replace("${hours}", "")
+                            if minutes > 0: 
+                                streaming_for = streaming_for.replace("${minutes}", f"{minutes} minutes")
+                                if minutes == 1:
+                                    streaming_for = streaming_for.replace("minutes", "minute")
+                            else: 
+                                streaming_for = streaming_for.replace("${minutes}", "")
+                            if seconds > 0: 
+                                streaming_for = streaming_for.replace("${seconds}", f"{seconds} seconds")
+                            else: 
+                                streaming_for = streaming_for.replace("${seconds}", "")
+                                if seconds == 1:
+                                    streaming_for = streaming_for.replace("seconds", "second")
 
                             embed = discord.Embed(
                                 title="Currently Playing",
-                                description=f"Streaming for: {streaming_for}",
-                                color=0xB6CDE4,
+                                color=0x9D00FF,
                             )
 
-                            embed.set_thumbnail(url=interaction.client._fnbb_globals.get("playing").get("thumbnail"))
+                            embed.add_field(name="Song:", value=playing_info.get("title"), inline=False)
+
+                            embed.add_field(name="Streaming for:", value=streaming_for, inline=False)
+
+                            embed.set_thumbnail(url=playing_info.get("thumbnail"))
+
                             embed.set_footer(
-                                text=f"Song requested by: {interaction.client._fnbb_globals.get('playing').get('requested_by')}",
-                                icon_url=interaction.client._fnbb_globals.get("playing").get("requested_by_icon"),
+                                text=f"Song requested by: {playing_info.get('requested_by')}",
+                                icon_url=playing_info.get("requested_by_icon"),
                             )
+
                             await interaction.followup.send(embed=embed)
                         else:
                             await interaction.followup.send(
-                                "*BRUH I AINT EVEN *PLAYING MUSIC*! :skull: :rofl:"
+                                "BRUH I AINT EVEN *PLAYING MUSIC*! :skull: :rofl:"
                             )
                     else:
                         await interaction.followup.send(
-                            "*BRUH I AINT EVEN *PLAYING MUSIC*! :skull: :rofl:"
+                            "BRUH I AINT EVEN *PLAYING MUSIC*! :skull: :rofl:"
                         )

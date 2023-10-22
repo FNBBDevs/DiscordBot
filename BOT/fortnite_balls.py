@@ -8,7 +8,9 @@ Intent: This multifaceted bot is to promote user activity within
 """
 
 import re
-
+import os
+import time
+import subprocess
 import discord
 from _commands.contains import Contains
 from _utils.bruhpy import BruhPy
@@ -16,7 +18,6 @@ from _utils.embeds import bruhby, nolang
 from _utils.nolang import Nolang
 from discord import Message, app_commands
 from slash_master import SlashMaster
-
 
 class FortniteBallsBot(discord.Client):
     """
@@ -45,6 +46,9 @@ class FortniteBallsBot(discord.Client):
         # get the text channels in the guild
         guild = self.get_guild(int(self._guild))
         text_channels = guild.text_channels
+        
+        # call the cool animation while the commands load
+        subprocess.Popen(["python", "./BOT/_utils/boot.py"], close_fds=True)
 
         # tell slash master to load commands
         SlashMaster(self.tree, self._guild, self._cmds_path, self._debug).load_commands(

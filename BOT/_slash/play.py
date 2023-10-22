@@ -198,6 +198,7 @@ class Play(Group):
             interaction.client._fnbb_globals.get("playing")["time"] = (hours * 60 * 60) + (minutes * 60) + (seconds)
             interaction.client._fnbb_globals.get("playing")["started_at"] = time()
             interaction.client._fnbb_globals.get("playing")["thumbnail"] = thumb
+            interaction.client._fnbb_globals.get("playing")["title"] = title
             interaction.client._fnbb_globals.get("playing")["requested_by"] = interaction.user.name
             interaction.client._fnbb_globals.get("playing")["requested_by_icon"] = interaction.user.guild_avatar
 
@@ -299,6 +300,7 @@ class Play(Group):
                 interaction.client._fnbb_globals.get("playing")["time"] = (hours * 60 * 60) + (minutes * 60) + (seconds)
                 interaction.client._fnbb_globals.get("playing")["started_at"] = time()
                 interaction.client._fnbb_globals.get("playing")["thumbnail"] = thumb
+                interaction.client._fnbb_globals.get("playing")["title"] = title
                 interaction.client._fnbb_globals.get("playing")["requested_by"] = next_user
                 interaction.client._fnbb_globals.get("playing")["requested_by_icon"] = next_user_icon
 

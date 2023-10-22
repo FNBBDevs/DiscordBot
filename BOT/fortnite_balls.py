@@ -8,8 +8,6 @@ Intent: This multifaceted bot is to promote user activity within
 """
 
 import re
-import os
-import time
 import subprocess
 import discord
 from _commands.contains import Contains

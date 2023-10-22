@@ -36,5 +36,4 @@ class Contains:
         for flag in self.flags:
             if flag in message_in:
                 out.append(self.flags[flag])
-
         return out

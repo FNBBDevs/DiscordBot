@@ -1,4 +1,3 @@
-
 import discord
 from _utils.modals import OpenAIPasswordInputModal
 

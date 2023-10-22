@@ -1,7 +1,9 @@
-import discord
-from discordwebhook import Discord
 import enum
 import os
+
+import discord
+from discordwebhook import Discord
+
 
 class MarcusSays:
     """
@@ -16,10 +18,8 @@ class MarcusSays:
         # args is passed in from slash_master. slash_master recieved args
         # args from the fortniteballsbot which was a list of the text_channels
         # in the guild. args[0] is a list of text_channel objects in the guild
-        self.ChannelEnum = enum.Enum("ChannelEnum", 
-            {
-                channel.name:channel for channel in args[0]
-            }
+        self.ChannelEnum = enum.Enum(
+            "ChannelEnum", {channel.name: channel for channel in args[0]}
         )
 
         self.marcus = Discord(url=os.getenv("MARCUS"))
@@ -30,7 +30,9 @@ class MarcusSays:
             description="Have marcus say something in a channel of your choice.",
             guild=discord.Object(id=guild),
         )
-        async def MarcusSays(interaction: discord.Interaction, channel: self.ChannelEnum, message: str):
+        async def MarcusSays(
+            interaction: discord.Interaction, channel: self.ChannelEnum, message: str
+        ):
             """
             The MarcusSays command. Allows the user to choose a channel and a message for Marcus to say in that channel.
             """
@@ -41,7 +43,7 @@ class MarcusSays:
             await interaction.response.defer(ephemeral=True)
 
             # find the marcus webhook
-            if self.marcus_id: 
+            if self.marcus_id:
                 webhooks = await interaction.guild.webhooks()
                 for webhook in webhooks:
                     if webhook.id == self.marcus_id:
@@ -50,7 +52,7 @@ class MarcusSays:
 
             # point marcus to the user selected channel
             await marcus_webhook.edit(channel=channel.value)
-            
+
             # have marcus say the provided message
             self.marcus.post(content=message)
 
@@ -60,7 +62,3 @@ class MarcusSays:
             # delete that message
             original_response = await interaction.original_response()
             await original_response.delete()
-
-
-
-

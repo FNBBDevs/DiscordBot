@@ -1,5 +1,6 @@
-from bruhcolor import bruhcolored
 from datetime import datetime
+
+from bruhcolor import bruhcolored
 
 
 VALID_TYPES = {"ERROR": 196, "INFO": 220, "SUCCESS": 76, "GENERAL": 105}
@@ -44,8 +45,9 @@ class DateTimeAlert:
 
     def set_message(self, text, dtia_alert_type, message_from):
         date_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        colored_part = (bruhcolored(date_string + " ", color=238)
-                        + bruhcolored(f"{dtia_alert_type:<9s}", color=27, attrs=["bold"])
-                        + bruhcolored(message_from + " ", color=5))
+        colored_part = (
+            bruhcolored(date_string + " ", color=238)
+            + bruhcolored(f"{dtia_alert_type:<9s}", color=27, attrs=["bold"])
+            + bruhcolored(message_from + " ", color=5)
+        )
         return colored_part + text
-

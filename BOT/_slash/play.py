@@ -75,12 +75,13 @@ class Play(Group):
                     # If the channel is currently playing then the song must be added to the queue
                     if channel.is_playing():
                         # Alert the user that the song has been queued
-                        embed = embeds.on_success(
+                        embed = embeds.generic_colored_embed(
                             title="Queuing Song Request",
                             description=f"{song}",
                             footer_text="Queued By:",
                             footer_usr=interaction.user.name,
                             footer_img=interaction.user.guild_avatar,
+                            color="SUCCESS"
                         )
                         # Add custom fields to generic success embed
                         embed.add_field(
@@ -178,12 +179,13 @@ class Play(Group):
         ):
             
             # Custom embed that is shown when a song is played
-            embed = embeds.on_light(
+            embed = embeds.generic_colored_embed(
                 title="Now Playing",
                 description=" ",
                 footer_text="Requested by:",
                 footer_usr=interaction.user.name,
                 footer_img=interaction.user.guild_avatar,
+                color="WHITE"
             )
 
             # Get the embed data from the song data dictionary
@@ -285,12 +287,13 @@ class Play(Group):
                 thumb = file_dict["thumbnail"]
 
                 # Create custom embed for songs that are now playing from the queue
-                embed = embeds.on_light(
+                embed = embeds.generic_colored_embed(
                     title="Now Playing",
                     description=" ",
                     footer_text="Played by:",
                     footer_usr=next_user,
                     footer_img=next_user_icon,
+                    color="WHITE"
                 )
 
                 hours = int(run_time[:2])
@@ -306,10 +309,6 @@ class Play(Group):
 
                 # Add custom fields to the embed using data from youtube video
                 embed.add_field(name="Song:", value=f"{title}", inline=False)
-
-                hours = int(time[:2])
-                minutes = int(time[3:5])
-                seconds = int(time[6:9])
 
                 embed.add_field(
                     name="Length:",

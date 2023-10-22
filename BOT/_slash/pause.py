@@ -1,31 +1,43 @@
-import _utils.embeds as embeds
 import discord
 from discord.app_commands import Group
+from _utils.embeds import generic_colored_embed
 
 
 class Pause(Group):
     def __init__(self, tree, guild, args=None):
         @tree.command(
-            description="Pause a song", name="pause", guild=discord.Object(id=guild)
+            description="Pause  the currently playing song.", name="pause", guild=discord.Object(id=guild)
         )
         async def pause(interaction: discord.Interaction):
             """
-            Pause song from queue.
+            Pause the currently playing song
             """
 
-            # INITIALIZE USER STATUS AND BOT STATUS
             user_channel = interaction.user.voice
+
             voice_channel = interaction.guild.voice_client
 
-            # AWAIT A RESPONSE
             await interaction.response.defer()
+
             if user_channel:
-                # SEE IF THE BOT IS IN THE CHANNEL
                 if voice_channel:
-                    # If the bot is currently playing music
                     if voice_channel.is_playing():
-                        # This is BROKEN
+
                         voice_channel.pause()
-                        await interaction.followup.send(
-                            content="Paused!"
+
+                        embed = generic_colored_embed(
+                            title="Song has been paused!",
+                            description="",
+                            color="PURPLE"
                         )
+
+                        await interaction.followup.send(embed=embed)
+
+                    else:
+                        embed = generic_colored_embed(
+                            title="The song is already paused!",
+                            description="",
+                            color="ERROR"
+                        )
+
+                        await interaction.followup.send(embed=embed)

@@ -180,3 +180,6 @@ cython_debug/
 
 
 *.fnbbef
+
+_tmp/*
+_gif/*

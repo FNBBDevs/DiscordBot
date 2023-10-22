@@ -14,108 +14,43 @@ colors = {
     "INFO": 0x54B4D3,
     "BLACK": 0x332D2D,
     "WHITE": 0xFBFBFB,
+    "PURPLE": 0x9D00FF,
 }
 
-
-# Embed that shows success
-def on_success(
+def generic_colored_embed(
     title: str = None,
     description: str = "",
     footer_text: str = None,
     footer_img: str = None,
     footer_usr: str = None,
+    color: any = "WHITE"       
 ):
-    color = colors["SUCCESS"]
+    """
+    Generic embed with colored sidebar
+    :param title: title for the embed
+    :param description: description for the embed
+    :param footer_text: footer text for the embed
+    :param footer_img: footer image for the embed
+    :param footer_user: footer user for the embed
+    :param color: color for the embed sidebar
+    """
+    
+    if isinstance(color, str):
+        color = colors[color]
+    else:
+        color = color
+    
+    if not footer_text:
+        footer_text = ""
+    if not footer_usr:
+        footer_usr = ""
+
     embed = discord.Embed(title=f"{title}", description=f"{description}", color=color)
+
     embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
+
     return embed
 
-
-# Embed that shows warning
-def on_warning(
-    title: str = None,
-    description: str = None,
-    footer_text: str = None,
-    footer_img: str = None,
-    footer_usr: str = None,
-):
-    color = colors["WARNING"]
-    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color)
-    embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
-    return embed
-
-
-# Embed that shows error
-def on_error(
-    title: str = None,
-    description: str = None,
-    footer_text: str = None,
-    footer_img: str = None,
-    footer_usr: str = None,
-):
-    color = colors["ERROR"]
-    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color)
-    embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
-    return embed
-
-
-# Embed that shows info
-def on_info(
-    title: str = None,
-    description: str = None,
-    footer_text: str = None,
-    footer_img: str = None,
-    footer_usr: str = None,
-):
-    color = colors["INFO"]
-    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color)
-    embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
-    return embed
-
-
-# Embed that shows general information
-def on_general(
-    title: str = None,
-    description: str = None,
-    footer_text: str = None,
-    footer_img: str = None,
-    footer_usr: str = None,
-):
-    color = colors["BLACK"]
-    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color)
-    embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
-    return embed
-
-
-# Embed that shows light color
-def on_light(
-    title: str = None,
-    description: str = None,
-    footer_text: str = None,
-    footer_img: str = None,
-    footer_usr: str = None,
-):
-    color = colors["WHITE"]
-    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color)
-    embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
-    return embed
-
-
-# Embed that shows dark color
-def on_dark(
-    title: str = None,
-    description: str = None,
-    footer_text: str = None,
-    footer_img: str = None,
-    footer_usr: str = None,
-):
-    color = colors["BLACK"]
-    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color)
-    embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
-    return embed
-
-
-# embed to show the weather results
 def weather(weather: dict, type: str = "current"):
     _emoji_to_image = {
         "☀️": "https://cdn.discordapp.com/attachments/1036736606465445898/1122596586854289538/sunny.png",
@@ -163,9 +98,13 @@ def weather(weather: dict, type: str = "current"):
 
     return embed
 
-
-# embed to show the python code execution results
 def bruhby(output: list[str], user: str):
+    """
+    Embed to show the output of the bruhpy command
+    :param output: list of output messages from the program run
+    :param user: discord user who ran the command
+    """
+
     embed = discord.Embed(timestamp=datetime.datetime.now())
     # python logo
     embed.set_author(
@@ -196,8 +135,13 @@ def bruhby(output: list[str], user: str):
 
     return embed
 
-
 def nolang(output: list[str], user: str):
+    """
+    Embed to show the output of the nolang command
+    :param output: list of output messages from the program run
+    :param user: discord user who ran the command
+    """
+    
     embed = discord.Embed(timestamp=datetime.datetime.now())
     # nolang logo
     embed.set_author(

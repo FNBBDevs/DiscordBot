@@ -1,6 +1,6 @@
-import _utils.embeds as embeds
 import discord
 from discord.app_commands import Group
+from _utils.embeds import generic_colored_embed
 
 
 class Resume(Group):
@@ -13,20 +13,31 @@ class Resume(Group):
             Resume song from queue.
             """
 
-            # INITIALIZE USER STATUS AND BOT STATUS
             user_channel = interaction.user.voice
+            
             voice_channel = interaction.guild.voice_client
 
-            # AWAIT A RESPONSE
             await interaction.response.defer()
 
             if user_channel:
-                # SEE IF THE BOT IS IN THE CHANNEL
                 if voice_channel:
-                    try:
+                    if not voice_channel.is_playing():
+
                         voice_channel.resume()
-                        await interaction.followup.send(
-                            content="Resumed!"
+
+                        embed = generic_colored_embed(
+                            title="Song has been resumed!",
+                            description="",
+                            color="PURPLE"
                         )
-                    except Exception as e:
-                        print(e)
+
+                        await interaction.followup.send(embed=embed)
+
+                    else:
+                        embed = generic_colored_embed(
+                            title="The song is already playing!",
+                            description="",
+                            color="ERROR"
+                        )
+
+                        await interaction.followup.send(embed=embed)

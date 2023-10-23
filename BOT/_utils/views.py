@@ -45,3 +45,26 @@ class ResumeView(discord.ui.View):
         ), view=None)
 
         await interaction.followup.send(embed=embed, view=PauseView())
+    
+class PlayingView(discord.ui.View):
+    @discord.ui.button(label="Pause", style=discord.ButtonStyle.primary, emoji="⏸️")
+    async def button_callbak(self, interaction, button):
+        await interaction.response.defer()
+
+        embed = generic_colored_embed(
+            title="Success ✅",
+            description="Song has been paused",
+            color="PURPLE",
+        )
+
+        interaction.guild.voice_client.pause()
+
+        original_response = await interaction.original_response()
+
+        await original_response.edit(embed=original_response.embeds[0], view=None)
+
+        await interaction.followup.send(embed=generic_colored_embed(
+            title="Success ✅",
+            description="Song has been paused",
+            color="PURPLE",
+        ), view=ResumeView())

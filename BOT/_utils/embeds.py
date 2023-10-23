@@ -45,7 +45,7 @@ def generic_colored_embed(
     if not footer_usr:
         footer_usr = ""
 
-    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color)
+    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color, timestamp=datetime.datetime.now())
 
     embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
 

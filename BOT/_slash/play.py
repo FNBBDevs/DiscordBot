@@ -73,7 +73,7 @@ class Play(Group):
                     # Get the VoiceClient object to make requests to
                     channel = interaction.guild.voice_client
                     # If the channel is currently playing then the song must be added to the queue
-                    if channel.is_playing():
+                    if channel.is_playing() or channel.is_paused():
                         # Alert the user that the song has been queued
                         embed = embeds.generic_colored_embed(
                             title="Queuing Song Request",
@@ -317,6 +317,7 @@ class Play(Group):
                 )
 
                 embed.set_thumbnail(url=thumb)
+
                 embed.set_footer(
                     text=f"Song requested by: {next_user}",
                     icon_url=next_user_icon,
@@ -346,6 +347,3 @@ class Play(Group):
                         else play_next(channel, interaction, audio_player)
                     ),
                 )
-
-        # Pause the song
-

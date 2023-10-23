@@ -1,6 +1,7 @@
 import discord
 from discord.app_commands import Group
 from _utils.embeds import generic_colored_embed
+from _utils.views import ResumeView
 
 
 class Pause(Group):
@@ -31,7 +32,7 @@ class Pause(Group):
                             color="PURPLE"
                         )
 
-                        await interaction.followup.send(embed=embed)
+                        await interaction.followup.send(embed=embed, view=ResumeView())
 
                     else:
                         embed = generic_colored_embed(
@@ -40,4 +41,4 @@ class Pause(Group):
                             color="ERROR"
                         )
 
-                        await interaction.followup.send(embed=embed)
+                        await interaction.followup.send(embed=embed, view=ResumeView())

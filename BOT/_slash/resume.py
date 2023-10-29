@@ -1,6 +1,7 @@
-import _utils.embeds as embeds
 import discord
 from discord.app_commands import Group
+from _utils.embeds import generic_colored_embed
+from _utils.views import PauseView
 
 
 class Resume(Group):
@@ -10,23 +11,42 @@ class Resume(Group):
         )
         async def resume(interaction: discord.Interaction):
             """
-            Resume song from queue.
+            Resume a song that was paused.
             """
-
-            # INITIALIZE USER STATUS AND BOT STATUS
+            # grab the channel the user is in
             user_channel = interaction.user.voice
+            # grab the channel the bot is in
             voice_channel = interaction.guild.voice_client
-
-            # AWAIT A RESPONSE
             await interaction.response.defer()
-
             if user_channel:
-                # SEE IF THE BOT IS IN THE CHANNEL
-                if voice_channel:
-                    try:
+                if voice_channel: 
+                    if voice_channel.is_paused():
                         voice_channel.resume()
-                        await interaction.followup.send(
-                            content="Resumed!"
+                        embed = generic_colored_embed(
+                            title="Success ✅",
+                            description="Song has been resumed",
+                            color="PURPLE",
                         )
-                    except Exception as e:
-                        print(e)
+                        await interaction.followup.send(embed=embed, view=PauseView())
+                    elif voice_channel.is_playing():
+                        embed = generic_colored_embed(
+                            title="Error ❌",
+                            description="A song is already playing",
+                            color="ERROR"
+                        )
+                        await interaction.followup.send(embed=embed)
+                    else:
+                        embed = generic_colored_embed(
+                            title="Error ❌",
+                            description="No song to resume and no song in the queue",
+                            color="ERROR"
+                        )
+                        await interaction.followup.send(embed=embed)
+                else:
+                    embed = generic_colored_embed(
+                        title="Error ❌",
+                        description="Not currently in a VC",
+                        color="ERROR"
+                    )
+                    await interaction.followup.send(embed=embed)
+

@@ -3,6 +3,7 @@ from time import time
 from discord.app_commands import Group
 
 from _utils.time_utils import seconds_to_hms
+from _utils.views import PlayingView
 
 
 # Bro this needs some serious help. A fix will need to be made to this whole command
@@ -78,7 +79,7 @@ class Playing(Group):
                                 icon_url=playing_info.get("requested_by_icon"),
                             )
 
-                            await interaction.followup.send(embed=embed)
+                            await interaction.followup.send(embed=embed, view=PlayingView())
                         else:
                             await interaction.followup.send(
                                 "BRUH I AINT EVEN *PLAYING MUSIC*! :skull: :rofl:"

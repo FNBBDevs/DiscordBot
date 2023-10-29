@@ -23,7 +23,7 @@ class Skip(Group):
             # IF THE USER IS NOT THE VOICE CHANNEL, ISSUE ERROR
             if not user_channel:
                 await interaction.followup.send(
-                    embed=embeds.on_error(
+                    embed=embeds.generic_colored_embed(
                         title="You are Not In a Voice Channel!",
                         description=(
                             "Hermph... You must be in a voice channel to skip songs."
@@ -31,6 +31,7 @@ class Skip(Group):
                         footer_text="(Attempted) Skip By:",
                         footer_usr=interaction.user.name,
                         footer_img=interaction.user.guild_avatar,
+                        color="ERROR"
                     )
                 )
 
@@ -42,18 +43,19 @@ class Skip(Group):
                     voice_channel.stop()
 
                     await interaction.followup.send(
-                        embed=embeds.on_success(
+                        embed=embeds.generic_colored_embed(
                             title="Successfully Skipped Song!",
                             description="",
                             footer_text="Skipped By:",
                             footer_usr=interaction.user.name,
                             footer_img=interaction.user.guild_avatar,
+                            color="SUCCESS"
                         )
                     )
                 # If the bot is in the voice channel but no music is playing
                 else:
                     await interaction.followup.send(
-                        embed=embeds.on_warning(
+                        embed=embeds.generic_colored_embed(
                             title="No Song to Skip!",
                             description=(
                                 "Erm... The queue is empty and there is no song to"
@@ -62,13 +64,14 @@ class Skip(Group):
                             footer_text="(Attempted) Skip By:",
                             footer_usr=interaction.user.name,
                             footer_img=interaction.user.guild_avatar,
+                            color="WARNING"
                         )
                     )
 
             # BOT IS NOT IN THE CHANNEL
             else:
                 await interaction.followup.send(
-                    embed=embeds.on_error(
+                    embed=embeds.generic_colored_embed(
                         title="Bot Not In Voice Channel!",
                         description=(
                             "Hermph... I must be in a voice channel to skip songs..."
@@ -76,5 +79,6 @@ class Skip(Group):
                         footer_text="(Attempted) Skip By:",
                         footer_usr=interaction.user.name,
                         footer_img=interaction.user.guild_avatar,
+                        color="ERROR"
                     )
                 )

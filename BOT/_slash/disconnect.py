@@ -2,14 +2,14 @@ import discord
 from discord.app_commands import Group
 
 
-class Kick(Group):
+class Disconnect(Group):
     def __init__(self, tree: discord.app_commands.CommandTree, guild: str, args=None):
         @tree.command(
-            description="Kick the bot from VC",
+            description="Disconnect the bot from VC",
             name="disconnect",
             guild=discord.Object(id=guild),
         )
-        async def kick(interaction: discord.Interaction):
+        async def disconnect(interaction: discord.Interaction):
             """
             Force bot to leave the voice channel.
             """
@@ -21,7 +21,7 @@ class Kick(Group):
                         # Safely cleanup and disconnect the bot
                         bot_channel.cleanup()
                         await bot_channel.disconnect()
-                        return
+                        return # <- not needed
 
                     except Exception as e:
                         # If user is not in the voice channel

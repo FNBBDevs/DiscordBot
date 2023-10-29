@@ -1,5 +1,6 @@
 import discord
 from discord.app_commands import Group
+from _utils.embeds import generic_colored_embed
 
 
 class Sync(Group):
@@ -8,6 +9,13 @@ class Sync(Group):
             name="sync", description="Owner only", guild=discord.Object(id=guild)
         )
         async def sync(interaction: discord.Interaction):
-            # Sync that command tree up!
+
             await tree.sync(guild=discord.Object(id=guild))
-            await interaction.response.send_message("Command tree synced.")
+
+            embed = generic_colored_embed(
+                title="Command Tree Synced",
+                description="",
+                color="SUCCESS"
+            )
+
+            await interaction.followup.send(embed=embed)

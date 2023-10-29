@@ -107,7 +107,7 @@ class Play(Group):
 
                         # Stream the song to the channel and call the play_next function on completion
                         audio_player = discord.FFmpegPCMAudio(
-                            executable="ffmpeg.exe",
+                            executable="ffmpeg",
                             before_options=(
                                 "-reconnect 1 -reconnect_streamed 1"
                                 " -reconnect_delay_max 5"
@@ -142,7 +142,7 @@ class Play(Group):
                     await load(file, channel, interaction)
                     # Stream the song to the channel and call the play_next function on completion
                     audio_player = discord.FFmpegPCMAudio(
-                        executable="ffmpeg.exe",
+                        executable="ffmpeg",
                         before_options=(
                             "-reconnect 1 -reconnect_streamed 1"
                             " -reconnect_delay_max 5"
@@ -329,7 +329,7 @@ class Play(Group):
                 )
 
                 audio_player = discord.FFmpegPCMAudio(
-                    executable="ffmpeg.exe",
+                    executable="ffmpeg",
                     before_options=(
                         "-reconnect 1 -reconnect_streamed 1" " -reconnect_delay_max 5"
                     ),

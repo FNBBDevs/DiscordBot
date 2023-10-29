@@ -101,7 +101,7 @@ class BruhPy:
 
         if not code_check:
             self.responses += [
-                ("ERROR", "Code did not pass preliminary inspection"),
+                ("ERROR", "FNBB is not executing python commands for the time being."),
                 ("INFO", "Code did not execute, no output produced"),
             ]
             return self.responses

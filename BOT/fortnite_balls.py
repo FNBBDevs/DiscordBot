@@ -46,7 +46,7 @@ class FortniteBallsBot(discord.Client):
         text_channels = guild.text_channels
         
         # call the cool animation while the commands load
-        subprocess.Popen(["python", "./BOT/_utils/boot.py"], close_fds=True)
+        # subprocess.Popen(["python", "./BOT/_utils/boot.py"], close_fds=True)
 
         # tell slash master to load commands
         SlashMaster(self.tree, self._guild, self._cmds_path, self._debug).load_commands(
@@ -75,38 +75,6 @@ class FortniteBallsBot(discord.Client):
                 f"Erm... <@{message.author.id}> ... [looks away nervously] ... pwease"
                 " don't ping me :("
             )
-
-        if message.content[0:8] == ":python:":
-            code = message.content[8:].lstrip().rstrip()
-            response = BruhPy().run(code, "", message.author.display_name)
-            embed_response = bruhby(response[0], message.author.display_name)
-            await message.channel.send(embed=embed_response)
-            del response
-            del embed_response
-        elif x := re.search(r"\<\:python\:\d*\>", message.content):
-            start, end = x.span()
-            code = message.content[end:].lstrip().rstrip()
-            response = BruhPy().run(code, "", message.author.display_name)
-            embed_response = bruhby(response[0], message.author.display_name)
-            await message.channel.send(embed=embed_response)
-            del response
-            del embed_response
-
-        if message.content[0:8] == ":nolang:":
-            code = message.content[8:].lstrip().rstrip()
-            response = Nolang().run(code, "")
-            embed_response = nolang(response[0], message.author.display_name)
-            await message.channel.send(embed=embed_response)
-            del response
-            del embed_response
-        elif x := re.search(r"\<\:nolang\:\d*\>", message.content):
-            start, end = x.span()
-            code = message.content[end:].lstrip().rstrip()
-            response = Nolang().run(code, "")
-            embed_response = nolang(response[0], message.author.display_name)
-            await message.channel.send(embed=embed_response)
-            del response
-            del embed_response
 
     async def on_message_delete(self, message):
         """

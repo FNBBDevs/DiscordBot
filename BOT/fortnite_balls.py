@@ -7,14 +7,12 @@ Intent: This multifaceted bot is to promote user activity within
         servers that it is hosted in.
 """
 
-import re
-import subprocess
 import discord
+import asyncio
 from _commands.contains import Contains
-from _utils.bruhpy import BruhPy
-from _utils.embeds import bruhby, nolang
-from _utils.nolang import Nolang
+from _utils.embeds import generic_colored_embed
 from discord import Message, app_commands
+from discord.ext import commands
 from slash_master import SlashMaster
 
 class FortniteBallsBot(discord.Client):
@@ -87,6 +85,32 @@ class FortniteBallsBot(discord.Client):
             + ": "
             + str(message.content)
         )
-        print(msg)
-        # with open("./error.fnbbef", "a+") as f:
-        #     f.write(msg + "\n")
+    
+    @commands.Cog.listener()
+    async def on_voice_state_update(self, member, before, after):
+        try:
+            client = self.get_guild(int(self._guild))
+            members = client.voice_client.channel.members
+            info_channel = [channel for channel in client.channels if channel.id == 1081850403920035931][0]
+            if len(members) <= 1:
+                timeout_embed = generic_colored_embed(
+                    title="Bot Leaving VC",
+                    description="In 20 seconds the bot will leave VC unless someone joins.",
+                    footer_text="20 seconds . . .",
+                )
+                await info_channel.send(embed=timeout_embed)
+                await asyncio.sleep(10)
+                members = self.get_guild(int(self._guild)).voice_client.channel.members
+                if len(members) <= 1:
+                    timeout_embed = generic_colored_embed(
+                        title="Bot Leaving VC",
+                        description="In 10 seconds the bot will leave VC unless someone joins.",
+                        footer_text="10 seconds . . .",
+                    )
+                    await info_channel.send(embed=timeout_embed)
+                    await asyncio.sleep(10)
+                    members = self.get_guild(int(self._guild)).voice_client.channel.members
+                    if len(members) <= 1:
+                        await self.get_guild(int(self._guild)).voice_client.disconnect()
+        except:
+            pass

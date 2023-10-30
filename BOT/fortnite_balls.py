@@ -7,6 +7,7 @@ Intent: This multifaceted bot is to promote user activity within
         servers that it is hosted in.
 """
 
+import os
 import discord
 import asyncio
 from _commands.contains import Contains
@@ -91,7 +92,7 @@ class FortniteBallsBot(discord.Client):
         try:
             client = self.get_guild(int(self._guild))
             members = client.voice_client.channel.members
-            info_channel = [channel for channel in client.channels if channel.id == 1081850403920035931][0]
+            info_channel = [channel for channel in client.channels if channel.id == os.getenv("INFO_CHANNEL")][0]
             if len(members) <= 1:
                 timeout_embed = generic_colored_embed(
                     title="Bot Leaving VC",

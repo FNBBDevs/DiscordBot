@@ -8,6 +8,7 @@ import _utils.ytdl as yt
 import discord
 from discord import VoiceProtocol
 from discord.app_commands import Group
+from _utils.queueing import MusicQueueItem
 
 
 class Filters(Enum):
@@ -40,7 +41,7 @@ class Play(Group):
         Description: Constructor for the music player.
         """
         # The queue that houses songs to be played (duh)
-        self.queue = []
+        # self.queue = [] <- queue is now in _fnbb_globals in fortnite_balls.py
 
         # Command that is called when the user types /play. Big bulky command that does a lot
         @tree.command(
@@ -74,6 +75,7 @@ class Play(Group):
                     channel = interaction.guild.voice_client
                     # If the channel is currently playing then the song must be added to the queue
                     if channel.is_playing() or channel.is_paused():
+                        queue = interaction.client._fnbb_globals.get("music_queue")
                         # Alert the user that the song has been queued
                         embed = embeds.generic_colored_embed(
                             title="Queuing Song Request",
@@ -86,7 +88,7 @@ class Play(Group):
                         # Add custom fields to generic success embed
                         embed.add_field(
                             name="Queue Position:",
-                            value=f"#{len(self.queue) + 1} in queue",
+                            value=f"#{len(queue) + 1} in queue",
                             inline=False,
                         )
                         embed.set_thumbnail(
@@ -96,7 +98,7 @@ class Play(Group):
                         # Send the response back to the interaction (i.e. reply)
                         await interaction.followup.send(embed=embed)
                         # Add the song to the queue
-                        await add_song(song, filter, interaction.user.name, interaction.user.guild_avatar)
+                        await add_song(interaction, song, filter)
 
                     # If the bot is not playing, the song can be played without queuing
                     else:
@@ -162,8 +164,16 @@ class Play(Group):
                     )
 
         # Add the song data to the queue
-        async def add_song(url, audio_filter, user, user_icon):
-            self.queue.append([url, audio_filter, user, user_icon])
+        async def add_song(interaction, url, audio_filter):
+            # interaction.user.name, interaction.user.guild_avatar
+            interaction.client._fnbb_globals.get("music_queue").add(
+                MusicQueueItem(
+                    url=url,
+                    audio_filter=audio_filter,
+                    user=interaction.user.name,
+                    user_icon=interaction.user.guild_avatar
+                )
+            )
 
         # Load a song from the queue and return the URL data
         async def load_song(song: str, interaction: discord.Interaction):
@@ -262,14 +272,11 @@ class Play(Group):
             interaction: discord.Interaction,
             player: discord.FFmpegAudio,
         ):
+            queue = interaction.client._fnbb_globals.get("music_queue")
             # If the queue is not empty, load the song from the front
-            if len(self.queue) > 0:
+            if len(queue) > 0:
                 # Get the song from the front
-                song_data = self.queue.pop(0)
-                queue_url = song_data[0]
-                filter = song_data[1]
-                next_user = song_data[2]
-                next_user_icon = song_data[3]
+                queue_url, filter, next_user, next_user_icon = queue.pop(0).values()
 
                 channel.stop()
 

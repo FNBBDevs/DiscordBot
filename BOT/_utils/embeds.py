@@ -15,6 +15,7 @@ colors = {
     "BLACK": 0x332D2D,
     "WHITE": 0xFBFBFB,
     "PURPLE": 0x9D00FF,
+    "ORANGE": 0xFF6600,
 }
 
 def generic_colored_embed(

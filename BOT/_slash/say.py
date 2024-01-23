@@ -3,12 +3,13 @@ import discord
 from enum import Enum
 from _utils.bruhtts.bruhtts import say as bruhtts_say
 import _utils.filters as af
+from _utils.embeds import generic_colored_embed
 
 
 class Members(Enum):
-    nolan = "Nolan"
-    ethan = "Ethan"
-    klim = "Klim"
+    Nolan = "Nolan"
+    Ethan = "Ethan"
+    Klim = "Klim"
 
 
 
@@ -27,7 +28,7 @@ class Say:
             description="say something as one of the discord memebers!",
             guild=discord.Object(id=guild),
         )
-        async def say(interaction: discord.Interaction, message: str, member: Members = Members.nolan):
+        async def say(interaction: discord.Interaction, message: str, member: Members = Members.Nolan):
             """
             /say
             """
@@ -75,7 +76,24 @@ class Say:
 
                         channel.play(audio_player)
                     
-                    await interaction.followup.send(f"Speaking now!")
+                    embed = generic_colored_embed(
+                        title=f"Speaking as {member.value} now!",
+                        description="Playing the genereated synthesized audio.",
+                        footer_text="Queued by: ",
+                        footer_usr=interaction.user.global_name,
+                        footer_img=interaction.user.guild_avatar,
+                        color="WHITE"  
+                    )
+                    
+                    await interaction.followup.send(embed=embed)
 
             else:
-                await interaction.followup.send("Command failed!")
+                embed = generic_colored_embed(
+                    title=f"Attempt to speak as {member.value} failed!",
+                    description="",
+                    footer_text="Queued by: ",
+                    footer_usr=interaction.user.global_name,
+                    footer_img=interaction.user.guild_avatar,
+                    color="RED"  
+                )
+                await interaction.followup.send(embed=embed)

@@ -1,5 +1,2 @@
-no x = 0
-bounce
-    nolout("Nolan has sucked " + (x + 1)  + " cocks!")
-    x = x + 1
-while x < 5
+no x = 10
+nolout("cock " + x)

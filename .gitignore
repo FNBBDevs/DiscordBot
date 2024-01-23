@@ -183,3 +183,11 @@ cython_debug/
 
 _tmp/*
 _gif/*
+ignore/
+
+
+BOT/_utils/bruhtts/audio/
+BOT/_utils/bruhtts/models/
+BOT/_utils/bruhtts/old_models/
+BOT/_utils/bruhtts/rvc/
+BOT/_utils/bruhtts/__init__.py

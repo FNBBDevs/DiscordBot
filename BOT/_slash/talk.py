@@ -124,3 +124,5 @@ class Talk(Group):
                     )
 
                     channel.play(audio_player)
+                
+            await interaction.followup.send(f"Talking to you {interaction.user.mention}")

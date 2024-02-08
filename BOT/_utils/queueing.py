@@ -20,15 +20,12 @@ class MusicQueue:
     def add(self, item: MusicQueueItem):
         self.queue.append(item)
     
-    def pop(self, idx: int=None):
-        if idx:
-            try:
-                return self.queue.pop(idx)
-            except:
-                return None
-        else:
-            return self.queue.pop()
-
+    def pop(self):
+        if len(self.queue) > 0:
+            return_val = self.queue[0]
+            self.queue = self.queue[1:]
+            return return_val
+        
     def check_and_purge(self, user):
         previous_length = len(self.queue)
         self.queue = [item for item in self.queue if item.user != user]

@@ -276,7 +276,7 @@ class Play(Group):
             # If the queue is not empty, load the song from the front
             if len(queue) > 0:
                 # Get the song from the front
-                queue_url, filter, next_user, next_user_icon = queue.pop(0).values()
+                queue_url, filter, next_user, next_user_icon = queue.pop().values()
 
                 channel.stop()
 

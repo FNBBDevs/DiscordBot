@@ -145,3 +145,32 @@ class PlayingView(discord.ui.View):
                 )
 
 
+
+class ImagineView(discord.ui.View):
+    @discord.ui.button(label="U1", style=discord.ButtonStyle.gray, row=1)
+    async def u1(self, interaction: discord.Interaction, button):
+        await interaction.response.send_message("balls", ephemeral=True)
+    @discord.ui.button(label="U2", style=discord.ButtonStyle.gray, row=1)
+    async def u2(self, interaction, button):
+        await interaction.response.send_message("balls", ephemeral=True)
+    @discord.ui.button(label="U3", style=discord.ButtonStyle.gray, row=1)
+    async def u3(self, interaction, button):
+        await interaction.response.send_message("balls", ephemeral=True)
+    @discord.ui.button(label="U4", style=discord.ButtonStyle.gray, row=1)
+    async def u4(self, interaction, button):
+        await interaction.response.send_message("balls", ephemeral=True)
+    @discord.ui.button(label="", style=discord.ButtonStyle.gray, emoji="🔁", row=1)
+    async def redo(self, interaction, button):
+        await interaction.response.send_message("balls", ephemeral=True)
+    @discord.ui.button(label="V1", style=discord.ButtonStyle.gray, row=2)
+    async def v1(self, interaction, button):
+        await interaction.response.send_message("balls", ephemeral=True)
+    @discord.ui.button(label="V2", style=discord.ButtonStyle.gray, row=2)
+    async def v2(self, interaction, button):
+        await interaction.response.send_message("balls", ephemeral=True)
+    @discord.ui.button(label="V3", style=discord.ButtonStyle.gray, row=2)
+    async def v3(self, interaction, button):
+        await interaction.response.send_message("balls", ephemeral=True)
+    @discord.ui.button(label="V4", style=discord.ButtonStyle.gray, row=2)
+    async def v4(self, interaction, button):
+        await interaction.response.send_message("balls", ephemeral=True)

@@ -6,7 +6,7 @@ from _utils.time_utils import seconds_to_hms
 from _utils.views import PlayingView
 
 
-# Bro this needs some serious help. A fix will need to be made to this whole command
+# Bro this needs some serious help. A fix will need to be made to this whole command <---- ?????
 class Playing(Group):
     def __init__(self, tree, guild, args=None):
         @tree.command(

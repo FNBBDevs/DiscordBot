@@ -6,10 +6,10 @@ authors = ["Nolan Gregory <65730528+nulzo@users.noreply.github.com>"]
 readme = "README.md"
 
 [project]
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 
 [tool.poetry.dependencies]
-python = ">=3.11"
+python = "3.10.13"
 "discord.py" = "^2.3.0"
 python-dotenv = "^1.0.0"
 python-weather = "^1.0.3"
@@ -25,13 +25,41 @@ ruff = "^0.0.276"
 pylint = "^2.17.4"
 black = "^23.3.0"
 invoke = "^2.1.3"
-youtube-dl = "^2021.12.17"
 flake8 = "^6.0.0"
 mypy = "^1.4.1"
 bandit = "^1.7.5"
 gtts = "^2.3.2"
 openai = ">=0.27.8"
 bruhanimate = "^0.1.72"
+ffmpeg-python = ">=0.2.0"
+numpy = "1.23.5"
+requests = "2.31.0"
+tqdm = "^4.66.1"
+wget = "^3.2"
+faiss-cpu = "1.7.3"
+librosa = "0.9.1"
+pyworld = "0.3.4"
+scipy = "1.11.1"
+soundfile = "0.12.1"
+praat-parselmouth = "^0.4.3"
+fairseq = "0.12.2"
+numba = "0.56.4"
+torchcrepe = "0.0.21"
+tensorboard = "^2.15.1"
+gradio = "4.14.0"
+ffmpy = "0.3.1"
+tensorboardx = "^2.6.2.2"
+edge-tts = "6.1.9"
+pypresence = "^4.3.0"
+beautifulsoup4 = "^4.12.3"
+torch = {version = "^2.1.2+cu118", source = "pytorch"}
+torchvision = {version = "^0.16.2+cu118", source = "pytorch"}
+youtube-dl = "^2021.12.17"
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu118"
+priority = "explicit"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.4"

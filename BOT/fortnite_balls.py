@@ -32,7 +32,9 @@ class FortniteBallsBot(discord.Client):
         self._contains = Contains()
         self._fnbb_globals = {
             "playing": {},
-            "music_queue": MusicQueue()
+            "music_queue": MusicQueue(),
+            "imagine_queue": {},
+            "imagine_generating": False
         }
         # Create CommandTree object
         self.tree = app_commands.CommandTree(self)

@@ -69,7 +69,7 @@ stable_base_json = {
                     "hr_prompt": "",
                     "hr_resize_x": 0,
                     "hr_resize_y": 0,
-                    "hr_scale": 2,
+                    "hr_scale": 3,
                     "hr_second_pass_steps": 0,
                     "hr_upscaler": "Latent",
                     "n_iter": 1,

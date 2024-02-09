@@ -9,6 +9,13 @@ import json
 import base64
 import requests
 from requests.exceptions import *
+from enum import Enum
+
+class Upscale(Enum):
+    one = 1
+    two = 2
+    three = 3
+    four = 4
 
 class Imagine:
     """
@@ -25,7 +32,7 @@ class Imagine:
             description="Creates images with Midjourney",
             guild=discord.Object(id=guild),
         )
-        async def imagine(interaction: discord.Interaction, prompt: str, negative_prompt: str = ""):
+        async def imagine(interaction: discord.Interaction, prompt: str, negative_prompt: str = "", quality: Upscale = Upscale.two):
             """
             /imagine
             """
@@ -48,7 +55,7 @@ class Imagine:
                 
                 await interaction.followup.send(embed=generic_colored_embed(
                         title="Generating!",
-                        description="Your image is being generated! It will be sent shortly.",
+                        description="Your image is being generated! It will be sent shortly. (Estimated wait: 1min)",
                         footer_usr=interaction.user.global_name,
                         footer_img=interaction.user.avatar,
                         color="SUCCESS"
@@ -62,6 +69,7 @@ class Imagine:
                 txt2img_request_payload["negative_prompt"] = negative_prompt
                 txt2img_request_payload["hr_prompt"] = prompt
                 txt2img_request_payload["prompt"] = prompt
+                txt2img_request_payload["hr_scale"] = quality.value
                 
                 try:
                     response = json.loads(requests.post(

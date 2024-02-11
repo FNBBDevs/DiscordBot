@@ -120,7 +120,7 @@ class Imagine:
                     grid_image.paste(pil_images[2], (0,pil_images[0].height))
                     grid_image.paste(pil_images[3], (pil_images[0].width,pil_images[0].height))
                     
-                    grid_image = grid_image.resize((pil_images[0].width // 4, pil_images[0].height // 4), Image.Resampling.BICUBIC)
+                    grid_image = grid_image.resize((pil_images[0].width // 3, pil_images[0].height // 3), Image.Resampling.BICUBIC)
                     
                     grid_image.save(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/grid.png")
 

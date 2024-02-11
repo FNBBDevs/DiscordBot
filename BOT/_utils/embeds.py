@@ -215,6 +215,7 @@ def imagine(
     if len(prompt) > 60:
         prompt = prompt[:60] + ". . ."
 
+    # grab the drig image
     file = discord.File(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/grid.png", filename="grid.png")
       
     embed.set_image(url="attachment://grid.png")
@@ -241,6 +242,7 @@ def imagine_upscale(index: int, footer_text: str, footer_usr: str, footer_img):
     if not footer_usr:
         footer_usr = ""
 
+    # based on index (1-4), grab the single image
     file = discord.File(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/stable_image_{index-1}.png", filename="stable_image.png")    
     embed.set_image(url="attachment://stable_image.png")
     embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)

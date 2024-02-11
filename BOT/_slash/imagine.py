@@ -55,6 +55,7 @@ class Imagine:
 
             await interaction.response.defer()
 
+            # is stable busy? (doesn't work since the api call is blocking)
             if interaction.client._fnbb_globals.get("imagine_generating"):
 
                 await interaction.followup.send(
@@ -71,6 +72,7 @@ class Imagine:
 
                 interaction.client._fnbb_globals["imagine_generating"] = True
 
+                # let user know we are generating image
                 await interaction.followup.send(
                     embed=generic_colored_embed(
                         title="Generating!",
@@ -81,6 +83,7 @@ class Imagine:
                     )
                 )
 
+                # fill out the payload
                 negative_prompt = negative_prompt if negative_prompt else ""
                 prompt = prompt if prompt else ""
 
@@ -95,6 +98,7 @@ class Imagine:
                 txt2img_request_payload["seed"] = seed
 
                 try:
+                    # ping local hosted stable diffusion ai
                     response = json.loads(
                         requests.post(
                             "http://127.0.0.1:7861/sdapi/v1/txt2img",
@@ -102,12 +106,14 @@ class Imagine:
                         ).content.decode("utf8")
                     )
                     
+                    # save all 4 images
                     for idx, image in enumerate(response["images"]):
                         with open(
                             f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/stable_image_{idx}.png", "wb"
                         ) as image_file:
                             image_file.write(base64.b64decode(image))
                     
+                    # create a 2x2 grid of the images to send (like mid journey)
                     pil_images = []
                     for image_file in os.listdir(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/"):
                         if "grid" not in image_file:
@@ -124,6 +130,7 @@ class Imagine:
                     
                     grid_image.save(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/grid.png")
 
+                    # send the grid view with buttons to upscale each picture
                     ie, imf = imagine_embed(
                         prompt=prompt,
                         negative=negative_prompt,

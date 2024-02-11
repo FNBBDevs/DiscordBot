@@ -1,11 +1,12 @@
 from enum import Enum
 
-
+# upscale options
 class Upscale(Enum):
     one = 1
     two = 2
     three = 3
 
+# payload to send to txt2img
 stable_base_json = {
                     "alwayson_scripts": {
                         "API payload": {"args": []},

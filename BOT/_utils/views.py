@@ -157,13 +157,15 @@ class PlayingView(discord.ui.View):
             )
 
 
-class ImagineView(discord.ui.View):    
+class ImagineView(discord.ui.View):
     @discord.ui.button(label="U1", style=discord.ButtonStyle.gray, row=1, custom_id="id_U1")
     async def u1(self, interaction: discord.Interaction, button: discord.ui.Button):
         
+        # disable the button and make it blue
         button.disabled = True
         button.style = discord.ButtonStyle.primary
         
+        # create the embed that will contain the single image (determined by index)
         embed, file = imagine_upscale(
             index=1,
             footer_text="Upscale requested by: ",
@@ -171,7 +173,9 @@ class ImagineView(discord.ui.View):
             footer_img=interaction.user.avatar,
         )
         
+        # edit the view to the button is disabled on the ui side
         await interaction.response.edit_message(view=self)
+        # send the single image
         await interaction.followup.send(embed=embed, file=file)
 
     @discord.ui.button(label="U2", style=discord.ButtonStyle.gray, row=1, custom_id="id_U2")

@@ -1,3 +1,11 @@
+from enum import Enum
+
+
+class Upscale(Enum):
+    one = 1
+    two = 2
+    three = 3
+
 stable_base_json = {
                     "alwayson_scripts": {
                         "API payload": {"args": []},
@@ -57,6 +65,7 @@ stable_base_json = {
                         "Seed": {"args": [-1, False, -1, 0, 0, 0]},
                     },
                     "batch_size": 1,
+                    "batch_count": 4,
                     "cfg_scale": 3,
                     "comments": {},
                     "denoising_strength": 0.7,
@@ -72,7 +81,7 @@ stable_base_json = {
                     "hr_scale": 3,
                     "hr_second_pass_steps": 0,
                     "hr_upscaler": "Latent",
-                    "n_iter": 1,
+                    "n_iter": 4,
                     "negative_prompt": "",
                     "override_settings": {},
                     "override_settings_restore_afterwards": True,

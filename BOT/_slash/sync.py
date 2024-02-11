@@ -18,10 +18,10 @@ class Sync(Group):
                     description="",
                     color="SUCCESS"
                 )
-            except:
+            except Exception as e:
                 embed = generic_colored_embed(
                     title="Command Tree failed to Sync",
-                    description="",
+                    description=str(e),
                     color="ERROR"
                 )
 

@@ -1,7 +1,9 @@
+import os
 import datetime
 import random
-
 import discord
+
+from _utils.stable_diffusion import Upscale
 
 
 # pylint: disable=C0301
@@ -18,13 +20,14 @@ colors = {
     "ORANGE": 0xFF6600,
 }
 
+
 def generic_colored_embed(
     title: str = None,
     description: str = "",
     footer_text: str = None,
     footer_img: str = None,
     footer_usr: str = None,
-    color: any = "WHITE"       
+    color: any = "WHITE",
 ):
     """
     Generic embed with colored sidebar
@@ -35,22 +38,28 @@ def generic_colored_embed(
     :param footer_user: footer user for the embed
     :param color: color for the embed sidebar
     """
-    
+
     if isinstance(color, str):
         color = colors[color]
     else:
         color = color
-    
+
     if not footer_text:
         footer_text = ""
     if not footer_usr:
         footer_usr = ""
 
-    embed = discord.Embed(title=f"{title}", description=f"{description}", color=color, timestamp=datetime.datetime.now())
+    embed = discord.Embed(
+        title=f"{title}",
+        description=f"{description}",
+        color=color,
+        timestamp=datetime.datetime.now(),
+    )
 
     embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
 
     return embed
+
 
 def weather(weather: dict, type: str = "current"):
     _emoji_to_image = {
@@ -99,6 +108,7 @@ def weather(weather: dict, type: str = "current"):
 
     return embed
 
+
 def bruhby(output: list[str], user: str):
     """
     Embed to show the output of the bruhpy command
@@ -136,13 +146,14 @@ def bruhby(output: list[str], user: str):
 
     return embed
 
+
 def nolang(output: list[str], user: str):
     """
     Embed to show the output of the nolang command
     :param output: list of output messages from the program run
     :param user: discord user who ran the command
     """
-    
+
     embed = discord.Embed(timestamp=datetime.datetime.now())
     # nolang logo
     embed.set_author(
@@ -172,3 +183,65 @@ def nolang(output: list[str], user: str):
         )
 
     return embed
+
+
+def imagine(
+    prompt: str,
+    negative: str,
+    quality: Upscale,
+    cfg: float,
+    steps: int,
+    seed: int,
+    footer_text: str,
+    footer_usr: str,
+    footer_img,
+):
+    embed = discord.Embed(
+        title="✨ Stable Diffusion Image ✨",
+        color=0x333333,
+        timestamp=datetime.datetime.now(),
+    )
+    
+    if not footer_text:
+        footer_text = ""
+    if not footer_usr:
+        footer_usr = ""
+    
+    if negative in ["", None]:
+        negative = "<no negative prompt provided>"
+    elif len(negative) > 60:
+        negative = negative[:60] + ". . ."
+    
+    if len(prompt) > 60:
+        prompt = prompt[:60] + ". . ."
+
+    file = discord.File(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/grid.png", filename="grid.png")
+      
+    embed.set_image(url="attachment://grid.png")
+    embed.add_field(name="Prompt", value=prompt, inline=False)
+    embed.add_field(name="Negative Prompt", value=negative, inline=False)
+    embed.add_field(name="Upscale", value=quality.value, inline=False)
+    embed.add_field(name="CFG Scale", value=cfg, inline=False)
+    embed.add_field(name="Steps", value=steps, inline=False)
+    embed.add_field(name="Seed", value=seed, inline=False)
+
+    embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
+
+    return embed, file
+
+def imagine_upscale(index: int, footer_text: str, footer_usr: str, footer_img):
+    embed = discord.Embed(
+        title=f"✨ Upscaled Image {index} ✨",
+        color=0x333333,
+        timestamp=datetime.datetime.now(),
+    )
+    
+    if not footer_text:
+        footer_text = ""
+    if not footer_usr:
+        footer_usr = ""
+
+    file = discord.File(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/stable_image_{index-1}.png", filename="stable_image.png")    
+    embed.set_image(url="attachment://stable_image.png")
+    embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
+    return embed, file

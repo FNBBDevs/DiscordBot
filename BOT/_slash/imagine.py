@@ -75,10 +75,11 @@ class Imagine:
                 # let user know we are generating image
                 await interaction.followup.send(
                     embed=generic_colored_embed(
-                        title="Generating!",
-                        description="Your image is being generated! It will be sent shortly. (Estimated wait: 1min)",
+                        title="✨ Generating ✨",
+                        description="Your image is being generated! It will be sent shortly. (note: higher step counts and higher quality will result in longer wait times)",
                         footer_usr=interaction.user.global_name,
                         footer_img=interaction.user.avatar,
+                        footer_text="Requested by:",
                         color="SUCCESS",
                     )
                 )

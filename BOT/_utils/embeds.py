@@ -197,7 +197,8 @@ def imagine(
     footer_img,
 ):
     embed = discord.Embed(
-        title="✨ Stable Diffusion Image ✨",
+        title="✨ Stable Diffusion x FNBB ✨",
+        description="You images are done generating!",
         color=0x333333,
         timestamp=datetime.datetime.now(),
     )

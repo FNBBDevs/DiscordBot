@@ -7,14 +7,14 @@ Intent: This multifaceted bot is to promote user activity within
         servers that it is hosted in.
 """
 
-import os
+import re
+import subprocess
 import discord
-import asyncio
 from _commands.contains import Contains
-from _utils.embeds import generic_colored_embed
-from _utils.queueing import MusicQueue
+from _utils.bruhpy import BruhPy
+from _utils.embeds import bruhby, nolang
+from _utils.nolang import Nolang
 from discord import Message, app_commands
-from discord.ext import commands
 from slash_master import SlashMaster
 
 class FortniteBallsBot(discord.Client):
@@ -32,7 +32,6 @@ class FortniteBallsBot(discord.Client):
         self._contains = Contains()
         self._fnbb_globals = {
             "playing": {},
-            "music_queue": MusicQueue()
         }
         # Create CommandTree object
         self.tree = app_commands.CommandTree(self)
@@ -88,41 +87,6 @@ class FortniteBallsBot(discord.Client):
             + ": "
             + str(message.content)
         )
-    
-    @commands.Cog.listener()
-    async def on_voice_state_update(self, member, before, after):
-        try:
-            # get the client to get channels, globals
-            client = self.get_guild(int(self._guild))
-
-            # get the info channel to send embeds
-            info_channel = [channel for channel in client.channels if str(channel.id) == str(os.getenv("INFO_CHANNEL"))][0]
-
-            # remove records from queue that user who left requested (like a boss)
-            purged_records = self._fnbb_globals.get("music_queue").check_and_purge(member.name)
-
-            if purged_records > 0:
-                purged_embed = generic_colored_embed(
-                    title=f"{member.name} has left VC",
-                    description=f"Songs by {member.name} purged from the Queue: {purged_records}",
-                    color="ORANGE"
-                )
-
-                await info_channel.send(embed=purged_embed)
-            
-            # check to see if the bot is the only one in VC
-            members = client.voice_client.channel.members
-
-            # give a minute warning
-            if len(members) <= 1:
-                timeout_embed = generic_colored_embed(
-                    title="Bot Leaving VC",
-                    description="In 1 minute the bot will leave VC unless someone joins.",
-                )
-                await info_channel.send(embed=timeout_embed)
-                await asyncio.sleep(60)
-                # check again and leave if bot is the only one in vc
-                if len(members) <= 1:
-                    await self.get_guild(int(self._guild)).voice_client.disconnect()
-        except Exception as e:
-            pass
+        print(msg)
+        # with open("./error.fnbbef", "a+") as f:
+        #     f.write(msg + "\n")

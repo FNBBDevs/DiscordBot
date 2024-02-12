@@ -218,13 +218,12 @@ def get_imagine_embed(
     file = discord.File(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/{stable_id}/{stable_id}_grid.png", filename=f"{footer_usr}_{stable_id}_grid.png")
       
     embed.set_image(url=f"attachment://{footer_usr}_{stable_id}_grid.png")
-    embed.add_field(name="Prompt", value=prompt, inline=False)
-    embed.add_field(name="Negative Prompt", value=negative, inline=False)
-    embed.add_field(name="Upscale", value=quality, inline=False)
-    embed.add_field(name="CFG Scale", value=cfg, inline=False)
-    embed.add_field(name="Steps", value=steps, inline=False)
-    embed.add_field(name="Seed", value=seed, inline=False)
-
+    # embed.add_field(name="Prompt", value=prompt, inline=False)
+    # embed.add_field(name="Negative Prompt", value=negative, inline=False)
+    # embed.add_field(name="Upscale", value=quality, inline=False)
+    # embed.add_field(name="CFG Scale", value=cfg, inline=False)
+    # embed.add_field(name="Steps", value=steps, inline=False)
+    # embed.add_field(name="Seed", value=seed, inline=False)
     embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
 
     return embed, file
@@ -246,3 +245,5 @@ def get_imagine_upscale_embed(index: int, footer_text: str, footer_usr: str, foo
     embed.set_image(url=f"attachment://{footer_usr}_{stable_id}.png")
     embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
     return embed, file
+
+    

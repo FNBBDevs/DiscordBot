@@ -1,6 +1,6 @@
 import os
 import discord
-import discord.interactions 
+import discord.interactions
 import datetime
 from .embeds import generic_colored_embed, get_imagine_upscale_embed
 
@@ -158,84 +158,113 @@ class PlayingView(discord.ui.View):
 
 
 class ImagineView(discord.ui.View):
-    def __init__(self, stable_id, *args, **kwargs):
+    def __init__(
+        self,
+        stable_id,
+        prompt,
+        negative,
+        quality,
+        cfg,
+        steps,
+        seed,
+        upscale_model,
+        sampler,
+        *args,
+        **kwargs,
+    ):
         super().__init__(*args, **kwargs)
         self.stable_id = stable_id
-    
-    @discord.ui.button(label="U1", style=discord.ButtonStyle.gray, row=1, custom_id="id_U1")
+        self.prompt = prompt
+        self.negative_prompt = negative
+        self.quality = quality
+        self.cfg_scale = cfg
+        self.steps = steps
+        self.seed = seed
+        self.upscale_model = upscale_model
+        self.sampler = sampler
+
+    @discord.ui.button(
+        label="U1", style=discord.ButtonStyle.gray, row=1, custom_id="id_U1"
+    )
     async def u1(self, interaction: discord.Interaction, button: discord.ui.Button):
-        
+
         print(f"U1 clicked with stable id: {self.stable_id}")
-        
+
         # disable the button and make it blue
         button.disabled = True
         button.style = discord.ButtonStyle.primary
-        
+
         # create the embed that will contain the single image (determined by index)
         embed, file = get_imagine_upscale_embed(
             index=1,
             footer_text="Upscale requested by: ",
             footer_usr=interaction.user.global_name,
             footer_img=interaction.user.avatar,
-            stable_id=self.stable_id
+            stable_id=self.stable_id,
         )
-        
+
         # edit the view to the button is disabled on the ui side
         await interaction.response.edit_message(view=self)
         # send the single image
         await interaction.followup.send(embed=embed, file=file)
 
-    @discord.ui.button(label="U2", style=discord.ButtonStyle.gray, row=1, custom_id="id_U2")
+    @discord.ui.button(
+        label="U2", style=discord.ButtonStyle.gray, row=1, custom_id="id_U2"
+    )
     async def u2(self, interaction, button):
-        
+
         button.disabled = True
         button.style = discord.ButtonStyle.primary
-                
+
         embed, file = get_imagine_upscale_embed(
             index=2,
             footer_text="Upscale requested by: ",
             footer_usr=interaction.user.global_name,
             footer_img=interaction.user.avatar,
-            stable_id=self.stable_id
+            stable_id=self.stable_id,
         )
-        
+
         await interaction.response.edit_message(view=self)
         await interaction.followup.send(embed=embed, file=file)
-        
-    @discord.ui.button(label="U3", style=discord.ButtonStyle.gray, row=1, custom_id="id_U3")
+
+    @discord.ui.button(
+        label="U3", style=discord.ButtonStyle.gray, row=1, custom_id="id_U3"
+    )
     async def u3(self, interaction, button):
-        
+
         button.disabled = True
         button.style = discord.ButtonStyle.primary
-        
+
         embed, file = get_imagine_upscale_embed(
             index=3,
             footer_text="Upscale requested by: ",
             footer_usr=interaction.user.global_name,
             footer_img=interaction.user.avatar,
-            stable_id=self.stable_id
+            stable_id=self.stable_id,
         )
-        
+
         await interaction.response.edit_message(view=self)
         await interaction.followup.send(embed=embed, file=file)
 
-    @discord.ui.button(label="U4", style=discord.ButtonStyle.gray, row=1, custom_id="id_U4")
+    @discord.ui.button(
+        label="U4", style=discord.ButtonStyle.gray, row=1, custom_id="id_U4"
+    )
     async def u4(self, interaction, button):
-        
+
         button.disabled = True
         button.style = discord.ButtonStyle.primary
-                
+
         embed, file = get_imagine_upscale_embed(
             index=4,
             footer_text="Upscale requested by: ",
             footer_usr=interaction.user.global_name,
             footer_img=interaction.user.avatar,
-            stable_id=self.stable_id
+            stable_id=self.stable_id,
         )
-        
+
         await interaction.response.edit_message(view=self)
         await interaction.followup.send(embed=embed, file=file)
-        
+
     @discord.ui.button(label="", style=discord.ButtonStyle.gray, emoji="🔁", row=1)
     async def redo(self, interaction, button):
         await interaction.response.send_message("balls", ephemeral=True)
@@ -255,3 +284,26 @@ class ImagineView(discord.ui.View):
     @discord.ui.button(label="V4", style=discord.ButtonStyle.gray, row=2)
     async def v4(self, interaction, button):
         await interaction.response.send_message("balls", ephemeral=True)
+
+    @discord.ui.button(label="", style=discord.ButtonStyle.gray, emoji="ℹ️", row=2)
+    async def info(self, interaction, button):
+        embed = discord.Embed(
+            title=f"✨ Info for {self.stable_id} ✨",
+            description="Here is the info for the image generation!",
+            color=0x333333,
+            timestamp=datetime.datetime.now(),
+        )
+        embed.add_field(name="Prompt", value=self.prompt, inline=False)
+        embed.add_field(name="Negative Prompt", value=self.negative_prompt, inline=False)
+        embed.add_field(name="Upscale", value=self.quality, inline=False)
+        embed.add_field(name="CFG Scale", value=self.cfg_scale, inline=False)
+        embed.add_field(name="Steps", value=self.steps, inline=False)
+        embed.add_field(name="Seed", value=self.seed, inline=False)
+        embed.add_field(name="Upscale Model", value=self.upscale_model, inline=False)
+        embed.add_field(name="Sampler", value=self.sampler, inline=False)
+        embed.set_footer(text=f"Requested by {interaction.user.global_name}", icon_url=interaction.user.avatar)
+        
+        button.disabled = True
+        
+        await interaction.response.edit_message(view=self)
+        await interaction.followup.send(embed=embed)

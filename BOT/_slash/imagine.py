@@ -12,6 +12,7 @@ import functools
 from PIL import Image
 from requests.exceptions import *
 from discordwebhook import Discord
+from discord import app_commands
 from _utils.views import ImagineView
 from _utils.alerts import DateTimeAlert
 from _utils.queueing import StableQueueItem
@@ -26,7 +27,8 @@ from _utils.stable_diffusion import (
     call_txt2img,
     save_image,
     make_grid_image,
-    process_queue
+    process_queue,
+    cooldown
 )
 
 
@@ -40,10 +42,11 @@ class Imagine:
         Description: Constructor.
         """
 
+        @app_commands.checks.cooldown(1, 60, key=lambda i: (i.guild_id, i.user.id))
         @tree.command(
             name="imagine",
             description="Creates images using Stable Diffusion.",
-            guild=discord.Object(id=guild),
+            guild=discord.Object(id=guild)
         )
         async def imagine(
             interaction: discord.Interaction,
@@ -79,7 +82,6 @@ class Imagine:
     
             # is stable busy? (doesn't work since the api call is blocking)
             if interaction.client._fnbb_globals.get("imagine_generating"):
-                print(f"ADDING TO STABLE QUEUE FROM: {interaction.user.global_name}")
                 queue_item = StableQueueItem(
                     prompt=prompt,
                     negative_prompt=negative_prompt,
@@ -105,7 +107,6 @@ class Imagine:
                         color="INFO",
                     )
                 )
-
             else:
 
                 interaction.client._fnbb_globals["imagine_generating"] = True
@@ -192,11 +193,9 @@ class Imagine:
                     )
                     
                     if len(interaction.client._fnbb_globals.get("imagine_queue")) == 0:
-                        print("NO QUEUE TO PROCESS")
                         interaction.client._fnbb_globals["imagine_generating"] = False
                     else:
-                        print("STARTING QUEUE PROCESSING!")
-                        tmp = await process_queue(client=interaction.client)
+                        await process_queue(client=interaction.client)
 
                 except ConnectionError as e:
                     interaction.client._fnbb_globals["imagine_generating"] = False
@@ -216,3 +215,8 @@ class Imagine:
                             color="ERROR",
                         )
                     )
+
+        @imagine.error
+        async def on_imagine_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
+            if isinstance(error, app_commands.CommandOnCooldown):
+                await interaction.response.send_message(str(error), ephemeral=False)

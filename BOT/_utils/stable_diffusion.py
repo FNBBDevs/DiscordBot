@@ -1,5 +1,6 @@
 import os
 import json
+import time
 import base64
 import typing
 import discord
@@ -198,6 +199,15 @@ def call_txt2img(payload):
     )
 
     return response
+
+@to_thread
+def cooldown(user: str, client: discord.Client):
+    client._fnbb_globals["imagine_user_blocking"][user] = 60
+    for _ in range(60):
+        time.sleep(1)
+        client._fnbb_globals["imagine_user_blocking"][user] -= 1
+        
+    del client._fnbb_globals["imagine_user_blocking"][user]
 
 
 def save_image(path: str, data: str):

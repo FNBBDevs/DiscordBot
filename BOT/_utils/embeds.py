@@ -3,9 +3,6 @@ import datetime
 import random
 import discord
 
-from _utils.stable_diffusion import Upscale
-
-
 # pylint: disable=C0301
 
 # Color mapping for embed. Neat-o colors if I do say so
@@ -185,16 +182,17 @@ def nolang(output: list[str], user: str):
     return embed
 
 
-def imagine(
+def get_imagine_embed(
     prompt: str,
     negative: str,
-    quality: Upscale,
+    quality,
     cfg: float,
     steps: int,
     seed: int,
     footer_text: str,
     footer_usr: str,
     footer_img,
+    stable_id: str
 ):
     embed = discord.Embed(
         title="✨ Stable Diffusion x FNBB ✨",
@@ -217,12 +215,12 @@ def imagine(
         prompt = prompt[:60] + ". . ."
 
     # grab the drig image
-    file = discord.File(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/grid.png", filename="grid.png")
+    file = discord.File(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/{stable_id}/{stable_id}_grid.png", filename=f"{footer_usr}_{stable_id}_grid.png")
       
-    embed.set_image(url="attachment://grid.png")
+    embed.set_image(url=f"attachment://{footer_usr}_{stable_id}_grid.png")
     embed.add_field(name="Prompt", value=prompt, inline=False)
     embed.add_field(name="Negative Prompt", value=negative, inline=False)
-    embed.add_field(name="Upscale", value=quality.value, inline=False)
+    embed.add_field(name="Upscale", value=quality, inline=False)
     embed.add_field(name="CFG Scale", value=cfg, inline=False)
     embed.add_field(name="Steps", value=steps, inline=False)
     embed.add_field(name="Seed", value=seed, inline=False)
@@ -231,7 +229,7 @@ def imagine(
 
     return embed, file
 
-def imagine_upscale(index: int, footer_text: str, footer_usr: str, footer_img):
+def get_imagine_upscale_embed(index: int, footer_text: str, footer_usr: str, footer_img, stable_id:str):
     embed = discord.Embed(
         title=f"✨ Upscaled Image {index} ✨",
         color=0x333333,
@@ -244,7 +242,7 @@ def imagine_upscale(index: int, footer_text: str, footer_usr: str, footer_img):
         footer_usr = ""
 
     # based on index (1-4), grab the single image
-    file = discord.File(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/stable_image_{index-1}.png", filename="stable_image.png")    
-    embed.set_image(url="attachment://stable_image.png")
+    file = discord.File(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/{stable_id}/{stable_id}_{index-1}.png", filename=f"{footer_usr}_{stable_id}.png")    
+    embed.set_image(url=f"attachment://{footer_usr}_{stable_id}.png")
     embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
     return embed, file

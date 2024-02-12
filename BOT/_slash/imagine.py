@@ -1,6 +1,7 @@
 import os
 import io
 import json
+import uuid
 import typing
 import base64
 import asyncio
@@ -13,27 +14,20 @@ from requests.exceptions import *
 from discordwebhook import Discord
 from _utils.views import ImagineView
 from _utils.alerts import DateTimeAlert
+from _utils.queueing import StableQueueItem
 from _utils.embeds import generic_colored_embed
-from _utils.embeds import imagine as imagine_embed
-from _utils.stable_diffusion import stable_base_json, Upscale
-
-
-def to_thread(func: typing.Callable) -> typing.Coroutine:
-    @functools.wraps(func)
-    async def wrapper(*args, **kwargs):
-        return await asyncio.to_thread(func, *args, **kwargs)
-    return wrapper
-
-@to_thread
-def blocking_func(url, payload):
-    response = json.loads(
-        requests.post(
-            url=url,
-            json=payload
-        ).content.decode("utf8")
-    )
-    
-    return response
+from _utils.embeds import get_imagine_embed
+from _utils.stable_diffusion import (
+    stable_base_json,
+    Upscale,
+    UpscaleModel,
+    SamplerSetOne,
+    SamplerSetTwo,
+    call_txt2img,
+    save_image,
+    make_grid_image,
+    process_queue
+)
 
 
 class Imagine:
@@ -57,8 +51,11 @@ class Imagine:
             negative_prompt: str = "",
             quality: Upscale = Upscale.two,
             cfg_scale: float = 3.0,
-            steps: int = 20,
+            steps: int = 5,
             seed: int = -1,
+            upscale_model: UpscaleModel = UpscaleModel.latent,
+            sampler_set_one: SamplerSetOne = SamplerSetOne.ddim,
+            sampler_set_two: SamplerSetTwo = SamplerSetTwo.none
         ):
             """Slash command to generate an image with Stable Diffusion.
             Stable diffusion must be running via stable-diffusion-webui with
@@ -76,14 +73,34 @@ class Imagine:
             """
 
             await interaction.response.defer()
-
+            
+            stable_id = uuid.uuid4().hex
+            os.mkdir(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/{stable_id}")
+    
             # is stable busy? (doesn't work since the api call is blocking)
             if interaction.client._fnbb_globals.get("imagine_generating"):
+                print(f"ADDING TO STABLE QUEUE FROM: {interaction.user.global_name}")
+                interaction.client._fnbb_globals["imagine_queue"].add(
+                    StableQueueItem(
+                        prompt=prompt,
+                        negative_prompt=negative_prompt,
+                        quality=quality.value,
+                        cfg_scale=cfg_scale,
+                        steps=steps,
+                        seed=seed,
+                        upscale_model=upscale_model.value,
+                        sampler=sampler_set_one.value if sampler_set_one.value != None else sampler_set_two.value,
+                        channel=interaction.channel_id,
+                        stable_id=stable_id,
+                        user=interaction.user.global_name,
+                        user_avatar=interaction.user.avatar
+                    )
+                )
 
                 await interaction.followup.send(
                     embed=generic_colored_embed(
-                        title="Cannot Generate Image",
-                        description="An image is already in the process of generating. Add prompts to the queue until stable diffusion frees up.",
+                        title="Adding to Queue",
+                        description="An image is already in the process of generating. Adding request to the queue until stable diffusion frees up.",
                         footer_usr=interaction.user.global_name,
                         footer_img=interaction.user.avatar,
                         color="INFO",
@@ -119,75 +136,68 @@ class Imagine:
                 txt2img_request_payload["cfg_scale"] = cfg_scale
                 txt2img_request_payload["steps"] = steps
                 txt2img_request_payload["seed"] = seed
-
+                txt2img_request_payload["hr_upscaler"] = upscale_model.value
+                if sampler_set_one.value != None:
+                    txt2img_request_payload["sampler_name"] = sampler_set_one.value
+                elif sampler_set_two.value != None:
+                    txt2img_request_payload["sampler_name"] = sampler_set_two.value
+                else:
+                    await interaction.followup.send(
+                        embed=generic_colored_embed(
+                            title="A Sampler must be provided!",
+                            description="Sampler One or Sampler Two value must be provided. If both are provided, Sampler One takes priority.",
+                            footer_usr=interaction.user.global_name,
+                            footer_img=interaction.user.avatar,
+                            footer_text="Requested by:",
+                            color="ERROR",
+                        )
+                    )
+                    
+                    interaction.client._fnbb_globals["imagine_generating"] = False
+                    
+                    return
+                    
                 try:
                     # ping local hosted stable diffusion ai
-                    response = await blocking_func(
-                        url="http://127.0.0.1:7861/sdapi/v1/txt2img",
-                        payload=txt2img_request_payload,
+                    response = await call_txt2img(
+                        payload=txt2img_request_payload
                     )
 
                     # save all 4 images
                     for idx, image in enumerate(response["images"]):
-                        with open(
-                            f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/stable_image_{idx}.png",
-                            "wb",
-                        ) as image_file:
-                            image_file.write(base64.b64decode(image))
-
-                    # create a 2x2 grid of the images to send (like mid journey)
-                    pil_images = []
-                    for image_file in os.listdir(
-                        f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/"
-                    ):
-                        if "grid" not in image_file:
-                            pil_images.append(
-                                Image.open(
-                                    f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/{image_file}"
-                                )
-                            )
-
-                    grid_image = Image.new(
-                        "RGB", (pil_images[0].width * 2, pil_images[0].height * 2)
-                    )
-
-                    grid_image.paste(pil_images[0], (0, 0))
-                    grid_image.paste(pil_images[1], (pil_images[0].width, 0))
-                    grid_image.paste(pil_images[2], (0, pil_images[0].height))
-                    grid_image.paste(
-                        pil_images[3], (pil_images[0].width, pil_images[0].height)
-                    )
-
-                    grid_image = grid_image.resize(
-                        (pil_images[0].width // 3, pil_images[0].height // 3),
-                        Image.Resampling.BICUBIC,
-                    )
-
-                    grid_image.save(
-                        f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/grid.png"
-                    )
-
+                        save_image(
+                            path=f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/{stable_id}/{stable_id}_{idx}.png",
+                            data=image
+                        )
+                    
+                    make_grid_image(stable_id=stable_id)
+                    
                     # send the grid view with buttons to upscale each picture
-                    ie, imf = imagine_embed(
+                    imagine_emebed, imagine_image_file = get_imagine_embed(
                         prompt=prompt,
                         negative=negative_prompt,
-                        quality=quality,
+                        quality=quality.value,
                         cfg=cfg_scale,
                         steps=steps,
                         seed=seed,
                         footer_text="Image generated by: ",
                         footer_usr=interaction.user.global_name,
                         footer_img=interaction.user.avatar,
+                        stable_id=stable_id
                     )
 
                     await interaction.followup.send(
-                        # f"**{prompt} {negative_part if negative_prompt != '' else ''}** - <@{interaction.user.id}> (fast)",
-                        view=ImagineView(),
-                        embed=ie,
-                        file=imf,
+                        view=ImagineView(stable_id=stable_id),
+                        embed=imagine_emebed,
+                        file=imagine_image_file,
                     )
-
-                    interaction.client._fnbb_globals["imagine_generating"] = False
+                    
+                    if len(interaction.client._fnbb_globals.get("imagine_queue")) == 0:
+                        print("NO QUEUE TO PROCESS")
+                        interaction.client._fnbb_globals["imagine_generating"] = False
+                    else:
+                        print("STARTING QUEUE PROCESSING!")
+                        tmp = await process_queue(client=interaction.client)
 
                 except ConnectionError as e:
                     interaction.client._fnbb_globals["imagine_generating"] = False

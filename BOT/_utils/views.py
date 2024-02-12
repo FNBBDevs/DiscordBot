@@ -2,7 +2,7 @@ import os
 import discord
 import discord.interactions 
 import datetime
-from .embeds import generic_colored_embed, imagine_upscale
+from .embeds import generic_colored_embed, get_imagine_upscale_embed
 
 
 class PauseView(discord.ui.View):
@@ -158,19 +158,26 @@ class PlayingView(discord.ui.View):
 
 
 class ImagineView(discord.ui.View):
+    def __init__(self, stable_id, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.stable_id = stable_id
+    
     @discord.ui.button(label="U1", style=discord.ButtonStyle.gray, row=1, custom_id="id_U1")
     async def u1(self, interaction: discord.Interaction, button: discord.ui.Button):
+        
+        print(f"U1 clicked with stable id: {self.stable_id}")
         
         # disable the button and make it blue
         button.disabled = True
         button.style = discord.ButtonStyle.primary
         
         # create the embed that will contain the single image (determined by index)
-        embed, file = imagine_upscale(
+        embed, file = get_imagine_upscale_embed(
             index=1,
             footer_text="Upscale requested by: ",
             footer_usr=interaction.user.global_name,
             footer_img=interaction.user.avatar,
+            stable_id=self.stable_id
         )
         
         # edit the view to the button is disabled on the ui side
@@ -184,11 +191,12 @@ class ImagineView(discord.ui.View):
         button.disabled = True
         button.style = discord.ButtonStyle.primary
                 
-        embed, file = imagine_upscale(
+        embed, file = get_imagine_upscale_embed(
             index=2,
             footer_text="Upscale requested by: ",
             footer_usr=interaction.user.global_name,
             footer_img=interaction.user.avatar,
+            stable_id=self.stable_id
         )
         
         await interaction.response.edit_message(view=self)
@@ -200,11 +208,12 @@ class ImagineView(discord.ui.View):
         button.disabled = True
         button.style = discord.ButtonStyle.primary
         
-        embed, file = imagine_upscale(
+        embed, file = get_imagine_upscale_embed(
             index=3,
             footer_text="Upscale requested by: ",
             footer_usr=interaction.user.global_name,
             footer_img=interaction.user.avatar,
+            stable_id=self.stable_id
         )
         
         await interaction.response.edit_message(view=self)
@@ -216,11 +225,12 @@ class ImagineView(discord.ui.View):
         button.disabled = True
         button.style = discord.ButtonStyle.primary
                 
-        embed, file = imagine_upscale(
+        embed, file = get_imagine_upscale_embed(
             index=4,
             footer_text="Upscale requested by: ",
             footer_usr=interaction.user.global_name,
             footer_img=interaction.user.avatar,
+            stable_id=self.stable_id
         )
         
         await interaction.response.edit_message(view=self)

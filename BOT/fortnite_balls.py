@@ -12,7 +12,7 @@ import discord
 import asyncio
 from _commands.contains import Contains
 from _utils.embeds import generic_colored_embed
-from _utils.queueing import MusicQueue
+from _utils.queueing import MusicQueue, StableQueue
 from discord import Message, app_commands
 from discord.ext import commands
 from slash_master import SlashMaster
@@ -33,7 +33,7 @@ class FortniteBallsBot(discord.Client):
         self._fnbb_globals = {
             "playing": {},
             "music_queue": MusicQueue(),
-            "imagine_queue": {},
+            "imagine_queue": StableQueue(),
             "imagine_generating": False
         }
         # Create CommandTree object

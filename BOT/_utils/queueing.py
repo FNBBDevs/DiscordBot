@@ -57,7 +57,7 @@ class StableQueueItem:
         self.sampler = sampler
         self.channel = channel
         self.stable_id = stable_id
-        self.user = user,
+        self.user = user
         self.user_avatar = user_avatar
 
     def values(self):
@@ -84,7 +84,7 @@ class StableQueue:
     def __len__(self):
         return len(self.queue)
 
-    def add(self, item: MusicQueueItem):
+    def add(self, item: StableQueueItem):
         self.queue.append(item)
 
     def pop(self):

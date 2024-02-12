@@ -51,7 +51,7 @@ class Imagine:
             negative_prompt: str = "",
             quality: Upscale = Upscale.two,
             cfg_scale: float = 3.0,
-            steps: int = 5,
+            steps: int = 20,
             seed: int = -1,
             upscale_model: UpscaleModel = UpscaleModel.latent,
             sampler_set_one: SamplerSetOne = SamplerSetOne.ddim,
@@ -80,22 +80,21 @@ class Imagine:
             # is stable busy? (doesn't work since the api call is blocking)
             if interaction.client._fnbb_globals.get("imagine_generating"):
                 print(f"ADDING TO STABLE QUEUE FROM: {interaction.user.global_name}")
-                interaction.client._fnbb_globals["imagine_queue"].add(
-                    StableQueueItem(
-                        prompt=prompt,
-                        negative_prompt=negative_prompt,
-                        quality=quality.value,
-                        cfg_scale=cfg_scale,
-                        steps=steps,
-                        seed=seed,
-                        upscale_model=upscale_model.value,
-                        sampler=sampler_set_one.value if sampler_set_one.value != None else sampler_set_two.value,
-                        channel=interaction.channel_id,
-                        stable_id=stable_id,
-                        user=interaction.user.global_name,
-                        user_avatar=interaction.user.avatar
-                    )
+                queue_item = StableQueueItem(
+                    prompt=prompt,
+                    negative_prompt=negative_prompt,
+                    quality=quality.value,
+                    cfg_scale=cfg_scale,
+                    steps=steps,
+                    seed=seed,
+                    upscale_model=upscale_model.value,
+                    sampler=sampler_set_one.value if sampler_set_one.value != None else sampler_set_two.value,
+                    channel=interaction.channel_id,
+                    stable_id=stable_id,
+                    user=interaction.user.global_name,
+                    user_avatar=interaction.user.avatar
                 )
+                interaction.client._fnbb_globals["imagine_queue"].add(queue_item)
 
                 await interaction.followup.send(
                     embed=generic_colored_embed(

@@ -235,8 +235,7 @@ def make_grid_image(stable_id: str):
 
 
 async def process_queue(client: discord.Client):
-    queue_length = len(client._fnbb_globals.get("imagine_queue"))
-    while queue_length != 0:
+    while len(client._fnbb_globals.get("imagine_queue")) != 0:
         try:
             stable_queue_item = client._fnbb_globals.get("imagine_queue").pop()
            
@@ -244,10 +243,6 @@ async def process_queue(client: discord.Client):
             user_avatar = stable_queue_item.user_avatar
             channel = stable_queue_item.channel
             stable_id = stable_queue_item.stable_id
-
-            print(user)
-            print(type(user))
-            
             source_channel = client.get_channel(channel)
 
             txt2img_request_payload = stable_base_json.copy()
@@ -296,7 +291,6 @@ async def process_queue(client: discord.Client):
                 embed=imagine_emebed,
                 file=imagine_image_file,
             )
-            queue_length -= 1
         except Exception as e:
             print(f"ERROR when processing stable queue: {e}")
             client._fnbb_globals["imagine_queue"] = StableQueue()

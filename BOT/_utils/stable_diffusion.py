@@ -1,6 +1,7 @@
 import os
 import json
 import time
+import openai
 import base64
 import typing
 import discord

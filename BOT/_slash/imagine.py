@@ -219,4 +219,12 @@ class Imagine:
         @imagine.error
         async def on_imagine_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
             if isinstance(error, app_commands.CommandOnCooldown):
-                await interaction.response.send_message(str(error), ephemeral=False)
+                cooldown_embed = generic_colored_embed(
+                    title="❄️ Let's chill! ❄️",
+                    description=str(error),
+                    footer_text="Attempted request by:",
+                    footer_usr=interaction.user.global_name,
+                    footer_img=interaction.user.avatar,
+                    color=0x08B6CE
+                )
+                await interaction.response.send_message(embed=cooldown_embed, ephemeral=False)

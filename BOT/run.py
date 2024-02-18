@@ -11,10 +11,10 @@ def main():
     """
     load_dotenv()
 
-    token = os.environ["BOT_token"]
-    guild = os.environ["guild_ID"]
-    cmds_path = os.environ["cmds_path"]
-    debug = os.environ["debug"]
+    token = os.environ["BOT_TOKEN"]
+    guild = os.environ["GUILD_ID"]
+    cmds_path = os.environ["CMDS_PATH"]
+    debug = os.environ["DEBUG"]
 
     intents = discord.Intents.default()
     intents.message_content = True

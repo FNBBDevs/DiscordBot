@@ -3,7 +3,7 @@ from datetime import datetime
 from bruhcolor import bruhcolored
 
 
-VALID_TYPES = {"ERROR": 196, "INFO": 27, "SUCCESS": 76, "GENERAL": 105}
+VALID_TYPES = {"ERROR": 196, "INFO": 12, "SUCCESS": 76, "GENERAL": 105}
 
 
 class Alert:

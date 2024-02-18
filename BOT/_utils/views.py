@@ -3,6 +3,7 @@ import discord
 import discord.interactions
 import datetime
 from .embeds import generic_colored_embed, get_imagine_upscale_embed
+from .queueing import StableQueueItem
 
 
 class PauseView(discord.ui.View):
@@ -277,9 +278,9 @@ class ImagineView(discord.ui.View):
         else:
             await interaction.followup.send(embed=embed)
 
-    @discord.ui.button(label="", style=discord.ButtonStyle.gray, emoji="🔁", row=1)
-    async def redo(self, interaction, button):
-        await interaction.response.send_message("balls", ephemeral=True)
+    # @discord.ui.button(label="", style=discord.ButtonStyle.gray, emoji="🔁", row=1)
+    # async def redo(self, interaction, button):
+    #     await interaction.response.send_message("balls", ephemeral=True)
 
     @discord.ui.button(label="V1", style=discord.ButtonStyle.gray, row=2)
     async def v1(self, interaction, button):

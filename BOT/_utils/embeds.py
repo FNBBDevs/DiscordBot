@@ -183,12 +183,6 @@ def nolang(output: list[str], user: str):
 
 
 def get_imagine_embed(
-    prompt: str,
-    negative: str,
-    quality,
-    cfg: float,
-    steps: int,
-    seed: int,
     footer_text: str,
     footer_usr: str,
     footer_img,
@@ -205,25 +199,10 @@ def get_imagine_embed(
         footer_text = ""
     if not footer_usr:
         footer_usr = ""
-    
-    if negative in ["", None]:
-        negative = "<no negative prompt provided>"
-    elif len(negative) > 60:
-        negative = negative[:60] + ". . ."
-    
-    if len(prompt) > 60:
-        prompt = prompt[:60] + ". . ."
 
     # grab the drig image
-    file = discord.File(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/{stable_id}/{stable_id}_grid.png", filename=f"{footer_usr}_{stable_id}_grid.png")
-        
+    file = discord.File(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/{stable_id}/{stable_id}_grid.png", filename=f"{footer_usr}_{stable_id}_grid.png") 
     embed.set_image(url=f"attachment://{footer_usr}_{stable_id}_grid.png")
-    # embed.add_field(name="Prompt", value=prompt, inline=False)
-    # embed.add_field(name="Negative Prompt", value=negative, inline=False)
-    # embed.add_field(name="Upscale", value=quality, inline=False)
-    # embed.add_field(name="CFG Scale", value=cfg, inline=False)
-    # embed.add_field(name="Steps", value=steps, inline=False)
-    # embed.add_field(name="Seed", value=seed, inline=False)
     embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
 
     return embed, file

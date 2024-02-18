@@ -37,7 +37,7 @@ class SlashMaster:
         for file in self.get_next_command():
             print(
                 DateTimeAlert(
-                    f"loading {file} . . . ",
+                    f"loading {file:^15s} command : ",
                     dtia_alert_type="INFO",
                     message_from="bot.slash_master",
                 ).text,

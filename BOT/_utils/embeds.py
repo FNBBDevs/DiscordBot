@@ -196,7 +196,7 @@ def get_imagine_embed(
 ):
     embed = discord.Embed(
         title="✨ Stable Diffusion x FNBB ✨",
-        description="You images are done generating!",
+        description="Your images are done generating!",
         color=0x333333,
         timestamp=datetime.datetime.now(),
     )
@@ -216,7 +216,7 @@ def get_imagine_embed(
 
     # grab the drig image
     file = discord.File(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/{stable_id}/{stable_id}_grid.png", filename=f"{footer_usr}_{stable_id}_grid.png")
-      
+        
     embed.set_image(url=f"attachment://{footer_usr}_{stable_id}_grid.png")
     # embed.add_field(name="Prompt", value=prompt, inline=False)
     # embed.add_field(name="Negative Prompt", value=negative, inline=False)
@@ -235,15 +235,26 @@ def get_imagine_upscale_embed(index: int, footer_text: str, footer_usr: str, foo
         timestamp=datetime.datetime.now(),
     )
     
+    embed_fail = discord.Embed(
+        title=f"ERROR",
+        description=f"Cannot upscale Image {index} for {stable_id} because it does not exist!",
+        color=colors["ERROR"],
+        timestamp=datetime.datetime.now(),
+    )
+    
     if not footer_text:
         footer_text = ""
     if not footer_usr:
         footer_usr = ""
 
     # based on index (1-4), grab the single image
-    file = discord.File(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/{stable_id}/{stable_id}_{index-1}.png", filename=f"{footer_usr}_{stable_id}.png")    
-    embed.set_image(url=f"attachment://{footer_usr}_{stable_id}.png")
-    embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
+    try:
+        file = discord.File(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/{stable_id}/{stable_id}_{index-1}.png", filename=f"{footer_usr}_{stable_id}.png")    
+        embed.set_image(url=f"attachment://{footer_usr}_{stable_id}.png")
+        embed.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
+    except Exception as e:
+        embed_fail.set_footer(text=f"{footer_text} {footer_usr}", icon_url=footer_img)
+        return embed_fail, None
     return embed, file
 
     

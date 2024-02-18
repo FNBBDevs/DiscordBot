@@ -24,6 +24,7 @@ from _utils.stable_diffusion import (
     UpscaleModel,
     SamplerSetOne,
     SamplerSetTwo,
+    Images,
     call_txt2img,
     save_image,
     make_grid_image,
@@ -59,6 +60,7 @@ class Imagine:
             upscale_model: UpscaleModel = UpscaleModel.latent,
             sampler_set_one: SamplerSetOne = SamplerSetOne.ddim,
             sampler_set_two: SamplerSetTwo = SamplerSetTwo.none,
+            images: Images = Images.one
         ):
             """Slash command to generate an image with Stable Diffusion.
             Stable diffusion must be running via stable-diffusion-webui with
@@ -99,6 +101,7 @@ class Imagine:
                     stable_id=stable_id,
                     user=interaction.user.global_name,
                     user_avatar=interaction.user.avatar,
+                    images=images.value
                 )
                 interaction.client._fnbb_globals["imagine_queue"].add(queue_item)
 
@@ -116,16 +119,28 @@ class Imagine:
                 interaction.client._fnbb_globals["imagine_generating"] = True
 
                 # let user know we are generating image
-                await interaction.followup.send(
-                    embed=generic_colored_embed(
-                        title="✨ Generating ✨",
-                        description="Your image is being generated! It will be sent shortly. (note: higher step counts and higher quality will result in longer wait times)",
-                        footer_usr=interaction.user.global_name,
-                        footer_img=interaction.user.avatar,
-                        footer_text="Requested by:",
-                        color="SUCCESS",
+                if images.value == 4:
+                    await interaction.followup.send(
+                        embed=generic_colored_embed(
+                            title="✨ Stable Diffusion x FNBB ✨",
+                            description="Your images are being generated! They will be sent shortly. (note: higher step counts and higher quality will result in longer wait times)",
+                            footer_usr=interaction.user.global_name,
+                            footer_img=interaction.user.avatar,
+                            footer_text="Requested by:",
+                            color="SUCCESS",
+                        )
                     )
-                )
+                else:
+                    await interaction.followup.send(
+                        embed=generic_colored_embed(
+                            title="✨ Stable Diffusion x FNBB ✨",
+                            description="Your image is being generated! It will be sent shortly. (note: higher step counts and higher quality will result in longer wait times)",
+                            footer_usr=interaction.user.global_name,
+                            footer_img=interaction.user.avatar,
+                            footer_text="Requested by:",
+                            color="SUCCESS",
+                        )
+                    )
 
                 # fill out the payload
                 negative_prompt = negative_prompt if negative_prompt else ""
@@ -141,6 +156,7 @@ class Imagine:
                 txt2img_request_payload["steps"] = steps
                 txt2img_request_payload["seed"] = seed
                 txt2img_request_payload["hr_upscaler"] = upscale_model.value
+                txt2img_request_payload["n_iter"] = images.value
                 if sampler_set_one.value != None:
                     txt2img_request_payload["sampler_name"] = sampler_set_one.value
                 elif sampler_set_two.value != None:
@@ -165,6 +181,7 @@ class Imagine:
                     # ping local hosted stable diffusion ai
                     response = await call_txt2img(payload=txt2img_request_payload)
                     
+                    # save the seed for if the user requests the image info
                     seed = json.loads(response["info"])["seed"]
                     
                     # save all 4 images
@@ -252,3 +269,4 @@ class Imagine:
                 )
             else:
                 print(f"UNHANDLED IMAGINE ERROR: {str(error)}")
+                interaction.client._fnbb_globals["imagine_generating"] = False

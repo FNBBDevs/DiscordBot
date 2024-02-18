@@ -45,7 +45,8 @@ class StableQueueItem:
         channel,
         stable_id,
         user,
-        user_avatar
+        user_avatar,
+        images
     ):
         self.prompt = prompt
         self.negative_prompt = negative_prompt
@@ -59,6 +60,7 @@ class StableQueueItem:
         self.stable_id = stable_id
         self.user = user
         self.user_avatar = user_avatar
+        self.images = images
 
     def values(self):
         return (
@@ -73,7 +75,8 @@ class StableQueueItem:
             self.channel,
             self.stable_id,
             self.user,
-            self.user_avatar
+            self.user_avatar,
+            self.images
         )
 
 

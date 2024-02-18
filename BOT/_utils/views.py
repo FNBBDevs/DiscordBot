@@ -172,7 +172,7 @@ class ImagineView(discord.ui.View):
         *args,
         **kwargs,
     ):
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs, timeout=None)
         self.stable_id = stable_id
         self.prompt = prompt
         self.negative_prompt = negative
@@ -206,7 +206,10 @@ class ImagineView(discord.ui.View):
         # edit the view to the button is disabled on the ui side
         await interaction.response.edit_message(view=self)
         # send the single image
-        await interaction.followup.send(embed=embed, file=file)
+        if file:
+            await interaction.followup.send(embed=embed, file=file)
+        else:
+            await interaction.followup.send(embed=embed)
 
     @discord.ui.button(
         label="U2", style=discord.ButtonStyle.gray, row=1, custom_id="id_U2"
@@ -225,7 +228,10 @@ class ImagineView(discord.ui.View):
         )
 
         await interaction.response.edit_message(view=self)
-        await interaction.followup.send(embed=embed, file=file)
+        if file:
+            await interaction.followup.send(embed=embed, file=file)
+        else:
+            await interaction.followup.send(embed=embed)
 
     @discord.ui.button(
         label="U3", style=discord.ButtonStyle.gray, row=1, custom_id="id_U3"
@@ -244,7 +250,10 @@ class ImagineView(discord.ui.View):
         )
 
         await interaction.response.edit_message(view=self)
-        await interaction.followup.send(embed=embed, file=file)
+        if file:
+            await interaction.followup.send(embed=embed, file=file)
+        else:
+            await interaction.followup.send(embed=embed)
 
     @discord.ui.button(
         label="U4", style=discord.ButtonStyle.gray, row=1, custom_id="id_U4"
@@ -263,7 +272,10 @@ class ImagineView(discord.ui.View):
         )
 
         await interaction.response.edit_message(view=self)
-        await interaction.followup.send(embed=embed, file=file)
+        if file:
+            await interaction.followup.send(embed=embed, file=file)
+        else:
+            await interaction.followup.send(embed=embed)
 
     @discord.ui.button(label="", style=discord.ButtonStyle.gray, emoji="🔁", row=1)
     async def redo(self, interaction, button):

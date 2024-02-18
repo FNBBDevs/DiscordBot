@@ -78,6 +78,12 @@ class SamplerSetOne(Enum):
     ddim = "DDIM"
     plms = "PLMS"
     unipc = "UniPC"
+    
+class Images(Enum):
+    four = 4
+    three = 3
+    two = 2
+    one = 1
 
 
 # payload to send to txt2img
@@ -232,10 +238,12 @@ def make_grid_image(stable_id: str):
 
     grid_image = Image.new("RGB", (pil_images[0].width * 2, pil_images[0].height * 2))
 
-    grid_image.paste(pil_images[0], (0, 0))
-    grid_image.paste(pil_images[1], (pil_images[0].width, 0))
-    grid_image.paste(pil_images[2], (0, pil_images[0].height))
-    grid_image.paste(pil_images[3], (pil_images[0].width, pil_images[0].height))
+    pil_images_count = len(pil_images)
+    
+    if pil_images_count >= 1: grid_image.paste(pil_images[0], (0, 0))
+    if pil_images_count >= 2: grid_image.paste(pil_images[1], (pil_images[0].width, 0))
+    if pil_images_count >= 3: grid_image.paste(pil_images[2], (0, pil_images[0].height))
+    if pil_images_count >= 4: grid_image.paste(pil_images[3], (pil_images[0].width, pil_images[0].height))
 
     grid_image = grid_image.resize(
         (pil_images[0].width // 2, pil_images[0].height // 2),
@@ -266,6 +274,7 @@ async def process_queue(client: discord.Client):
             txt2img_request_payload["steps"] = stable_queue_item.steps
             txt2img_request_payload["seed"] = stable_queue_item.seed
             txt2img_request_payload["hr_upscaler"] = stable_queue_item.upscale_model
+            txt2img_request_payload["n_iter"] = stable_queue_item.images
             if stable_queue_item.sampler:
                 txt2img_request_payload["sampler_name"] = stable_queue_item.sampler
             else:

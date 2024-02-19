@@ -302,24 +302,25 @@ class ImagineView(discord.ui.View):
         await interaction.client._fnbb_globals["SCC"].delegate(queue_item)
 
     @discord.ui.button(label="", style=discord.ButtonStyle.gray, emoji="ℹ️", row=2)
-    async def info(self, interaction, button):
-        embed = discord.Embed(
+    async def info(self, interaction: discord.Interaction, button: discord.ui.Button):
+        info_embed = discord.Embed(
             title=f"✨ Info for {self.stable_id} ✨",
             description="Here is the info for the image generation!",
             color=0x333333,
             timestamp=datetime.datetime.now(),
         )
-        embed.add_field(name="Prompt", value=self.prompt, inline=False)
-        embed.add_field(name="Negative Prompt", value=self.negative_prompt, inline=False)
-        embed.add_field(name="Upscale", value=self.quality, inline=False)
-        embed.add_field(name="CFG Scale", value=self.cfg_scale, inline=False)
-        embed.add_field(name="Steps", value=self.steps, inline=False)
-        embed.add_field(name="Seed", value=self.seed, inline=False)
-        embed.add_field(name="Upscale Model", value=self.upscale_model, inline=False)
-        embed.add_field(name="Sampler", value=self.sampler, inline=False)
-        embed.set_footer(text=f"Requested by {interaction.user.global_name}", icon_url=interaction.user.avatar)
+        info_embed.add_field(name="Prompt", value=self.prompt, inline=False)
+        info_embed.add_field(name="Negative Prompt", value=self.negative_prompt, inline=False)
+        info_embed.add_field(name="Upscale", value=self.quality, inline=False)
+        info_embed.add_field(name="CFG Scale", value=self.cfg_scale, inline=False)
+        info_embed.add_field(name="Steps", value=self.steps, inline=False)
+        info_embed.add_field(name="Seed", value=self.seed, inline=False)
+        info_embed.add_field(name="Upscale Model", value=self.upscale_model, inline=False)
+        info_embed.add_field(name="Sampler", value=self.sampler, inline=False)
+        info_embed.set_footer(text=f"Requested by {interaction.user.global_name}", icon_url=interaction.user.avatar)
         
         button.disabled = True
+        button.style = discord.ButtonStyle.primary
         
         await interaction.response.edit_message(view=self)
-        await interaction.followup.send(embed=embed)
+        await interaction.client.get_channel(1208961369588633600).send(embed=info_embed)

@@ -9,7 +9,7 @@ class Sync(Group):
             name="sync", description="Owner only", guild=discord.Object(id=guild)
         )
         async def sync(interaction: discord.Interaction):
-            await interaction.response.defer()
+            await interaction.response.defer(ephemeral=True)
             try:
                 await tree.sync(guild=discord.Object(id=guild))
 
@@ -25,4 +25,4 @@ class Sync(Group):
                     color="ERROR"
                 )
 
-            await interaction.followup.send(embed=embed)
+            await interaction.followup.send(embed=embed, ephemeral=True)

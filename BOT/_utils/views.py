@@ -280,8 +280,8 @@ class ImagineView(discord.ui.View):
         else:
             await interaction.followup.send(embed=embed)
 
-    @discord.ui.button(label="", style=discord.ButtonStyle.gray, emoji="🔁", row=1)
-    async def redo(self, interaction, button):
+    @discord.ui.button(label="", style=discord.ButtonStyle.gray, emoji="🔁", row=2)
+    async def redo(self, interaction: discord.Interaction, button: discord.ui.Button):
         
         button.disabled = True
         button.style = discord.ButtonStyle.primary
@@ -300,22 +300,6 @@ class ImagineView(discord.ui.View):
 
         await interaction.response.edit_message(view=self)
         await interaction.client._fnbb_globals["SCC"].delegate(queue_item)
-
-    @discord.ui.button(label="V1", style=discord.ButtonStyle.gray, row=2)
-    async def v1(self, interaction, button):
-        await interaction.response.send_message("balls", ephemeral=True)
-
-    @discord.ui.button(label="V2", style=discord.ButtonStyle.gray, row=2)
-    async def v2(self, interaction, button):
-        await interaction.response.send_message("balls", ephemeral=True)
-
-    @discord.ui.button(label="V3", style=discord.ButtonStyle.gray, row=2)
-    async def v3(self, interaction, button):
-        await interaction.response.send_message("balls", ephemeral=True)
-
-    @discord.ui.button(label="V4", style=discord.ButtonStyle.gray, row=2)
-    async def v4(self, interaction, button):
-        await interaction.response.send_message("balls", ephemeral=True)
 
     @discord.ui.button(label="", style=discord.ButtonStyle.gray, emoji="ℹ️", row=2)
     async def info(self, interaction, button):

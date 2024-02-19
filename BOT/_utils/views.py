@@ -160,7 +160,7 @@ class PlayingView(discord.ui.View):
             )
 
 
-class ImagineView(discord.ui.View):
+class ImagineView(discord.ui.View):    
     def __init__(
         self,
         stable_id,
@@ -185,7 +185,7 @@ class ImagineView(discord.ui.View):
         self.seed = seed
         self.upscale_model = upscale_model
         self.sampler = sampler
-
+            
     @discord.ui.button(
         label="U1", style=discord.ButtonStyle.gray, row=1, custom_id="id_U1"
     )

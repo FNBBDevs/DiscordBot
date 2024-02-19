@@ -1,4 +1,6 @@
 import os
+import json
+import uuid
 import discord
 import discord.interactions
 import datetime
@@ -278,9 +280,26 @@ class ImagineView(discord.ui.View):
         else:
             await interaction.followup.send(embed=embed)
 
-    # @discord.ui.button(label="", style=discord.ButtonStyle.gray, emoji="🔁", row=1)
-    # async def redo(self, interaction, button):
-    #     await interaction.response.send_message("balls", ephemeral=True)
+    @discord.ui.button(label="", style=discord.ButtonStyle.gray, emoji="🔁", row=1)
+    async def redo(self, interaction, button):
+        
+        button.disabled = True
+        button.style = discord.ButtonStyle.primary
+        
+        with open(f"{os.getcwd()}\\BOT\\_utils\\_tmp\\stable_diffusion\\{self.stable_id}\\info.json") as json_file:
+            json_info = json.loads(json_file.read())
+        
+        queue_item = StableQueueItem().from_dict(json_info)
+        
+        new_id = uuid.uuid4().hex
+        while new_id in os.listdir(f"{os.getcwd()}\\BOT\\_utils\\_tmp\\stable_diffusion"):
+            new_id = uuid.uuid4().hex
+        queue_item.stable_id = new_id
+        queue_item.user = interaction.user.global_name
+        queue_item.user_avatar = interaction.user.avatar
+
+        await interaction.response.edit_message(view=self)
+        await interaction.client._fnbb_globals["SCC"].delegate(queue_item)
 
     @discord.ui.button(label="V1", style=discord.ButtonStyle.gray, row=2)
     async def v1(self, interaction, button):

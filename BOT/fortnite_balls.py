@@ -12,7 +12,8 @@ import discord
 import asyncio
 from _commands.contains import Contains
 from _utils.embeds import generic_colored_embed
-from _utils.queueing import MusicQueue, StableQueue
+from _utils.queueing import MusicQueue
+from _utils.stable_command import StableCommandCenter
 from discord import Message, app_commands
 from discord.ext import commands
 from slash_master import SlashMaster
@@ -33,8 +34,7 @@ class FortniteBallsBot(discord.Client):
         self._fnbb_globals = {
             "playing": {},
             "music_queue": MusicQueue(),
-            "imagine_queue": StableQueue(),
-            "imagine_generating": False
+            "SCC": StableCommandCenter(os.getcwd(), self)
         }
         # Create CommandTree object
         self.tree = app_commands.CommandTree(self)
@@ -47,10 +47,7 @@ class FortniteBallsBot(discord.Client):
         # get the text channels in the guild
         guild = self.get_guild(int(self._guild))
         text_channels = guild.text_channels
-        
-        # call the cool animation while the commands load
-        # subprocess.Popen(["python", "./BOT/_utils/boot.py"], close_fds=True)
-
+     
         # tell slash master to load commands
         SlashMaster(self.tree, self._guild, self._cmds_path, self._debug).load_commands(
             args=(text_channels,)

@@ -191,3 +191,5 @@ BOT/_utils/bruhtts/models/
 BOT/_utils/bruhtts/old_models/
 BOT/_utils/bruhtts/rvc/*.zip
 BOT/_utils/bruhtts/rvc/pretraineds/
+
+BOT/_utils/_tmp/stable_diffusion/*

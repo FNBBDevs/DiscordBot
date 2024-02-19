@@ -1,27 +1,10 @@
-import os
-import json
-import time
-import openai
-import base64
-import typing
-import discord
-import asyncio
-import requests
-import functools
-
-from PIL import Image
 from enum import Enum
-
-from .embeds import get_imagine_embed
-from .views import ImagineView
-from .queueing import StableQueue
 
 # upscale options
 class Upscale(Enum):
     one = 1
     two = 2
     three = 3
-
 
 class UpscaleModel(Enum):
     none = "None"
@@ -41,7 +24,6 @@ class UpscaleModel(Enum):
     scunet_psnr = "ScuNET PSNR"
     swinir_4x = "SwinIR 4x"
 
-
 class SamplerSetTwo(Enum):
     none = None
     dpm_2m_karras = "DPM++ 2M Karras"
@@ -60,7 +42,6 @@ class SamplerSetTwo(Enum):
     dpm_2m_sde = "DPM++ 2M SDE"
     dpm_2m_sde_heun = "DPM++ 2M SDE Heun"
     dpm_2m_sde_heun_karras = "DPM++ 2M SDE Heun Karras"
-
 
 class SamplerSetOne(Enum):
     none = None
@@ -84,7 +65,6 @@ class Images(Enum):
     three = 3
     two = 2
     one = 1
-
 
 # payload to send to txt2img
 stable_base_json = {
@@ -187,140 +167,3 @@ stable_base_json = {
     "tiling": False,
     "width": 800,
 }
-
-
-def to_thread(func: typing.Callable) -> typing.Coroutine:
-    @functools.wraps(func)
-    async def wrapper(*args, **kwargs):
-        return await asyncio.to_thread(func, *args, **kwargs)
-
-    return wrapper
-
-
-@to_thread
-def call_txt2img(payload):
-    response = json.loads(
-        requests.post(
-            url=r"http://127.0.0.1:7861/sdapi/v1/txt2img", json=payload
-        ).content.decode("utf8")
-    )
-
-    return response
-
-@to_thread
-def cooldown(user: str, client: discord.Client):
-    client._fnbb_globals["imagine_user_blocking"][user] = 60
-    for _ in range(60):
-        time.sleep(1)
-        client._fnbb_globals["imagine_user_blocking"][user] -= 1
-        
-    del client._fnbb_globals["imagine_user_blocking"][user]
-
-
-def save_image(path: str, data: str):
-    with open(
-        path,
-        "wb",
-    ) as image_file:
-        image_file.write(base64.b64decode(data))
-
-
-def make_grid_image(stable_id: str):
-    # create a 2x2 grid of the images to send (like mid journey)
-    pil_images = []
-    for image_file in os.listdir(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/{stable_id}"):
-        if "grid" not in image_file:
-            pil_images.append(
-                Image.open(
-                    f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/{stable_id}/{image_file}"
-                )
-            )
-
-    grid_image = Image.new("RGB", (pil_images[0].width * 2, pil_images[0].height * 2))
-
-    pil_images_count = len(pil_images)
-    
-    if pil_images_count >= 1: grid_image.paste(pil_images[0], (0, 0))
-    if pil_images_count >= 2: grid_image.paste(pil_images[1], (pil_images[0].width, 0))
-    if pil_images_count >= 3: grid_image.paste(pil_images[2], (0, pil_images[0].height))
-    if pil_images_count >= 4: grid_image.paste(pil_images[3], (pil_images[0].width, pil_images[0].height))
-
-    grid_image = grid_image.resize(
-        (pil_images[0].width // 2, pil_images[0].height // 2),
-        Image.Resampling.BICUBIC,
-    )
-
-    grid_image.save(f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/{stable_id}/{stable_id}_grid.png")
-
-
-async def process_queue(client: discord.Client):
-    while len(client._fnbb_globals.get("imagine_queue")) != 0:
-        try:
-            stable_queue_item = client._fnbb_globals.get("imagine_queue").pop()
-           
-            user = stable_queue_item.user
-            user_avatar = stable_queue_item.user_avatar
-            channel = stable_queue_item.channel
-            stable_id = stable_queue_item.stable_id
-            source_channel = client.get_channel(channel)
-
-            txt2img_request_payload = stable_base_json.copy()
-            txt2img_request_payload["hr_negative_prompt"] = stable_queue_item.negative_prompt
-            txt2img_request_payload["negative_prompt"] = stable_queue_item.negative_prompt
-            txt2img_request_payload["hr_prompt"] = stable_queue_item.prompt
-            txt2img_request_payload["prompt"] = stable_queue_item.prompt
-            txt2img_request_payload["hr_scale"] = stable_queue_item.quality
-            txt2img_request_payload["cfg_scale"] = stable_queue_item.cfg_scale
-            txt2img_request_payload["steps"] = stable_queue_item.steps
-            txt2img_request_payload["seed"] = stable_queue_item.seed
-            txt2img_request_payload["hr_upscaler"] = stable_queue_item.upscale_model
-            txt2img_request_payload["n_iter"] = stable_queue_item.images
-            if stable_queue_item.sampler:
-                txt2img_request_payload["sampler_name"] = stable_queue_item.sampler
-            else:
-                # send none sampler error message
-                break
-
-            # ping local hosted stable diffusion ai
-            response = await call_txt2img(payload=txt2img_request_payload)
-
-            # save all 4 images
-            for idx, image in enumerate(response["images"]):
-                save_image(
-                    path=f"{os.getcwd()}/BOT/_utils/_tmp/stable_diffusion/{stable_id}/{stable_id}_{idx}.png",
-                    data=image
-                )
-
-            make_grid_image(stable_id=stable_id)
-
-            imagine_emebed, imagine_image_file = get_imagine_embed(
-                footer_text="Image generated by: ",
-                footer_usr=user,
-                footer_img=user_avatar,
-                stable_id=stable_id
-            )
-
-            await source_channel.send(
-                view=ImagineView(
-                    stable_id=stable_id,
-                    prompt=stable_queue_item.prompt,
-                    negative=stable_queue_item.negative_prompt,
-                    quality=stable_queue_item.quality,
-                    cfg=stable_queue_item.cfg_scale,
-                    steps=stable_queue_item.steps,
-                    seed=stable_queue_item.seed,
-                    upscale_model=stable_queue_item.upscale_model,
-                    sampler=stable_queue_item.sampler
-                ),
-                embed=imagine_emebed,
-                file=imagine_image_file,
-            )
-        except Exception as e:
-            print(f"ERROR when processing stable queue: {e}")
-            client._fnbb_globals["imagine_queue"] = StableQueue()
-            client._fnbb_globals["imagine_generating"] = False
-            break
-    client._fnbb_globals["imagine_queue"] = StableQueue()  
-    client._fnbb_globals["imagine_generating"] = False
-    
-

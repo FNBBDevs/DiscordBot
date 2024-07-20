@@ -34,7 +34,9 @@ class FortniteBallsBot(discord.Client):
         self._fnbb_globals = {
             "playing": {},
             "music_queue": MusicQueue(),
-            "SCC": StableCommandCenter(os.getcwd(), self)
+            "SCC": StableCommandCenter(os.getcwd(), self),
+            "chat_cooldown": {},
+            "mh": {}
         }
         # Create CommandTree object
         self.tree = app_commands.CommandTree(self)
@@ -93,7 +95,7 @@ class FortniteBallsBot(discord.Client):
         try:
             # get the client to get channels, globals
             client = self.get_guild(int(self._guild))
-
+            
             # get the info channel to send embeds
             info_channel = [channel for channel in client.channels if str(channel.id) == str(os.getenv("INFO_CHANNEL"))][0]
 
@@ -110,10 +112,10 @@ class FortniteBallsBot(discord.Client):
                 await info_channel.send(embed=purged_embed)
             
             # check to see if the bot is the only one in VC
-            members = client.voice_client.channel.members
-
+            members = [member.id for member in client.voice_client.channel.members]
+        
             # give a minute warning
-            if len(members) <= 1:
+            if len(members) == 1 and members[0] == self.user.id:
                 timeout_embed = generic_colored_embed(
                     title="Bot Leaving VC",
                     description="In 1 minute the bot will leave VC unless someone joins.",

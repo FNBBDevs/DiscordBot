@@ -1,0 +1,4 @@
+poetry run python BOT/run.py
+[38;5;238m2024-04-20 19:50:18 [0m[1m[38;5;12mINFO     [0m[38;5;5mbot.slash_master [0mloading       add       command : [38;5;76msuccess[0m
+[38;5;238m2024-04-20 19:50:18 [0m[1m[38;5;12mINFO     [0m[38;5;5mbot.slash_master [0mloading      bruh       command : [38;5;76msuccess[0m
+[38;5;238m2024-04-20 19:50:19 [0m[1m[38;5;12mINFO     [0m[38;5;5mbot.slash_master [0mloading      chat       command : 

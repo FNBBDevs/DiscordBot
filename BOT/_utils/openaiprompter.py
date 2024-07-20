@@ -2,15 +2,15 @@ import os
 
 import openai
 
-
 class OpenAIPrompter:
     def __init__(self):
         self.password = os.getenv("OPENPASS")
         openai.api_key = os.getenv("OPENAI_API_KEY")
+        self.client = openai.OpenAI()
 
-    def complete(self, prompt, password):
-        if os.getenv("OPENAI_API_KEY") is not None and password == self.password:
-            completion = openai.ChatCompletion.create(
+    def complete(self, prompt):
+        if os.getenv("OPENAI_API_KEY") is not None:# and password == self.password:
+            completion = self.client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
                     {

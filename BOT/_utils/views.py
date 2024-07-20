@@ -12,6 +12,34 @@ class PauseView(discord.ui.View):
     @discord.ui.button(label="Pause", style=discord.ButtonStyle.primary, emoji="⏸️")
     async def pause_button_callback(self, interaction, button):
         await interaction.response.defer()
+        
+        user_channel = interaction.user.voice
+        voice_channel = interaction.guild.voice_client
+        
+        if not user_channel:
+            embed = generic_colored_embed(
+                title="Error ❌",
+                description="You are not in a VC!",
+                color="ERROR",
+            )
+            await interaction.followup.send(embed=embed)
+            return
+        if user_channel.channel.id != voice_channel.id:
+            embed = generic_colored_embed(
+                title="Error ❌",
+                description="You are not in the same VC as the bot!",
+                color="ERROR",
+            )
+            await interaction.followup.send(embed=embed)
+            return
+        if not voice_channel:
+            embed = generic_colored_embed(
+                title="Error ❌",
+                description="The bot is not in a VC!",
+                color="ERROR",
+            )
+            await interaction.followup.send(embed=embed)
+            return
 
         embed = generic_colored_embed(
             title="Success ✅",
@@ -39,11 +67,51 @@ class ResumeView(discord.ui.View):
     @discord.ui.button(label="Resume", style=discord.ButtonStyle.primary, emoji="▶️")
     async def resume_button_callback(self, interaction, button):
         await interaction.response.defer()
+        
+        user_channel = interaction.user.voice
+        voice_channel = interaction.guild.voice_client
+        
+        if not user_channel:
+            embed = generic_colored_embed(
+                title="Error ❌",
+                description="You are not in a VC!",
+                color="ERROR",
+            )
+            await interaction.followup.send(embed=embed)
+            return
+        if user_channel.channel.id != voice_channel.id:
+            embed = generic_colored_embed(
+                title="Error ❌",
+                description="You are not in the same VC as the bot!",
+                color="ERROR",
+            )
+            await interaction.followup.send(embed=embed)
+            return
+        if not voice_channel:
+            embed = generic_colored_embed(
+                title="Error ❌",
+                description="The bot is not in a VC!",
+                color="ERROR",
+            )
+            await interaction.followup.send(embed=embed)
+            return
+        
+        if not user_channel:
+            embed = generic_colored_embed(
+                title="Error ❌",
+                description="You are not in a VC and cannot resume the song!",
+                color="ERROR",
+            )
+            await interaction.followup.send(embed=embed)
+            return
+            
+        
         embed = generic_colored_embed(
             title="Success ✅",
             description="Song has been resumed",
             color="PURPLE",
         )
+        
         interaction.guild.voice_client.resume()
 
         original_response = await interaction.original_response()

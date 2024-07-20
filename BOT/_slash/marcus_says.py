@@ -19,7 +19,7 @@ class MarcusSays:
         # args from the fortniteballsbot which was a list of the text_channels
         # in the guild. args[0] is a list of text_channel objects in the guild
         self.ChannelEnum = enum.Enum(
-            "ChannelEnum", {channel.name: channel for channel in args[0]}
+            "ChannelEnum", {channel.name: channel for channel in args[0][:25]}
         )
 
         self.marcus = Discord(url=os.getenv("MARCUS"))

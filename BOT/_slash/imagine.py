@@ -70,7 +70,9 @@ class Imagine:
                 Steps (int, optional): generation steps. Defaults to 20.
                 Seed (int, optional): seed to use to create the image. Defaults to -1.
             """
-            await interaction.response.defer()            
+            await interaction.response.defer()
+            if interaction.user.global_name == "nulzo":
+                return         
             stable_id = uuid.uuid4().hex
             while stable_id in os.listdir(f"{os.getcwd()}\\BOT\\_utils\\_tmp\\stable_diffusion"):
                 stable_id = uuid.uuid4().hex

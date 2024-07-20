@@ -3121,6 +3121,9 @@ def get_vc(weight_root, sid):
     n_spk = cpt["config"][-3]
 
 
+for i, val in enumerate(sys.argv):
+    print(i, val)
+
 f0up_key = sys.argv[1]
 filter_radius = sys.argv[2]
 index_rate = float(sys.argv[3])
@@ -3138,7 +3141,6 @@ except IndexError:
     split_audio = None
 try:
     models_path = sys.argv[11]
-    print(models_path)
 except:
     models_path = None
 

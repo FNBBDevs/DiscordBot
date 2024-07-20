@@ -55,6 +55,7 @@ beautifulsoup4 = "^4.12.3"
 torch = {version = "^2.1.2+cu118", source = "pytorch"}
 torchvision = {version = "^0.16.2+cu118", source = "pytorch"}
 youtube-dl = "^2021.12.17"
+alt-profanity-check = "^1.4.1.post1"
 
 [[tool.poetry.source]]
 name = "pytorch"

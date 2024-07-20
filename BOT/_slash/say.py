@@ -1,8 +1,8 @@
 import os
 import discord
+import _utils.filters as af
 from enum import Enum
 from _utils.bruhtts.bruhtts import say as bruhtts_say
-import _utils.filters as af
 from _utils.embeds import generic_colored_embed
 
 
@@ -33,11 +33,9 @@ class Say:
             /say
             """
             await interaction.response.defer()
-            
-            print("CWD:", os.getcwd())
-            
+                    
             result = await bruhtts_say(message=message, member=member, curr_dir=os.getcwd())
-            
+
             if result:
                 user_channel = interaction.user.voice
                 if not user_channel:
@@ -94,6 +92,6 @@ class Say:
                     footer_text="Queued by: ",
                     footer_usr=interaction.user.global_name,
                     footer_img=interaction.user.guild_avatar,
-                    color="RED"  
+                    color="ERROR"  
                 )
                 await interaction.followup.send(embed=embed)
